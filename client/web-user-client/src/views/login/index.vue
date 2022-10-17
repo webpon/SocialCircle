@@ -29,7 +29,11 @@ const state = reactive({
 })
 
 function login() {
-    proxy?.$router.push('/home')
+    if (state.code) {
+        proxy?.$router.push('/home')
+    } else {
+        proxy?.$router.push('/register')
+    }
 }
 </script>
 
