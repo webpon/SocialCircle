@@ -1,3 +1,5 @@
 /server/userServer/src/main/resources/application-dev.yml
+
+/server/communicationServer/src/main/resources/application-dev.yml
 /server/managerServer/src/main/resources/application-dev.yml
 /server/.idea
