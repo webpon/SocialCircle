@@ -29,6 +29,10 @@ public class Result<T> {
         return new Result<C>(code,null,data);
     }
 
+    public static <C> Result<C> ok(String msg, Integer code){
+        return new Result<C>(code,msg,null);
+    }
+
 
     public static <C> Result<C> ok(){
         return new Result<C>(ResultCode.SUCCEED,null,null);
@@ -38,6 +42,10 @@ public class Result<T> {
 
     public static  <C> Result<C> error(String msg){
         return new Result<C>(400,msg,null);
+    }
+
+    public static  <C> Result<C> error(String msg, Integer code){
+        return new Result<C>(code,msg,null);
     }
 
 }

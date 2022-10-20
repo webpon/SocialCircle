@@ -14,20 +14,7 @@ public class Report implements Serializable {
      * 被封号人
      */
     private Integer userId;
-
-    /**
-     * 封号时间
-     */
-    private Date startTime;
-
-    /**
-     * 结束时间
-     */
-    private Date endTime;
-
-    /**
-     * 封号理由
-     */
-    private String reason;
+    private Integer reportUserId;
+    private String content;
 
 }

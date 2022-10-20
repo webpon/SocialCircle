@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.socialCircle.dao.ImageDao">
+    <select id="queryByReportId" resultType="com.socialCircle.entity.Image">
+        select * from image
+        <where>
+            report_id = #{id}
+        </where>
+    </select>
+</mapper>

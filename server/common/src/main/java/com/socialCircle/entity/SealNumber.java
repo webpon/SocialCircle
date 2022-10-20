@@ -1,18 +1,15 @@
 package com.socialCircle.entity;
+
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 封号
- */
 @Data
 public class SealNumber implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    private Long id;
+    private Integer id;
 
     /**
      * 被封号人
@@ -33,5 +30,4 @@ public class SealNumber implements Serializable {
      * 封号理由
      */
     private String reason;
-
 }

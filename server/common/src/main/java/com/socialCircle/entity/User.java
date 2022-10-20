@@ -45,7 +45,7 @@ public class User implements Serializable {
     /**
      * 权限
      */
-    private int permission;
+    private Integer permission;
 
     public User() {}
 }
