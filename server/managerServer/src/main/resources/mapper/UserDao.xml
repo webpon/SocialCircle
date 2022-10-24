@@ -5,6 +5,25 @@
         insert into user (password,email,permission,account_id)
         values (#{password},#{email},#{permission},#{accountId});
     </insert>
+    <update id="updateById">
+        update user
+        <set>
+            <if test="permission != null">
+                permission = #{permission},
+            </if>
+            <if test="banned != null">
+                banned = #{banned},
+            </if>
+            id = #{id}
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="deleteManager">
+        delete from user
+        <where>
+            id = #{id} and permission != 0
+        </where>
+    </delete>
     <select id="login" resultType="com.socialCircle.entity.User">
         select * from `user`
         <where>

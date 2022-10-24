@@ -2,12 +2,11 @@ package com.socialCircle.service.impl;
 
 import cn.hutool.crypto.SecureUtil;
 import com.socialCircle.common.JWTUtil;
+import com.socialCircle.common.RedisUtil;
+import com.socialCircle.constant.RedisKey;
 import com.socialCircle.constant.ResultCode;
 import com.socialCircle.dao.UserDao;
-import com.socialCircle.entity.Result;
-import com.socialCircle.entity.SignIn;
-import com.socialCircle.entity.User;
-import com.socialCircle.entity.UserInfo;
+import com.socialCircle.entity.*;
 import com.socialCircle.service.UserInfoService;
 import com.socialCircle.service.UserService;
 import com.socialCircle.vm.UserInfoVM;
@@ -24,6 +23,8 @@ public class UserServiceImpl implements UserService {
     private JWTUtil jwtUtil;
     @Resource
     private UserInfoService userInfoService;
+    @Resource
+    private RedisUtil redisUtil;
 
     @Override
     public Result login(User user) {
@@ -32,12 +33,14 @@ public class UserServiceImpl implements UserService {
         User login = userDao.login(user);
         if (login != null){
             // 判断是已经登录和是否被封号
-            if (login.getLogin() == 1){
-                return Result.error("已经被登录", ResultCode.LOGIN_LOGGED_IN);
+            if (!redisUtil.setIfAbsent(RedisKey.LOGIN+login.getId())) {
+                return  Result.error("账号已被登录", ResultCode.LOGIN_LOGGED_IN);
             }
             if (login.getBanned() == 1){
                 return Result.error("已经被封", ResultCode.LOGIN_ERROR);
             }
+            // 设置为登录
+            redisUtil.setIfAbsent(RedisKey.LOGIN+user.getId());
             HashMap<String, String> map = new HashMap<>();
             map.put("id",login.getId().toString());
             map.put("permission", login.getPermission().toString());
@@ -81,6 +84,36 @@ public class UserServiceImpl implements UserService {
         return Result.error("注册失败", ResultCode.SIGN_IN_FALL);
     }
 
+    @Override
+    public Result updateManagerPermission(User user) {
+        if (user.getPermission() == null) {
+            return Result.error("修改失败",ResultCode.USER_UPDATE_FALL);
+        }
+        user.setBanned(null);
+        if (userDao.updateById(user)) {
+            UserInfoVM info = userDao.getInfo(user.getId());
+            return Result.ok(info,ResultCode.USER_UPDATE_OK);
+        }
+        return Result.error("修改失败",ResultCode.USER_UPDATE_FALL);
+    }
+
+    @Override
+    public Boolean banned(SealNumber sealNumber) {
+        User user = new User();
+        user.setId(sealNumber.getUserId());
+        user.setBanned(2);
+        redisUtil.delete(RedisKey.LOGIN+user.getId());
+        return userDao.updateById(user);
+    }
+
+    @Override
+    public Result deleteManager(Integer id) {
+        userInfoService.deleteManager(id);
+        if (userDao.deleteManager(id)) {
+            return Result.ok("删除成功", ResultCode.USER_DELETE_OK);
+        }
+        return Result.ok("删除失败", ResultCode.USER_DELETE_FALL);
+    }
 
     private String md5(String s){
         // 密码加密5次

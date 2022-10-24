@@ -15,9 +15,27 @@ public interface ResultCode {
     Integer LOGIN_LOGGED_IN = 4002;
     // 注册失败
     Integer SIGN_IN_FALL = 4003;
-
+    // 权限修改成功
+    Integer USER_UPDATE_OK = 2005;
+    // 权限修改失败
+    Integer USER_UPDATE_FALL = 4004;
+    // 用户删除成功
+    Integer USER_DELETE_OK = 2006;
+    // 用户删除失败
+    Integer USER_DELETE_FALL = 4005;
+    // 封号成功
+    Integer USER_BANNED_OK = 2007;
+    // 封号失败
+    Integer USER_BANNED_FALL = 4006;
     // 有数据
     Integer HAVE_DATA = 2003;
     // 没有数据
     Integer NOT_HAVE_DATA = 4001;
+    // 动态删除成功
+    Integer DYNAMIC_DELETE_OK = 2008;
+    // 动态删除失败
+    Integer DYNAMIC_DELETE_FALL = 4007;
+    // 动态保存失败
+    Integer DYNAMIC_SAVE_FALL = 4009;
+    Integer DYNAMIC_SAVE_OK = 2009;
 }

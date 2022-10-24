@@ -28,14 +28,9 @@ public class User implements Serializable {
     private String accountId;
 
     /**
-     * 登录状态
-     */
-    private int login;
-
-    /**
      * 封号状态
      */
-    private int banned;
+    private Integer banned;
 
     /**
      * 登录时间

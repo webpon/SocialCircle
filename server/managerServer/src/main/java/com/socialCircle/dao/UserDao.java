@@ -15,4 +15,9 @@ public interface UserDao {
     boolean save(SignIn user);
 
     User queryByEmail(@Param("email") String email);
+
+    Boolean updateById(User user);
+
+    Boolean deleteManager(@Param("id") Integer id);
+
 }

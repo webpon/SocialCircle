@@ -23,6 +23,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     private RedisUtil redisUtil;
 
     @Override
+    public void deleteManager(Integer id) {
+       userInfoDao.deleteById(id);
+    }
+
+    @Override
     public Result getUsers(String q, Integer p, User user) {
         if (p == null) p = 1;
         // 如果没有关键词就开启缓存模式

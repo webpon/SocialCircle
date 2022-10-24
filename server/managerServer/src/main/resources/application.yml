@@ -1,5 +1,5 @@
 server:
-  port: 10000
+  port: 20211
 spring:
   profiles:
     active: dev
@@ -26,4 +26,6 @@ mybatis:
 ## 显示dao 执⾏sql语句
 logging:
   level:
-    com.ppl.springboot.dao: debug # 改成你的dao接口文件所在包路径可以打印出sql语句
+    com:
+      socialCircle:
+        dao: debug

@@ -19,12 +19,12 @@ public class SealNumber implements Serializable {
     /**
      * 封号时间
      */
-    private Date startTime;
+    private String startTime;
 
     /**
      * 结束时间
      */
-    private Date endTime;
+    private String endTime;
 
     /**
      * 封号理由

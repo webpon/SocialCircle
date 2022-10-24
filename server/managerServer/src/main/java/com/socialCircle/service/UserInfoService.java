@@ -23,4 +23,9 @@ public interface UserInfoService {
     UserInfo getUserInfoByUserId(Integer id);
 
     void save(SignIn user);
+
+    /**
+     * 删除管理
+     */
+    void deleteManager(Integer id);
 }

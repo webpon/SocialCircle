@@ -5,6 +5,12 @@
         insert into user_info (pet_name, head_icon, gender,user_id)
         values (#{petName},#{headIcon},#{gender},#{id});
     </insert>
+    <delete id="deleteById">
+        delete from user_info
+        <where>
+            user_id = #{id}
+        </where>
+    </delete>
     <select id="getUserInfoByUserId" resultType="com.socialCircle.entity.UserInfo">
         select *
         from user_info

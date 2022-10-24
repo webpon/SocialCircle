@@ -18,7 +18,6 @@
         <module>common</module>
         <module>managerServer</module>
         <module>userServer</module>
-        <module>communication</module>
     </modules>
     <properties>
         <spring.boot.version>2.5.6</spring.boot.version>

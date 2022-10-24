@@ -24,4 +24,9 @@ public interface UserInfoDao {
     UserInfo getUserInfoByUserId(@Param("id") Integer id);
 
     boolean save(SignIn user);
+
+    /**
+     * 根据id删除管理
+     */
+    void deleteById(@Param("id") Integer id);
 }
