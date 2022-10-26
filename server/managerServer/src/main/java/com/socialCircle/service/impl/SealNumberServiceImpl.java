@@ -20,8 +20,8 @@ public class SealNumberServiceImpl implements SealNumberService {
     @Override
     public Result sealNumber(SealNumber sealNumber) {
         if (sealNumberDao.save(sealNumber) && userService.banned(sealNumber)) {
-            return Result.ok("禁用成功", ResultCode.USER_BANNED_OK);
+            return Result.ok("禁用成功");
         }
-        return Result.ok("禁用失败", ResultCode.USER_BANNED_FALL);
+        return Result.ok("禁用失败");
     }
 }

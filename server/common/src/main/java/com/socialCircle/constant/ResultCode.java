@@ -37,5 +37,15 @@ public interface ResultCode {
     Integer DYNAMIC_DELETE_FALL = 4007;
     // 动态保存失败
     Integer DYNAMIC_SAVE_FALL = 4009;
+    // 动态保存成功
     Integer DYNAMIC_SAVE_OK = 2009;
+    // 话题删除成功
+    Integer TOPIC_DELETE_OK = 2010;
+    // 话题删除失败
+    Integer TOPIC_DELETE_FALL = 4010;
+    // 话题保存成功
+    Integer TOPIC_SAVE_OK = 2011;
+    // 话题保存失败
+    Integer TOPIC_SAVE_FALL = 2011;
+    
 }

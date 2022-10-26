@@ -35,14 +35,14 @@ public class UserInfoServiceImpl implements UserInfoService {
             List<UserInfoVM> userInfoList = redisUtil.getBeans(RedisKey.USERS_QUERY_KEY + p, UserInfoVM.class);
             // 如果缓存有数据
             if (userInfoList != null) {
-                return Result.ok(userInfoList, ResultCode.NOT_HAVE_DATA);
+                return Result.ok(userInfoList);
             }
             userInfoList = queryUsers(q,p,user);
             redisUtil.save(RedisKey.USERS_QUERY_KEY+p, userInfoList);
-            return Result.ok(userInfoList, ResultCode.HAVE_DATA);
+            return Result.ok(userInfoList);
         }
         List<UserInfoVM> userInfoList = queryUsers(q, p, user);
-        return Result.ok(userInfoList, ResultCode.HAVE_DATA);
+        return Result.ok(userInfoList);
     }
 
     @Override

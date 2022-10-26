@@ -43,11 +43,11 @@ public class ReportServiceImpl implements ReportService {
             // 保存缓存
             redisUtil.save(RedisKey.REPORT_QUERY_KEY + p, reportVMS);
             if (reportVMS.isEmpty()){
-                return Result.error("没有数据",ResultCode.NOT_HAVE_DATA);
+                return Result.error("没有数据");
             }
-            return Result.ok(reportVMS, ResultCode.HAVE_DATA);
+            return Result.ok(reportVMS);
         }
-        return Result.ok(bean, ResultCode.HAVE_DATA);
+        return Result.ok(bean);
     }
 
     private List<Report> queryByPage(Integer p) {

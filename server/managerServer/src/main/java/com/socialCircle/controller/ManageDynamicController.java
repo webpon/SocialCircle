@@ -17,8 +17,8 @@ public class ManageDynamicController {
     private DynamicService dynamicService;
 
     @GetMapping
-    public Result getDynamic(@RequestParam Integer p){
-        return dynamicService.getDynamic(p);
+    public Result getDynamic(@RequestParam Integer p, @RequestParam Integer classifyId){
+        return dynamicService.getDynamic(p, classifyId);
     }
 
     @DeleteMapping

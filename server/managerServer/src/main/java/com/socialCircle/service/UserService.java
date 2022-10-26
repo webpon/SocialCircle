@@ -36,4 +36,9 @@ public interface UserService {
      * 封号
      */
     Boolean banned(SealNumber sealNumber);
+
+    /**
+     * 退出登录
+     */
+    Result logout(User user);
 }

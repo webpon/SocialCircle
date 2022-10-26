@@ -4,7 +4,6 @@ import cn.hutool.core.date.DateField;
 import com.socialCircle.common.RedisUtil;
 import com.socialCircle.constant.RedisCommand;
 import com.socialCircle.constant.RedisQuery;
-import com.socialCircle.constant.ResultCode;
 import com.socialCircle.dao.DynamicDao;
 import com.socialCircle.entity.Dynamic;
 import com.socialCircle.entity.Image;
@@ -37,15 +36,19 @@ public class DynamicServiceImpl implements DynamicService {
 
 
     @Override
-    public Result getDynamic(Integer p) {
+    public Result getDynamic(Integer p, Integer classify) {
+        String key = p.toString();
+        if (classify != null) {
+            key += ":"+classify;
+        }
         // redis查询对象
         RedisQuery<List<DynamicVM>> dynamicVMRedisQuery =
-                new RedisQuery<>(DYNAMIC_QUERY_KEY, p.toString(), null, DateField.MINUTE, 20);
+                new RedisQuery<>(DYNAMIC_QUERY_KEY, key, null, DateField.MINUTE, 20);
         // 数据库查询方式
-        RedisCommand redisCommand = (key)->{
+        RedisCommand redisCommand = (k)->{
             Integer p1 = p-1;
             p1 *= 15;
-            List<Dynamic> dynamics = dynamicDao.query(p1);
+            List<Dynamic> dynamics = dynamicDao.query(p1, classify);
             ArrayList<DynamicVM> dynamicVMS = new ArrayList<>();
             dynamics.forEach(dynamic -> {
                 List<Image> images = imageService.queryByDynamicId(dynamic.getId());
@@ -57,23 +60,23 @@ public class DynamicServiceImpl implements DynamicService {
                 dynamicVMS.add(dynamicVM);
             });
             RedisQuery<List<DynamicVM>> listRedisQuery = new RedisQuery<>(DYNAMIC_QUERY_KEY, p.toString(), dynamicVMS, DateField.MINUTE, 20);
-            redisUtil.save(key, listRedisQuery, dynamicVMRedisQuery.getOffset()+10, TimeUnit.MINUTES);
+            redisUtil.save(k, listRedisQuery, dynamicVMRedisQuery.getOffset()+10, TimeUnit.MINUTES);
         };
 
         List<DynamicVM> beans = redisUtil.getBeans(dynamicVMRedisQuery, redisCommand, DynamicVM.class);
         if (beans == null) {
-            return Result.error("没有更多的数据", ResultCode.NOT_HAVE_DATA);
+            return Result.error("没有更多的数据");
         }
-        return Result.ok(beans, ResultCode.HAVE_DATA);
+        return Result.ok(beans);
     }
 
     @Override
     public Result deleteDynamicById(List<Integer> ids) {
         imageService.deleteDynamicById(ids);
         if (dynamicDao.deleteDynamicById(ids)) {
-            return Result.ok("删除成功", ResultCode.DYNAMIC_DELETE_OK);
+            return Result.ok("删除成功");
         }
-        return Result.ok("删除失败", ResultCode.DYNAMIC_DELETE_FALL);
+        return Result.ok("删除失败");
     }
 
     @Override
@@ -88,12 +91,22 @@ public class DynamicServiceImpl implements DynamicService {
             });
             if (imageService.save(images)) {
                 redisUtil.batchDelete(DYNAMIC_QUERY_KEY+"*");
-                return Result.error("发布成功", ResultCode.DYNAMIC_SAVE_OK);
+                return Result.error("发布成功");
             }
             ArrayList<Integer> integers = new ArrayList<>();
             integers.add(dynamic.getId());
             dynamicDao.deleteDynamicById(integers);
         }
-        return Result.error("发布失败", ResultCode.DYNAMIC_SAVE_FALL);
+        return Result.error("发布失败");
+    }
+
+    /**
+     * 修改动态话题
+     *
+     * @param ids
+     */
+    @Override
+    public void updateByTopicIds(List<Integer> ids) {
+        dynamicDao.updateByTopicIds(ids);
     }
 }

@@ -9,8 +9,9 @@ public interface DynamicService {
     /**
      * 获取动态
      * @param p 第几页
+     * @param classify 分类id
      */
-    Result getDynamic(Integer p);
+    Result getDynamic(Integer p, Integer classify);
 
     /**
      * 删除动态
@@ -23,4 +24,10 @@ public interface DynamicService {
      * @param dynamicVM 动态内容
      */
     Result addDynamicById(DynamicVM dynamicVM);
+
+    /**
+     * 修改动态话题
+     * @param ids
+     */
+    void updateByTopicIds(List<Integer> ids);
 }

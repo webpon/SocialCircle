@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.socialCircle.dao.ClassifyDao">
+    <insert id="addClassify" useGeneratedKeys="true" keyProperty="id">
+        insert into classify (title)
+        values (#{title})
+    </insert>
+    <delete id="deleteById">
+        delete from classify
+        <where>
+            id in (
+            <foreach collection="ids" item="id" index="index" separator=",">
+                ${id}
+            </foreach>
+            )
+        </where>
+    </delete>
+    <select id="getClassify" resultType="com.socialCircle.entity.Classify">
+        select * from classify
+    </select>
+</mapper>

@@ -23,4 +23,8 @@ public class UserController {
     public Result userInfo(@RequestAttribute User user){
         return userService.userInfo(user);
     }
+    @RequestMapping("/logout")
+    public Result logout(@RequestAttribute User user){
+        return userService.logout(user);
+    }
 }

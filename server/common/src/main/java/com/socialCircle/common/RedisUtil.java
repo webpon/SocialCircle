@@ -2,6 +2,7 @@ package com.socialCircle.common;
 
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.socialCircle.constant.RedisCommand;
 import com.socialCircle.constant.RedisQuery;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -96,7 +97,7 @@ public class RedisUtil {
             threadPoolExecutor.execute(()-> {
                 if (lock(key, 10, TimeUnit.SECONDS)) {
                     redisCommand.run(key);
-                    delete(key);
+                    delete(key+":lock");
                 }
             });
             return null;
@@ -174,6 +175,14 @@ public class RedisUtil {
      * @return 获取所是否成功
      */
     public Boolean lock(String key, Integer timeout, TimeUnit time){
-        return stringRedisTemplate.opsForValue().setIfAbsent(key,"1", timeout, time);
+        return stringRedisTemplate.opsForValue().setIfAbsent(key+":lock","1", timeout, time);
+    }
+
+    public <T> Map<String, List<T>> getMap(String key, Class<T> t) {
+        String s = stringRedisTemplate.opsForValue().get(key);
+        if (s == null) {
+            return null;
+        }
+        return JSON.parseObject(s, new TypeReference<Map<String,List<T>>>(){});
     }
 }

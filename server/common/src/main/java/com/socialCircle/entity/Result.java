@@ -20,22 +20,21 @@ public class Result<T> {
     }
 
 
-
-    public static <C> Result<C> ok(String msg, C data, Integer code){
-        return new Result<C>(code,msg,data);
+    public static <C> Result<C> ok(C data){
+        return new Result<C>(200,null,data);
     }
 
-    public static <C> Result<C> ok(C data, Integer code){
-        return new Result<C>(code,null,data);
+    public static <C> Result<C> ok(String msg, C data){
+        return new Result<C>(200,msg,data);
     }
 
-    public static <C> Result<C> ok(String msg, Integer code){
-        return new Result<C>(code,msg,null);
+    public static <C> Result<C> ok(String msg){
+        return new Result<C>(200,msg,null);
     }
 
 
     public static <C> Result<C> ok(){
-        return new Result<C>(ResultCode.SUCCEED,null,null);
+        return new Result<C>(200,null,null);
     }
 
 

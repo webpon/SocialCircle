@@ -50,7 +50,6 @@ public class SessionManager {
                 // 关闭连接
                 session.close();
             } catch (IOException e) {
-                // todo: 关闭出现异常处理
                 e.printStackTrace();
             }
         }
