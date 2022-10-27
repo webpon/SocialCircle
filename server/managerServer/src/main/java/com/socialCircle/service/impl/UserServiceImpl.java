@@ -81,8 +81,8 @@ public class UserServiceImpl implements UserService {
         if (userDao.save(signIn)) {
             signIn.setId(userDao.queryByEmail(signIn.getEmail()).getId());
             userInfoService.save(signIn);
-            user.setPassword(null);
-            return Result.ok("注册成功",user);
+            signIn.setPassword(null);
+            return Result.ok("注册成功",signIn);
         }
         return Result.error("注册失败");
     }
