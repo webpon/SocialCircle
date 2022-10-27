@@ -1,31 +1,47 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div v-if="true">
+    <!-- <transition name="transitionLeft"> -->
+    <keep-alive>
+      <router-view class="transitionBody"></router-view>
+    </keep-alive>
+    <!-- </transition> -->
   </div>
-  <HelloWorld msg="Vite + Vue" />
+  <div v-else>
+    <keep-alive>
+      <router-view />
+    </keep-alive>
+  </div>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
+<style scoped lang="scss">
+.transitionBody {
+  transition: all 0.3s ease-out; //设置动画
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.transitionLeft-enter,
+.transitionRight-leave-to {
+  transform: translate(100%, 0);
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.transitionLeft-enter-to {
+  transform: translate(0, 0);
+}
+
+.transitionLeft-leave-to,
+.transitionRight-enter {
+  transform: translate(-100%, 0);
+}
+
+.transitionLeft-enter-active,
+.transitionRight-enter-active {
+  //防止过渡时元素抖动
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
 }
 </style>

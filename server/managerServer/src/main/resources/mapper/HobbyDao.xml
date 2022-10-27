@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.socialCircle.dao.HobbyDao">
+    <insert id="addHobby" useGeneratedKeys="true" keyProperty="id">
+        insert into hobby (title, hobby_name)
+        values (#{title}, #{hobbyName})
+    </insert>
+    <delete id="deleteHobby">
+        delete from hobby
+        <where>
+            id in (
+            <foreach collection="ids" item="id" index="index" separator=",">
+                ${id}
+            </foreach>
+            )
+        </where>
+    </delete>
+    <select id="getHobbies" resultType="com.socialCircle.entity.Hobby">
+        select * from hobby
+    </select>
+</mapper>
