@@ -7,7 +7,7 @@ import { BrowserRouterProps } from 'react-router-dom';
 // import result from './modules/result';
 // import user from './modules/user';
 // import login from './modules/login';
-// import otherRoutes from './modules/others';
+import otherRoutes from './modules/others';
 // import { useAppSelector } from 'modules/store';
 
 // import { selectUserInfo } from 'modules/user'
@@ -20,9 +20,7 @@ import { BrowserRouterProps } from 'react-router-dom';
 
 
 
-import firstLevel from './modules/firstlevel'
-import secondLevel from './modules/secondLevel'
-import adminLevel from './modules/adminLevel'
+import firstLevel from './modules/firstlevel';
 
 export interface IRouter {
   path: string;
@@ -61,13 +59,15 @@ const routes: IRouter[] = [
   },
   {
     path: '/',
-    redirect: '/user/manage',
+    redirect: '/user/manage'
   },
+  // {
+  //   path: '/*',
+  //   Component: 
+  // }
 ];
 
+const InitRoutes = [...routes, ...otherRoutes, ...firstLevel]
 
 
-// const allRoutes = [...routes, ...dashboard, ...list, ...form, ...detail, ...result, ...user, ...login, ...otherRoutes];
-const allRoutes = [...routes, ...firstLevel, ...secondLevel, ...adminLevel]
-
-export default allRoutes;
+export default InitRoutes;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'tdesign-react';
+import { Button, Tag } from 'tdesign-react';
 import { LogoGithubIcon, HelpCircleIcon, SettingIcon } from 'tdesign-icons-react';
 import { useAppDispatch } from 'modules/store';
 import { toggleSetting } from 'modules/global';
@@ -11,7 +11,7 @@ export default function Header() {
   const dispatch = useAppDispatch();
 
   const navToGitHub = () => {
-    window.open('https://github.com/tencent/tdesign-react-starter');
+    window.open('https://gitee.com/gitopenchina/social-circle/tree/dev/');
   };
 
   const navToHelper = () => {
@@ -21,11 +21,13 @@ export default function Header() {
   const toggleSettingPanel = () => {
     dispatch(toggleSetting());
   };
-
+  
   return (
     <div>
       <header className={Style.loginHeader}>
-        <LogoFullIcon className={Style.logo} />
+        <Tag shape="round" className={Style.logo}>
+          圈子社交
+        </Tag>
         <div className={Style.operationsContainer}>
           <Button
             className={Style.operationsButton}

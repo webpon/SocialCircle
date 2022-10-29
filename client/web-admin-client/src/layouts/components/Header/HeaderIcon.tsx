@@ -26,7 +26,7 @@ export default memo(() => {
   };
 
   const gotoGitHub = () => {
-    window.open('https://github.com/Tencent/tdesign-react-starter');
+    window.open('https://gitee.com/gitopenchina/social-circle/tree/dev/');
   };
 
   const clickHandler = (data: any) => {
@@ -78,7 +78,7 @@ export default memo(() => {
                 个人中心
               </>
             </DropdownItem>
-            <DropdownItem value={1} onClick={handleLogout}>
+            <DropdownItem value={2} onClick={handleLogout}>
               <>
                 <PoweroffIcon />
                 退出登录

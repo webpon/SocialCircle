@@ -30,6 +30,14 @@ export const getUserInfo = async () => {
 
 // !TOdO: TS类型限制
 export const getUserList = async (params: any) => {
-    return request.get<any, any>('/manage/user', params);
+    return request.get<any, any>('/manage/user', {
+        params
+    });
 };
+
+// !TOdO: TS类型限制
+export const addAdminUser = async (params: any) => {
+    return request.post<any, any>('/admin', params);
+};
+
 

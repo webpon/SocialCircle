@@ -5,19 +5,22 @@ import Header from './Header';
 import Footer from './Footer';
 import Menu from './Menu';
 import Content from './AppRouter';
+import { Navigate, useNavigate } from 'react-router-dom'
 
 import Style from './AppLayout.module.less';
 
-const SideLayout = React.memo(() => (
-  <Layout className={Style.sidePanel}>
-    <Menu showLogo showOperation />
-    <Layout className={Style.sideContainer}>
-      <Header />
-      <Content />
-      <Footer />
+const SideLayout = React.memo(() => {
+  return (
+    <Layout className={Style.sidePanel}>
+      <Menu showLogo showOperation />
+      <Layout className={Style.sideContainer}>
+        <Header />
+        <Content />
+        {/* <Footer /> */}
+      </Layout>
     </Layout>
-  </Layout>
-));
+  )
+});
 
 const TopLayout = React.memo(() => (
   <Layout className={Style.topPanel}>
@@ -34,7 +37,7 @@ const MixLayout = React.memo(() => (
       <Menu />
       <Layout className={Style.mixContent}>
         <Content />
-        <Footer />
+        {/* <Footer /> */}
       </Layout>
     </Layout>
   </Layout>

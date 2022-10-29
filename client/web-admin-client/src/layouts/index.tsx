@@ -23,15 +23,6 @@ export default memo(() => {
       }
     }, 100);
     window.addEventListener('resize', handleResize);
-    // 获取用户信息
-    // if (Token) {
-    //   console.log('_____________');
-      
-    //   dispatch(getUserInfo())
-    // } else {
-    //   await dispatch(logout());
-    //   navigate('/login');
-    // }
     return () => {
       window.removeEventListener('resize', handleResize);
     };

@@ -1,7 +1,5 @@
 import React, { memo } from 'react';
-import Style from './Menu.module.less';
-import FullLogo from 'assets/svg/assets-logo-full.svg?component';
-import MiniLogo from 'assets/svg/assets-t-logo.svg?component';
+import Style from './Menu.module.less'
 import { useNavigate } from 'react-router-dom';
 
 interface IProps {
@@ -16,8 +14,8 @@ export default memo((props: IProps) => {
   };
 
   return (
-    <div className={Style.menuLogo} onClick={handleClick}>
-      {props.collapsed ? <MiniLogo /> : <FullLogo />}
+    <div  onClick={handleClick}>
+      {props.collapsed ? <div className={Style.menuMiniLogo}>圈子</div> : <div className={Style.menuLogo}>圈子社交</div>}
     </div>
   );
 });

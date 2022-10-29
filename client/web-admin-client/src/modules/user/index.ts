@@ -8,7 +8,13 @@ const TOKEN_NAME = 'token';
 const initialState = {
   token: localStorage.getItem(TOKEN_NAME) || 'main_token', // 默认token不走权限
   userInfo: {},
-  userList: []
+  userListData: {
+    contractList: [],
+    current: 1,
+    loading: false,
+    pageSize: 15,
+    total: 100,
+  }
 };
 
 // login
@@ -40,12 +46,13 @@ export const getUserInfo = createAsyncThunk(`${namespace}/getUserInfo`, async ()
 });
 
 // getUserList
-export const getUserList = createAsyncThunk(`${namespace}/getUserList`, async () => {
-  const res = await getUserListApi({
-    q: 1,
-    p: 1
-  });
-  return res;
+export const getUserList = createAsyncThunk(`${namespace}/getUserList`, async (params: {p: number, q?:string, }) => {
+  
+  const res = await getUserListApi(params);
+  return {
+    data: res.data,
+    current: params.p,
+  }
 });
 
 const userSlice = createSlice({
@@ -70,16 +77,28 @@ const userSlice = createSlice({
         state.token = '';
         state.userInfo = {};
       })
+      /* 获取当前用户信息 */
       .addCase(getUserInfo.fulfilled, (state, action) => {
         state.userInfo = action.payload;
       })
+      /* 获取管理端用户列表 */
+      .addCase(getUserList.pending, (state) => {
+        state.userListData.loading = true;
+      })
       .addCase(getUserList.fulfilled, (state, action) => {
-        state.userList = action.payload;
+        state.userListData.contractList = action.payload.data;
+        state.userListData.current = action.payload.current;
+        state.userListData.loading = false;
+      })
+      .addCase(getUserList.rejected, (state, action) => {
+        state.userListData.loading = false;
       });
   },
 });
+console.log();
 
 export const selectListBase = (state: RootState) => state.listBase;
+export const selectUserList = (state: RootState) => state.user.userListData;
 export const selectUserInfo = (state: RootState) => state.user.userInfo;
 export const selectToken = (state: RootState) => state.user.token;
 

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Form, MessagePlugin, Input, Checkbox, Button, FormInstanceFunctions, SubmitContext } from 'tdesign-react';
 import { LockOnIcon, UserIcon, BrowseOffIcon, BrowseIcon, RefreshIcon } from 'tdesign-icons-react';
 import classnames from 'classnames';
-import QRCode from 'qrcode.react';
 import { useAppDispatch } from 'modules/store';
 import { login, getUserInfo } from 'modules/user';
 import useCountdown from '../../hooks/useCountDown';
@@ -36,6 +35,12 @@ export default function Login() {
     }
   };
 
+  const emailCheck = (val: string) => {
+    const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+    if (reg.test(val)) return { result: true, type: 'success' };
+    return { result: false, message: '请输入正确的邮箱', type: 'error' };
+  }
+
   const switchType = (val: ELoginType) => {
     formRef.current?.reset?.();
     changeLoginType(val);
@@ -51,15 +56,14 @@ export default function Login() {
       >
         {loginType === 'password' && (
           <>
-            <FormItem name='email' rules={[{ required: true, message: '账号必填', type: 'error' }]}>
-              <Input size='large' placeholder='请输入账号：admin' prefixIcon={<UserIcon />}></Input>
+            <FormItem name='accountId' rules={[{ required: true, message: '账号必填', type: 'error' }]}>
+              <Input clearable size='large' placeholder='请输入账号：' prefixIcon={<UserIcon />}></Input>
             </FormItem>
             <FormItem name='password' rules={[{ required: true, message: '密码必填', type: 'error' }]}>
               <Input
                 size='large'
                 type={showPsw ? 'text' : 'password'}
-                clearable
-                placeholder='请输入登录密码：admin'
+                placeholder='请输入登录密码：'
                 prefixIcon={<LockOnIcon />}
                 suffixIcon={
                   showPsw ? (
@@ -77,23 +81,11 @@ export default function Login() {
           </>
         )}
 
-        {/* 扫码登陆 */}
-        {loginType === 'qrcode' && (
-          <>
-            <div className={Style.tipContainer}>
-              <span className='tip'>请使用微信扫一扫登录</span>
-              <span className='refresh'>
-                刷新 <RefreshIcon />
-              </span>
-            </div>
-            <QRCode value='' size={200} />
-          </>
-        )}
-        {/* // 手机号登陆 */}
+        {/* // 邮箱登陆 */}
         {loginType === 'phone' && (
           <>
-            <FormItem name='phone' rules={[{ required: true, message: '手机号必填', type: 'error' }]}>
-              <Input maxlength={11} size='large' placeholder='请输入您的手机号' prefixIcon={<UserIcon />} />
+            <FormItem name='email' rules={[{ required: true, message: '邮箱必填', type: 'error' }, { validator: emailCheck }]}>
+              <Input maxlength={20} size='large' placeholder='请输入您的邮箱' prefixIcon={<UserIcon />} />
             </FormItem>
             <FormItem name='verifyCode' rules={[{ required: true, message: '验证码必填', type: 'error' }]}>
               <Input size='large' placeholder='请输入验证码' />
@@ -121,14 +113,9 @@ export default function Login() {
               使用账号密码登录
             </span>
           )}
-          {loginType !== 'qrcode' && (
-            <span className='tip' onClick={() => switchType('qrcode')}>
-              使用微信扫码登录
-            </span>
-          )}
           {loginType !== 'phone' && (
             <span className='tip' onClick={() => switchType('phone')}>
-              使用手机号登录
+              使用邮箱登录
             </span>
           )}
         </div>

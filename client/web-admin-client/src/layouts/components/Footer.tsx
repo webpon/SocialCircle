@@ -13,7 +13,7 @@ const Footer = () => {
 
   return (
     <TFooter>
-      <Row justify='center'>Copyright @ 2022-2022 Tencent. All Rights Reserved</Row>
+      <Row justify='center'>卷就完了~~~</Row>
     </TFooter>
   );
 };
