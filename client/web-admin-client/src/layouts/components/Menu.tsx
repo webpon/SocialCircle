@@ -155,6 +155,8 @@ export default memo((props: IMenuProps) => {
         if (firstChild?.meta && !firstChild?.meta?.hidden) {
           const { Icon, title } = meta;
           const singlePath = resolve(resolve(parentPath, path), firstChild.path);
+          
+          
           return (
             <MenuItem
               key={singlePath}
@@ -167,7 +169,8 @@ export default memo((props: IMenuProps) => {
           );
         }
       }
-
+      console.log(routerPath, 'routerPath');
+      
       return (
         <SubMenu key={routerPath} value={routerPath} title={title} icon={Icon ? <Icon /> : undefined}>
           {renderMenuItems(children, routerPath)}
@@ -178,6 +181,7 @@ export default memo((props: IMenuProps) => {
   console.log(menu, 'menu');
 
   const location = useLocation();
+  const defaultExpanded = ["/" + location.pathname.split("/")[1]]
   const globalState = useAppSelector(selectGlobal);
 
   const { version } = globalState;
@@ -190,6 +194,7 @@ export default memo((props: IMenuProps) => {
       value={location.pathname}
       theme={globalState.theme}
       collapsed={globalState.collapsed}
+      expanded={defaultExpanded}
       operations={props.showOperation ? <div className={Style.menuTip}>{bottomText}</div> : undefined}
       logo={props.showLogo ? <MenuLogo collapsed={globalState.collapsed} /> : undefined}
     >
