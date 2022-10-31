@@ -49,7 +49,7 @@ export default memo(() => {
     const pageState = useAppSelector(selectUserList);
     const [isAddUser, setIsAddUser] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([1, 2]);
-  const [alertProps, setAlertProps] = useState({ visible: false, title: "" });
+    const [alertProps, setAlertProps] = useState({ visible: false, title: "" });
     const { loading, contractList, current, pageSize, total } = pageState;
     useEffect(() => {
         dispatch(
@@ -175,6 +175,7 @@ export default memo(() => {
           },
         },
     ]
+    
     return (
         <div className={classnames(CommonStyle.pageWithPadding, CommonStyle.pageWithColor)}>
             <Row justify='space-between' className={style.toolBar}>
@@ -186,8 +187,7 @@ export default memo(() => {
                 columns={columns}
                 loading={loading}
                 data={contractList}
-                rowKey='id'
-                selectedRowKeys={selectedRowKeys}
+                rowKey='accountId'
                 verticalAlign='top'
                 hover
                 onSelectChange={onSelectChange}
