@@ -194,7 +194,7 @@ export default memo((props: IMenuProps) => {
       value={location.pathname}
       theme={globalState.theme}
       collapsed={globalState.collapsed}
-      expanded={defaultExpanded}
+      defaultExpanded={defaultExpanded}
       operations={props.showOperation ? <div className={Style.menuTip}>{bottomText}</div> : undefined}
       logo={props.showLogo ? <MenuLogo collapsed={globalState.collapsed} /> : undefined}
     >
