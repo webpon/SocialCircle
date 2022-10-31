@@ -39,15 +39,16 @@ public class DynamicServiceImpl implements DynamicService {
     public Result getDynamic(Integer p, Integer classify) {
         String key = p.toString();
         if (classify != null) {
-            key += ":"+classify;
+            key += ":" + classify;
         }
         // redis查询对象
         RedisQuery<List<DynamicVM>> dynamicVMRedisQuery =
                 new RedisQuery<>(DYNAMIC_QUERY_KEY, key, null, DateField.MINUTE, 20);
         // 数据库查询方式
-        RedisCommand redisCommand = (k)->{
-            Integer p1 = p-1;
-            p1 *= 15;
+        Integer finalP = p;
+        RedisCommand redisCommand = (k) -> {
+            Integer p1 = finalP - 1;
+            p1 *= 10;
             List<Dynamic> dynamics = dynamicDao.query(p1, classify);
             ArrayList<DynamicVM> dynamicVMS = new ArrayList<>();
             dynamics.forEach(dynamic -> {
@@ -59,15 +60,19 @@ public class DynamicServiceImpl implements DynamicService {
                 dynamicVM.setImages(images);
                 dynamicVMS.add(dynamicVM);
             });
-            RedisQuery<List<DynamicVM>> listRedisQuery = new RedisQuery<>(DYNAMIC_QUERY_KEY, p.toString(), dynamicVMS, DateField.MINUTE, 20);
-            redisUtil.save(k, listRedisQuery, dynamicVMRedisQuery.getOffset()+10, TimeUnit.MINUTES);
+            RedisQuery<List<DynamicVM>> listRedisQuery = new RedisQuery<>(DYNAMIC_QUERY_KEY, finalP.toString(), dynamicVMS, DateField.MINUTE, 20);
+            redisUtil.save(k, listRedisQuery, dynamicVMRedisQuery.getOffset() + 10, TimeUnit.MINUTES);
         };
 
         List<DynamicVM> beans = redisUtil.getBeans(dynamicVMRedisQuery, redisCommand, DynamicVM.class);
         if (beans == null) {
             return Result.error("没有更多的数据");
         }
-        return Result.ok(beans);
+        p--;
+        p *= 10;
+        Result<List<DynamicVM>> ok = Result.ok(beans);
+        ok.setTotal(dynamicDao.count(classify));
+        return ok;
     }
 
     @Override
@@ -90,7 +95,7 @@ public class DynamicServiceImpl implements DynamicService {
                 image.setDynamicId(dynamic.getId());
             });
             if (imageService.save(images)) {
-                redisUtil.batchDelete(DYNAMIC_QUERY_KEY+"*");
+                redisUtil.batchDelete(DYNAMIC_QUERY_KEY + "*");
                 return Result.error("发布成功");
             }
             ArrayList<Integer> integers = new ArrayList<>();

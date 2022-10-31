@@ -13,6 +13,8 @@ public class MVCConfig implements WebMvcConfigurer {
     private JWTUtil jwtUtil;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new JWTInterceptor(jwtUtil)).addPathPatterns("/**");
+        registry.addInterceptor(new JWTInterceptor(jwtUtil))
+                .addPathPatterns("/**")
+                .excludePathPatterns("/login","/kaptcha","/signIn","/emailCode");
     }
 }

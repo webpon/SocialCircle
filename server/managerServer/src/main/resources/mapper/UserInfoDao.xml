@@ -23,15 +23,34 @@
         from user u
         left join user_info ui on u.id = ui.user_id
         <where>
-            <if test="user.permission == 1 and user.id != 1">
-                permission = 0 and
-            </if>
             <if test="q != null">
                 pet_name like #{q} and
             </if>
+            <if test="getAdmin">
+                permission != 0 and
+            </if>
+            <if test="!getAdmin">
+                permission = 0 and
+            </if>
             u.id != 1
         </where>
-        limit #{p},15
-
+        order by u.id desc
+        limit 0,10    </select>
+    <select id="count" resultType="java.lang.Long">
+        select COUNT(u.id)
+        from user u
+        left join user_info ui on u.id = ui.user_id
+        <where>
+            <if test="q != null">
+                pet_name like #{q} and
+            </if>
+            <if test="getAdmin">
+                permission != 0 and
+            </if>
+            <if test="!getAdmin">
+                permission = 0 and
+            </if>
+            u.id != 1
+        </where>
     </select>
 </mapper>

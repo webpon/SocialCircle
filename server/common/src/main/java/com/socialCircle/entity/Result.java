@@ -1,15 +1,13 @@
 package com.socialCircle.entity;
 
-import com.socialCircle.constant.ResultCode;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class Result<T> {
     private Integer code;
     private String msg;
     private T data;
+    private Long total;
 
     private Result(){}
 
@@ -42,9 +40,11 @@ public class Result<T> {
     public static  <C> Result<C> error(String msg){
         return new Result<C>(400,msg,null);
     }
-
-    public static  <C> Result<C> error(String msg, Integer code){
+    public static  <C> Result<C> error(Integer code, String msg){
         return new Result<C>(code,msg,null);
+    }
+    public static  <C> Result<C> error(C data){
+        return new Result<C>(400,null,data);
     }
 
 }

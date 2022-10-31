@@ -1,12 +1,15 @@
 import React, { useState, memo, useEffect } from 'react';
-import { Table, Tag, Row, Col, Button, Input, Avatar } from 'tdesign-react';
+import { Table, Tag, Row, Col, Button, Input, Avatar, Dialog } from 'tdesign-react';
 import { UserIcon } from 'tdesign-icons-react';
 import classnames from 'classnames';
 import { useAppDispatch, useAppSelector } from 'modules/store';
-import { getUserList, selectUserList } from 'modules/user';
+import {getAdminList, getUserList, selectUserList} from 'modules/user';
 import { clearPageState } from 'modules/list/base';
 import CommonStyle from 'styles/common.module.less';
 import style from './List.module.less';
+import {
+  deleteAdminUser as deleteAdminUserApi
+} from 'services/user'
 
 import AddUser from './components/AddUser';
 
@@ -38,11 +41,6 @@ export const PermissionMap: {
             普通管理员
         </Tag>
     ),
-    3: (
-        <Tag theme='danger' variant='light'>
-            超级管理员
-        </Tag>
-    ),
 };
 
 
@@ -51,10 +49,11 @@ export default memo(() => {
     const pageState = useAppSelector(selectUserList);
     const [isAddUser, setIsAddUser] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([1, 2]);
+  const [alertProps, setAlertProps] = useState({ visible: false, title: "" });
     const { loading, contractList, current, pageSize, total } = pageState;
     useEffect(() => {
         dispatch(
-            getUserList({ p: 1 }),
+          getAdminList({ p: 1 }),
         );
         return () => {
             console.log('clear');
@@ -66,7 +65,15 @@ export default memo(() => {
         setSelectedRowKeys(value);
     }
     function setAddUser(isShow: Boolean) {
-        setIsAddUser(isShow)
+        // @ts-ignore
+      setIsAddUser(isShow)
+    }
+    function deleteAdmin(id:number) {
+      deleteAdminUserApi({id}).then(({code})=>{
+        if (code === 200){
+          console.log("删除成功")
+        }
+      });
     }
     const columns: any = [
         {
@@ -143,18 +150,29 @@ export default memo(() => {
             width: 180,
             colKey: 'op',
             title: '操作',
-            cell() {
-                return (
-                    <>
-                        <Button theme='primary' variant='text'>
-                            管理
-                        </Button>
-                        <Button theme='primary' variant='text'>
-                            删除
-                        </Button>
-                    </>
-                );
-            },
+          cell: function (row: any) {
+            return (
+              <>
+                <Button onClick={() => {
+                  deleteAdmin(row.id)
+                }} theme='primary' variant='text'>
+                  管理
+                </Button>
+                <Button theme='primary' variant='text'
+                        onClick={() => {
+                          setAlertProps({
+                            visible: true,
+                            title: `删除`,
+                            content: `是否删除id为:${row.id}的管理`,
+                            confirmBtn: '删除',
+                          });
+                        }}
+                >
+                  删除
+                </Button>
+              </>
+            );
+          },
         },
     ]
     return (
@@ -181,7 +199,7 @@ export default memo(() => {
                     showJumper: true,
                     onCurrentChange(current, pageInfo) {
                         dispatch(
-                            getUserList({
+                            getAdminList({
                                 p: pageInfo.current,
                             }),
                         );
@@ -189,6 +207,17 @@ export default memo(() => {
                 }}
             />
             <AddUser setAddUser={setAddUser} isAddUser={isAddUser} />
+
+          <Dialog
+            {...alertProps}
+            cancelBtn="取消"
+            onClose={() => {
+              setAlertProps({ visible: false });
+            }}
+            onConfirm={() => {
+              setAlertProps({ visible: false });
+            }}
+          />
         </div>
     );
 });

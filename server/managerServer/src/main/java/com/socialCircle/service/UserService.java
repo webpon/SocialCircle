@@ -41,4 +41,19 @@ public interface UserService {
      * 退出登录
      */
     Result logout(User user);
+
+    /**
+     * 发送验证码
+     * @param sessionCode 正确验证码
+     * @param email 用户邮箱
+     * @param code 用户输入的验证码
+     */
+    Result emailCode(String sessionCode, String email, String code);
+
+    /**
+     * 以下的列表
+     * @param email 邮箱
+     * @param code 验证码
+     */
+    Result loginByEmail(String email, String code);
 }

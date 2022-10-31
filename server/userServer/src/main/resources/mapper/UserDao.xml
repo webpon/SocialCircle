@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.socialCircle.dao.UserDao">
+<!--    <insert id="save">-->
+<!--        insert into user (password,email,permission,account_id)-->
+<!--        values (#{password},#{email},#{permission},#{accountId});-->
+<!--    </insert>-->
+    <select id="login" resultType="com.socialCircle.entity.User">
+        select * from `user`
+        <where>
+            (email = #{email} or account_id = #{accountId})
+            and `password` = #{password}
+            and permission = 0
+        </where>
+    </select>
+<!--    <select id="getInfo" resultType="com.socialCircle.vm.UserInfoVM">-->
+<!--        select *,user.id as id-->
+<!--        from user-->
+<!--                 left join user_info ui on user.id = ui.user_id-->
+<!--        <where>-->
+<!--            user.id = #{id}-->
+<!--        </where>-->
+<!--    </select>-->
+    <select id="getMaxId" resultType="java.lang.Long">
+        select MAX(id) from user
+    </select>
+</mapper>

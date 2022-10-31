@@ -1,6 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-import { login as loginApi, getUserInfo as getUserInfoApi, getUserList as getUserListApi, logout as logoutApi } from 'services/user'
+import {
+  login as loginApi,
+  getUserInfo as getUserInfoApi,
+  getUserList as getUserListApi,
+  getAdminList as getAdminListApi,
+  logout as logoutApi
+} from 'services/user'
 
 const namespace = 'user';
 const TOKEN_NAME = 'token';
@@ -19,10 +25,10 @@ const initialState = {
 
 // login
 export const login = createAsyncThunk(`${namespace}/login`, async (params: { accountId: string; password: string }) => {
-  try {    
+  try {
     const res = await loginApi(params)
     console.log(res);
-    
+
     return res.data
   } catch (error: any) {
     return Promise.reject(error.msg);
@@ -31,7 +37,7 @@ export const login = createAsyncThunk(`${namespace}/login`, async (params: { acc
 
 // logout
 export const logout = createAsyncThunk(`${namespace}/logout`, async () => {
-  try {    
+  try {
     const res = await logoutApi()
     return res.data
   } catch (error: any) {
@@ -47,8 +53,17 @@ export const getUserInfo = createAsyncThunk(`${namespace}/getUserInfo`, async ()
 
 // getUserList
 export const getUserList = createAsyncThunk(`${namespace}/getUserList`, async (params: {p: number, q?:string, }) => {
-  
+
   const res = await getUserListApi(params);
+  return {
+    data: res.data,
+    current: params.p,
+  }
+});
+
+// getAdminList
+export const getAdminList = createAsyncThunk(`${namespace}/getAdminList`, async (params: {p: number, q?:string, }) => {
+  const res = await getAdminListApi(params);
   return {
     data: res.data,
     current: params.p,
@@ -81,9 +96,11 @@ const userSlice = createSlice({
       .addCase(getUserInfo.fulfilled, (state, action) => {
         state.userInfo = action.payload;
       })
-      /* 获取管理端用户列表 */
+      /* 获取用户列表 */
       .addCase(getUserList.pending, (state) => {
         state.userListData.loading = true;
+
+
       })
       .addCase(getUserList.fulfilled, (state, action) => {
         state.userListData.contractList = action.payload.data;
@@ -91,6 +108,18 @@ const userSlice = createSlice({
         state.userListData.loading = false;
       })
       .addCase(getUserList.rejected, (state, action) => {
+        state.userListData.loading = false;
+      })
+      /* 获取管理列表 */
+      .addCase(getAdminList.pending, (state) => {
+        state.userListData.loading = true;
+      })
+      .addCase(getAdminList.fulfilled, (state, action) => {
+        state.userListData.contractList = action.payload.data;
+        state.userListData.current = action.payload.current;
+        state.userListData.loading = false;
+      })
+      .addCase(getAdminList.rejected, (state, action) => {
         state.userListData.loading = false;
       });
   },

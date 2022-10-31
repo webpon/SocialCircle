@@ -3,6 +3,7 @@ package com.socialCircle.controller.user;
 import com.socialCircle.entity.Result;
 import com.socialCircle.entity.SignIn;
 import com.socialCircle.entity.User;
+import com.socialCircle.service.UserInfoService;
 import com.socialCircle.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,9 @@ import javax.annotation.Resource;
 public class AdminController {
     @Resource
     private UserService userService;
+
+    @Resource
+    private UserInfoService userInfoService;
 
     /**
      * 修改管理权限
@@ -30,5 +34,10 @@ public class AdminController {
     @DeleteMapping
     public Result deleteManager(Integer id){
         return userService.deleteManager(id);
+    }
+
+    @GetMapping
+    public Result getManagers(String q, @RequestParam(defaultValue = "1",required = false) Integer p){
+        return userInfoService.getManagers(q,p);
     }
 }

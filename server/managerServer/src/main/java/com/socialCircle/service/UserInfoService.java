@@ -11,7 +11,6 @@ public interface UserInfoService {
      * 查询用户
      * @param q 关键词
      * @param p 页码
-     * @param user 当前登录对象
      */
     Result getUsers(String q, Integer p, User user);
 
@@ -28,4 +27,11 @@ public interface UserInfoService {
      * 删除管理
      */
     void deleteManager(Integer id);
+
+    /**
+     * 获取管理
+     * @param q 关键词
+     * @param p 页码
+     */
+    Result getManagers(String q, Integer p);
 }

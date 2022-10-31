@@ -13,9 +13,8 @@ public interface UserInfoDao {
      * 查询用户
      * @param q 关键词
      * @param p 页码
-     * @param user 当前登录对象
      */
-    List<UserInfoVM> queryUsers(@Param("q") String q, @Param("p") Integer p, @Param("user") User user);
+    List<UserInfoVM> queryUsers(@Param("q") String q, @Param("p") Integer p, @Param("getAdmin") Boolean getAdmin);
 
     /**
      * 按照用户id查询个人信息
@@ -29,4 +28,6 @@ public interface UserInfoDao {
      * 根据id删除管理
      */
     void deleteById(@Param("id") Integer id);
+
+    Long count(@Param("q") String q, @Param("p") Integer p, @Param("getAdmin") Boolean getAdmin);
 }

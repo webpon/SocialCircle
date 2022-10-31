@@ -33,4 +33,6 @@ public class SignIn {
      * 性别
      */
     private Integer gender;
+
+    private String emailCode;
 }

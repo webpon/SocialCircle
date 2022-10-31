@@ -34,4 +34,10 @@
         order by id desc
         limit #{p},15
     </select>
+    <select id="count" resultType="java.lang.Long">
+        select count(id) from `dynamic`
+        <where>
+            classify_id = #{classify}
+        </where>
+    </select>
 </mapper>

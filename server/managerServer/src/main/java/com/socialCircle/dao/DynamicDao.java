@@ -13,4 +13,6 @@ public interface DynamicDao {
     Boolean save(Dynamic dynamic);
 
     void updateByTopicIds(@Param("ids") List<Integer> ids);
+
+    Long count(@Param("classify") Integer classify);
 }

@@ -27,6 +27,32 @@ public class UserInfoServiceImpl implements UserInfoService {
        userInfoDao.deleteById(id);
     }
 
+    /**
+     * 获取管理
+     *
+     * @param q 关键词
+     * @param p 页码
+     */
+    @Override
+    public Result getManagers(String q, Integer p) {
+        // 如果没有关键词就开启缓存模式
+        if (q == null) {
+            List<UserInfoVM> userInfoList = redisUtil.getBeans(RedisKey.MANAGERS_QUERY_KEY + p, UserInfoVM.class);
+            // 如果缓存有数据
+            if (userInfoList == null) {
+                userInfoList = queryUsers(q,p,true);
+               redisUtil.save(RedisKey.MANAGERS_QUERY_KEY + p, userInfoList);
+            }
+            Result<List<UserInfoVM>> ok = Result.ok(userInfoList);
+            ok.setTotal(userInfoDao.count(q,p,true));
+            return ok;
+        }
+        List<UserInfoVM> userInfoList = queryUsers(q,p,true);
+        Result<List<UserInfoVM>> ok = Result.ok(userInfoList);
+        ok.setTotal(userInfoDao.count(q,p,true));
+        return ok;
+    }
+
     @Override
     public Result getUsers(String q, Integer p, User user) {
         if (p == null) p = 1;
@@ -34,15 +60,18 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (q == null) {
             List<UserInfoVM> userInfoList = redisUtil.getBeans(RedisKey.USERS_QUERY_KEY + p, UserInfoVM.class);
             // 如果缓存有数据
-            if (userInfoList != null) {
-                return Result.ok(userInfoList);
+            if (userInfoList == null) {
+                userInfoList = queryUsers(q,p,false);
+                redisUtil.save(RedisKey.USERS_QUERY_KEY+p, userInfoList);
             }
-            userInfoList = queryUsers(q,p,user);
-            redisUtil.save(RedisKey.USERS_QUERY_KEY+p, userInfoList);
-            return Result.ok(userInfoList);
+            Result<List<UserInfoVM>> ok = Result.ok(userInfoList);
+            ok.setTotal(userInfoDao.count(q,p,false));
+            return ok;
         }
-        List<UserInfoVM> userInfoList = queryUsers(q, p, user);
-        return Result.ok(userInfoList);
+        List<UserInfoVM> userInfoList = queryUsers(q, p, false);
+        Result<List<UserInfoVM>> ok = Result.ok(userInfoList);
+        ok.setTotal(userInfoDao.count(q,p,false));
+        return ok;
     }
 
     @Override
@@ -55,12 +84,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfoDao.save(user);
     }
 
-    private List<UserInfoVM> queryUsers(String q, Integer p, User user) {
+    private List<UserInfoVM> queryUsers(String q, Integer p, Boolean getAdmin) {
         p--;
-        p *= 15;
+        p *= 10;
         if (q != null){
             q = "%"+q+"%";
         }
-        return userInfoDao.queryUsers(q,p,user);
+        return userInfoDao.queryUsers(q,p,getAdmin);
     }
 }
