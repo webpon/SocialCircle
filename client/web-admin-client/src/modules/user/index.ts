@@ -15,11 +15,11 @@ const initialState = {
   token: localStorage.getItem(TOKEN_NAME) || 'main_token', // 默认token不走权限
   userInfo: {},
   userListData: {
-    contractList: [],
+    adminList: [],
     current: 1,
     loading: false,
     pageSize: 10,
-    total: 100,
+    total: 0,
   }
 };
 
@@ -67,6 +67,7 @@ export const getAdminList = createAsyncThunk(`${namespace}/getAdminList`, async 
   return {
     data: res.data,
     current: params.p,
+    total: res.total
   }
 });
 
@@ -103,7 +104,7 @@ const userSlice = createSlice({
 
       })
       .addCase(getUserList.fulfilled, (state, action) => {
-        state.userListData.contractList = action.payload.data;
+        state.userListData.adminList = action.payload.data;
         state.userListData.current = action.payload.current;
         state.userListData.loading = false;
       })
@@ -115,8 +116,9 @@ const userSlice = createSlice({
         state.userListData.loading = true;
       })
       .addCase(getAdminList.fulfilled, (state, action) => {
-        state.userListData.contractList = action.payload.data;
+        state.userListData.adminList = action.payload.data;
         state.userListData.current = action.payload.current;
+        state.userListData.total = action.payload.total;
         state.userListData.loading = false;
       })
       .addCase(getAdminList.rejected, (state, action) => {

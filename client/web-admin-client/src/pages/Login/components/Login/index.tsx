@@ -36,10 +36,10 @@ export default function Login() {
   };
 
   const emailCheck = (val: string) => {
-    const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+    const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
     if (reg.test(val)) return { result: true, type: 'success' };
     return { result: false, message: '请输入正确的邮箱', type: 'error' };
-  }
+  };
 
   const switchType = (val: ELoginType) => {
     formRef.current?.reset?.();
@@ -56,8 +56,8 @@ export default function Login() {
       >
         {loginType === 'password' && (
           <>
-            <FormItem name='accountId' rules={[{ required: true, message: '账号必填', type: 'error' }]}>
-              <Input clearable size='large' placeholder='请输入账号：' prefixIcon={<UserIcon />}></Input>
+            <FormItem name='email' rules={[{ required: true, message: '账号必填', type: 'error' }]}>
+              <Input clearable size='large' placeholder='请输入邮箱：' prefixIcon={<UserIcon />}></Input>
             </FormItem>
             <FormItem name='password' rules={[{ required: true, message: '密码必填', type: 'error' }]}>
               <Input
@@ -84,7 +84,10 @@ export default function Login() {
         {/* // 邮箱登陆 */}
         {loginType === 'phone' && (
           <>
-            <FormItem name='email' rules={[{ required: true, message: '邮箱必填', type: 'error' }, { validator: emailCheck }]}>
+            <FormItem
+              name='email'
+              rules={[{ required: true, message: '邮箱必填', type: 'error' }, { validator: emailCheck }]}
+            >
               <Input maxlength={20} size='large' placeholder='请输入您的邮箱' prefixIcon={<UserIcon />} />
             </FormItem>
             <FormItem name='verifyCode' rules={[{ required: true, message: '验证码必填', type: 'error' }]}>
@@ -115,7 +118,7 @@ export default function Login() {
           )}
           {loginType !== 'phone' && (
             <span className='tip' onClick={() => switchType('phone')}>
-              使用邮箱登录
+              使用邮箱验证码登录
             </span>
           )}
         </div>

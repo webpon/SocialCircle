@@ -48,7 +48,7 @@ export default memo(() => {
     const dispatch = useAppDispatch();
     const pageState = useAppSelector(selectUserList);
     const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([1, 2]);
-    const { loading, contractList, current, pageSize, total } = pageState;
+    const { loading, adminList, current, pageSize, total } = pageState;
     useEffect(() => {
         dispatch(
             getUserList({ p: 1 }),
@@ -170,7 +170,7 @@ export default memo(() => {
             <Table
                 columns={columns}
                 loading={loading}
-                data={contractList}
+                data={adminList}
                 rowKey='id'
                 selectedRowKeys={selectedRowKeys}
                 verticalAlign='top'

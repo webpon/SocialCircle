@@ -49,7 +49,11 @@ export const addAdminUser = async (params: any) => {
 
 // !TOdO: TS类型限制
 export const deleteAdminUser = async (params: any) => {
-    return request.delete<any, any>('/admin', params);
+    console.log(params);
+    
+    return request.delete<any, any>('/admin', {
+        params
+    });
 };
 
 
