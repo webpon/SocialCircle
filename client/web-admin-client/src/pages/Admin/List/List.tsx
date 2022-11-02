@@ -199,8 +199,7 @@ export default memo(() => {
         },
     ]
 
-
-  return (
+    return (
         <div className={classnames(CommonStyle.pageWithPadding, CommonStyle.pageWithColor)}>
             <Row justify='space-between' className={style.toolBar}>
                 <Col>

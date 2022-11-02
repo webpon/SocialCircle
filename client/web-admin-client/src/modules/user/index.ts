@@ -18,7 +18,7 @@ const initialState = {
     contractList: [],
     current: 1,
     loading: false,
-    pageSize: 15,
+    pageSize: 10,
     total: 100,
   }
 };
