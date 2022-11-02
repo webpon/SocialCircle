@@ -19,8 +19,7 @@ import javax.mail.MessagingException;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import static com.socialCircle.constant.RedisKey.EMAIL_CODE;
-import static com.socialCircle.constant.RedisKey.LOGIN;
+import static com.socialCircle.constant.RedisKey.*;
 
 @Log4j
 @Service
@@ -50,7 +49,9 @@ public class UserServiceImpl implements UserService {
                 return Result.error(ResultCode.REPORT_ERROR,"已经被封");
             }
             // 设置为登录
-            redisUtil.setIfAbsent(LOGIN+user.getId());
+            if (login.getId() != 1) {
+                redisUtil.setIfAbsent(LOGIN + user.getId());
+            }
             HashMap<String, String> map = new HashMap<>();
             map.put("id",login.getId().toString());
             map.put("permission", login.getPermission().toString());
@@ -103,6 +104,7 @@ public class UserServiceImpl implements UserService {
         }
         user.setBanned(null);
         if (userDao.updateById(user)) {
+            redisUtil.batchDelete(MANAGERS_QUERY_KEY);
             UserInfoVM info = userDao.getInfo(user.getId());
             return Result.ok(info);
         }
@@ -134,6 +136,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result deleteManager(Integer id) {
         userInfoService.deleteManager(id);
+        redisUtil.batchDelete(MANAGERS_QUERY_KEY);
         if (userDao.deleteManager(id)) {
             return Result.ok("删除成功");
         }

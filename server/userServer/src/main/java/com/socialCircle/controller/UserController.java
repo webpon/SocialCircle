@@ -9,6 +9,7 @@ import com.socialCircle.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 @RestController
 public class UserController {
@@ -17,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/signIn")
-    public Result signIn(@RequestParam SignIn signIn){
+    public Result signIn(@RequestBody SignIn signIn){
         return userService.signIn(signIn);
     }
 
@@ -27,9 +28,10 @@ public class UserController {
     }
 
     @GetMapping("/emailCode")
-    public Result emailCode(@RequestAttribute(Constants.KAPTCHA_SESSION_KEY) String sessionCode,
+    public Result emailCode(HttpSession httpSession,
                             String code,
                             String email){
-        return userService.emailCode(sessionCode, email,code);
+        String s = (String) httpSession.getAttribute(Constants.KAPTCHA_SESSION_KEY);
+        return userService.emailCode(s, email,code);
     }
 }

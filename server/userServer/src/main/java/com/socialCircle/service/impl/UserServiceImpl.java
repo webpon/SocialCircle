@@ -1,5 +1,6 @@
 package com.socialCircle.service.impl;
 
+import cn.hutool.core.lang.UUID;
 import cn.hutool.crypto.SecureUtil;
 import com.socialCircle.common.JWTUtil;
 import com.socialCircle.common.RedisUtil;
@@ -12,7 +13,6 @@ import com.socialCircle.entity.SignIn;
 import com.socialCircle.entity.User;
 import com.socialCircle.service.UserInfoService;
 import com.socialCircle.service.UserService;
-import com.socialCircle.vm.UserInfoVM;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +22,7 @@ import javax.mail.MessagingException;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import static com.socialCircle.constant.RedisKey.EMAIL_CODE;
 import static com.socialCircle.constant.RedisKey.LOGIN;
 
 @Log4j
@@ -42,7 +43,6 @@ public class UserServiceImpl implements UserService {
     /**
      * 登录
      *
-     * @param user
      */
     @Override
     public Result login(User user) {
@@ -71,14 +71,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result signIn(SignIn signIn) {
+        String code = redisUtil.getBean(EMAIL_CODE + signIn.getEmail(), String.class);
+        if (code == null) {
+            return Result.error(ResultCode.CODE_ERROR,"验证码时效");
+        }
+        if (!code.equals(signIn.getEmailCode())){
+            return Result.error(ResultCode.CODE_ERROR,"验证码失败");
+        }
         User user = userDao.queryByEmail(signIn.getEmail());
         if (user != null){
             return Result.error("注册失败");
         }
         signIn.setPermission(0);
         // 生成账号
-        Long maxId = userDao.getMaxId()+1L;
-        StringBuilder stringBuffer = new StringBuilder(maxId.toString());
+        long maxId = userDao.getMaxId()+1L;
+        StringBuilder stringBuffer = new StringBuilder(Long.toString(maxId));
         for (int i = stringBuffer.length(); i < 10; i++) {
             stringBuffer.insert(0,"0");
         }
@@ -87,8 +94,11 @@ public class UserServiceImpl implements UserService {
         // 添加成功
         if (userDao.save(signIn)) {
             signIn.setId(userDao.queryByEmail(signIn.getEmail()).getId());
+            signIn.setPetName(UUID.fastUUID().toString().substring(0,10));
+            signIn.setGender(1);
             userInfoService.save(signIn);
             signIn.setPassword(null);
+            redisUtil.delete(EMAIL_CODE + signIn.getEmail());
             return Result.ok("注册成功",signIn);
         }
         return Result.error("注册失败");
@@ -100,7 +110,6 @@ public class UserServiceImpl implements UserService {
      * @param sessionCode 正确验证码
      * @param email       用户邮箱
      * @param code        用户输入的验证码
-     * @return
      */
     @Override
     public Result emailCode(String sessionCode, String email, String code) {

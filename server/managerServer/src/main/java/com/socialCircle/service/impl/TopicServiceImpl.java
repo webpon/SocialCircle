@@ -48,16 +48,19 @@ public class TopicServiceImpl implements TopicService {
     public Result getTopic(Integer p) {
         RedisQuery<List<Topic>> listRedisQuery =
                 new RedisQuery<>(RedisKey.TOPIC_QUERY_KEY, p.toString(), null, DateField.MINUTE, 30);
+        p --;
+        p *= 10;
+        Integer finalP = p;
         RedisCommand redisCommand = (key) -> {
-            int integer = p - 1;
-            integer *= 15;
-            List<Topic> topics = topicDao.queryQueryTopics(integer);
+            List<Topic> topics = topicDao.queryQueryTopics(finalP);
             listRedisQuery.setData(topics);
             redisUtil.save(key, listRedisQuery, 30, TimeUnit.MINUTES);
         };
         List<Topic> beans = redisUtil.getBeans(listRedisQuery, redisCommand, Topic.class);
         if (beans != null) {
-            return Result.ok(beans);
+            Result<List<Topic>> ok = Result.ok(beans);
+            ok.setTotal(topicDao.count(p));
+            return ok;
         }
         return Result.error("没有数据");
     }

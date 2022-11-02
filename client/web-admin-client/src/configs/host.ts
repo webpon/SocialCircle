@@ -9,7 +9,7 @@ export default {
   },
   test: {
     // 测试环境接口地址
-    API: 'https://service-exndqyuk-1257786608.gz.apigw.tencentcs.com',
+    API: 'http://localhost:20001',
   },
   production: {
     // 正式环境接口地址

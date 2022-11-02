@@ -65,6 +65,7 @@ export const getUserList = createAsyncThunk(`${namespace}/getUserList`, async (p
 export const getAdminList = createAsyncThunk(`${namespace}/getAdminList`, async (params: {p: number, q?:string, }) => {
   const res = await getAdminListApi(params);
   return {
+    total: res.total,
     data: res.data,
     current: params.p,
   }

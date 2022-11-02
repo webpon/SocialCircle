@@ -14,4 +14,6 @@ public interface TopicDao {
     Boolean deleteTopicById(@Param("ids") List<Integer> ids);
 
     boolean addTopic(Topic topic);
+
+    Long count(Integer p);
 }

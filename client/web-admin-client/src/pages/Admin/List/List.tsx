@@ -12,6 +12,8 @@ import {
 } from 'services/user'
 
 import AddUser from './components/AddUser';
+import UpdateAdmin from "./components/UpdateAdmin";
+import {SearchIcon} from "tdesign-icons-react/lib";
 
 export const GenderMap: {
     [key: number]: React.ReactElement;
@@ -46,20 +48,30 @@ export const PermissionMap: {
 
 export default memo(() => {
     const dispatch = useAppDispatch();
+    const [q,setQ] = useState(null);
     const pageState = useAppSelector(selectUserList);
     const [isAddUser, setIsAddUser] = useState(false)
+    const [isUpdateUser, setIsUpdateUser] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([1, 2]);
-  const [alertProps, setAlertProps] = useState({ visible: false, title: "" });
+    const [alertProps, setAlertProps] = useState({ visible: false, title: "", content:"", confirmBtn:"" });
+    const [delId, setDelId] = useState(0);
+    const [user,setUser] = useState({
+      email: '',
+      password: '',
+      petName: '',
+      gender: 1,
+      permission: 2,
+      headIcon: ''
+    });
     const { loading, contractList, current, pageSize, total } = pageState;
     useEffect(() => {
         dispatch(
-          getAdminList({ p: 1 }),
+          getAdminList({ p: 1 ,q}),
         );
         return () => {
-            console.log('clear');
             dispatch(clearPageState());
         };
-    }, []);
+    }, [q]);
 
     function onSelectChange(value: (string | number)[]) {
         setSelectedRowKeys(value);
@@ -71,11 +83,18 @@ export default memo(() => {
     function deleteAdmin(id:number) {
       deleteAdminUserApi({id}).then(({code})=>{
         if (code === 200){
-          console.log("删除成功")
+          dispatch(
+            getAdminList({ p: 1 ,q}),
+          );
         }
       });
     }
-    const columns: any = [
+  function setUpdateUser(isShow: Boolean) {
+    // @ts-ignore
+    setIsUpdateUser(isShow)
+  }
+
+  const columns: any = [
         {
             align: 'left',
             width: 100,
@@ -150,19 +169,23 @@ export default memo(() => {
             width: 180,
             colKey: 'op',
             title: '操作',
-          cell: function (row: any) {
+          cell: function ({row}: any) {
             return (
               <>
-                <Button onClick={() => {
-                  deleteAdmin(row.id)
-                }} theme='primary' variant='text'>
+                <Button theme='primary' variant='text'
+                        onClick={()=> {
+                          setUser(row)
+                          setIsUpdateUser(true)
+                        }}
+                >
                   管理
                 </Button>
                 <Button theme='primary' variant='text'
                         onClick={() => {
+                          setDelId(row.id);
                           setAlertProps({
                             visible: true,
-                            title: `删除`,
+                            title: `删除管理`,
                             content: `是否删除id为:${row.id}的管理`,
                             confirmBtn: '删除',
                           });
@@ -175,18 +198,29 @@ export default memo(() => {
           },
         },
     ]
-    return (
+
+
+  return (
         <div className={classnames(CommonStyle.pageWithPadding, CommonStyle.pageWithColor)}>
             <Row justify='space-between' className={style.toolBar}>
                 <Col>
                     <Button onClick={() => setAddUser(true)}>新增管理</Button>
                 </Col>
+              <Col>
+                <Input suffixIcon={<SearchIcon />} placeholder='请输入你需要搜索的型号' onEnter={(v,e)=>{
+                  if (v === ""){
+                    setQ(null)
+                    return
+                  }
+                  setQ(v)
+                }}/>
+              </Col>
             </Row>
             <Table
                 columns={columns}
                 loading={loading}
                 data={contractList}
-                rowKey='id'
+                rowKey='accountId'
                 selectedRowKeys={selectedRowKeys}
                 verticalAlign='top'
                 hover
@@ -201,21 +235,24 @@ export default memo(() => {
                         dispatch(
                             getAdminList({
                                 p: pageInfo.current,
+                                q
                             }),
                         );
                     },
                 }}
             />
-            <AddUser setAddUser={setAddUser} isAddUser={isAddUser} />
+            <AddUser setAddUser={setAddUser} isAddUser={isAddUser}/>
+            <UpdateAdmin setUpdateAdmin={setUpdateUser} isUpdateAdmin={isUpdateUser} INITIAL_DATA={user}/>
 
           <Dialog
             {...alertProps}
             cancelBtn="取消"
             onClose={() => {
-              setAlertProps({ visible: false });
+              setAlertProps({confirmBtn: "", content: "", title: "", visible: false });
             }}
             onConfirm={() => {
-              setAlertProps({ visible: false });
+              setAlertProps({confirmBtn: "", content: "", title: "", visible: false });
+              deleteAdmin(delId);
             }}
           />
         </div>

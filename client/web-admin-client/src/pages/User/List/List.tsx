@@ -7,6 +7,7 @@ import { getUserList, selectUserList } from 'modules/user';
 import { selectListBase, getList, clearPageState } from 'modules/list/base';
 import CommonStyle from 'styles/common.module.less';
 import style from './List.module.less';
+import {SearchIcon} from "tdesign-icons-react/lib";
 
 export const GenderMap: {
     [key: number]: React.ReactElement;
@@ -23,52 +24,27 @@ export const GenderMap: {
     ),
 };
 
-export const PermissionMap: {
-    [key: number]: React.ReactElement;
-} = {
-    1: (
-        <Tag theme='primary' variant='light'>
-            高级管理员
-        </Tag>
-    ),
-    2: (
-        <Tag theme='warning' variant='light'>
-            普通管理员
-        </Tag>
-    ),
-    3: (
-        <Tag theme='danger' variant='light'>
-            超级管理员
-        </Tag>
-    ),
-};
-
 
 export default memo(() => {
     const dispatch = useAppDispatch();
     const pageState = useAppSelector(selectUserList);
     const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([1, 2]);
+    const [q,setQ] = useState(null);
     const { loading, contractList, current, pageSize, total } = pageState;
     useEffect(() => {
         dispatch(
-            getUserList({ p: 1 }),
+            getUserList({ p: 1, q: q}),
         );
         return () => {
             console.log('clear');
             dispatch(clearPageState());
         };
-    }, []);
+    }, [q]);
 
     function onSelectChange(value: (string | number)[]) {
         setSelectedRowKeys(value);
     }
     const columns: any = [
-        // {
-        //     colKey: 'row-select',
-        //     fixed: 'left',
-        //     type: 'multiple',
-        //     // width: 50,
-        // },
         {
             align: 'left',
             width: 100,
@@ -99,16 +75,6 @@ export default memo(() => {
             cell({ row }) {
                 return <div>{new Date(row.loginTime).toLocaleString()}</div>
             },
-        },
-        {
-            align: 'left',
-            width: 200,
-            ellipsis: true,
-            colKey: 'permission',
-            title: '权限',
-            cell({ row }) {
-                return PermissionMap[row.permission]
-            }
         },
         {
             align: 'left',
@@ -146,11 +112,11 @@ export default memo(() => {
             cell() {
                 return (
                     <>
+                        {/*<Button theme='primary' variant='text'>*/}
+                        {/*    管理*/}
+                        {/*</Button>*/}
                         <Button theme='primary' variant='text'>
-                            管理
-                        </Button>
-                        <Button theme='primary' variant='text'>
-                            删除
+                            封号
                         </Button>
                     </>
                 );
@@ -160,12 +126,18 @@ export default memo(() => {
     return (
         <div className={classnames(CommonStyle.pageWithPadding, CommonStyle.pageWithColor)}>
             <Row justify='space-between' className={style.toolBar}>
+                {/*<Col>*/}
+                {/*    <Button>新增用户</Button>*/}
+                {/*</Col>*/}
                 <Col>
-                    <Button>新增用户</Button>
+                    <Input suffixIcon={<SearchIcon />} placeholder='请输入你需要搜索的型号' onEnter={(v,e)=>{
+                      if (v === ""){
+                        setQ(null)
+                        return
+                      }
+                      setQ(v)
+                    }}/>
                 </Col>
-                {/* <Col>
-                    <Input suffixIcon={<SearchIcon />} placeholder='请输入你需要搜索的型号' />
-                </Col> */}
             </Row>
             <Table
                 columns={columns}
@@ -186,17 +158,10 @@ export default memo(() => {
                         dispatch(
                             getUserList({
                                 p: pageInfo.current,
+                              q
                             }),
                         );
                     },
-                    // onPageSizeChange(size) {
-                    //     dispatch(
-                    //         getUserList({
-                    //             p: 1,
-                    //             q: size,
-                    //         }),
-                    //     );
-                    // },
                 }}
             />
         </div>

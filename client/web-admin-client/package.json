@@ -5,12 +5,12 @@
   "scripts": {
     "dev:mock": "vite --open --mode mock",
     "dev": "vite --open --mode development",
+    "test": "vite --open --mode test",
     "dev:linux": "vite --mode development",
     "build:test": "vite build --mode test",
     "build": "vite build --mode production",
     "site:preview": "npm run build && cp -r dist _site",
     "preview": "vite preview --mode test",
-    "test": "echo \"no test specified,work in process\"",
     "test:coverage": "echo \"no test specified,work in process\"",
     "lint": "eslint ./src --ext ts,tsx",
     "lint:fix": "eslint ./src --ext ts,tsx --fix",
