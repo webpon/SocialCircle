@@ -26,7 +26,14 @@ const initialState = {
     current: 1,
     loading: false,
     pageSize: 10,
-    total: 100,
+    total: 0,
+  },
+  adminListData: {
+    contractList: [],
+    current: 1,
+    loading: false,
+    pageSize: 10,
+    total: 0,
   },
   reportLis:{
     list:[],
@@ -80,9 +87,9 @@ export const getUserList = createAsyncThunk(`${namespace}/getUserList`, async (p
 export const getAdminList = createAsyncThunk(`${namespace}/getAdminList`, async (params: {p: number, q?:string, }) => {
   const res = await getAdminListApi(params);
   return {
-    total: res.total,
     data: res.data,
     current: params.p,
+    total: res.total
   }
 });
 
@@ -127,7 +134,7 @@ const userSlice = createSlice({
         state.userListData.loading = true;
       })
       .addCase(getUserList.fulfilled, (state, action) => {
-        state.userListData.contractList = action.payload.data;
+        state.userListData.adminList = action.payload.data;
         state.userListData.current = action.payload.current;
         state.userListData.loading = false;
       })
@@ -148,21 +155,23 @@ const userSlice = createSlice({
       })
       /* 获取管理列表 */
       .addCase(getAdminList.pending, (state) => {
-        state.userListData.loading = true;
+        state.adminListData.loading = true;
       })
       .addCase(getAdminList.fulfilled, (state, action) => {
-        state.userListData.contractList = action.payload.data;
-        state.userListData.current = action.payload.current;
-        state.userListData.loading = false;
+        state.adminListData.contractList = action.payload.data;
+        state.adminListData.current = action.payload.current;
+        state.adminListData.total = action.payload.total;
+        state.adminListData.loading = false;
       })
       .addCase(getAdminList.rejected, (state, action) => {
-        state.userListData.loading = false;
+        state.adminListData.loading = false;
       });
   },
 });
 
 export const selectListBase = (state: RootState) => state.listBase;
 export const selectUserList = (state: RootState) => state.user.userListData;
+export const selectAdminList = (state: RootState) => state.user.adminListData;
 export const selectReportList = (state: RootState) => state.user.reportLis;
 export const selectUserInfo = (state: RootState) => state.user.userInfo;
 export const selectToken = (state: RootState) => state.user.token;

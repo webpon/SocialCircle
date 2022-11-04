@@ -31,6 +31,7 @@ export default memo(() => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([1, 2]);
     const [q,setQ] = useState(null);
     const { loading, contractList, current, pageSize, total } = pageState;
+    // const { loading, adminList, current, pageSize, total } = pageState;
     useEffect(() => {
         dispatch(
             getUserList({ p: 1, q: q}),
@@ -126,9 +127,6 @@ export default memo(() => {
     return (
         <div className={classnames(CommonStyle.pageWithPadding, CommonStyle.pageWithColor)}>
             <Row justify='space-between' className={style.toolBar}>
-                {/*<Col>*/}
-                {/*    <Button>新增用户</Button>*/}
-                {/*</Col>*/}
                 <Col>
                     <Input suffixIcon={<SearchIcon />} placeholder='请输入你需要搜索的型号' onEnter={(v,e)=>{
                       if (v === ""){

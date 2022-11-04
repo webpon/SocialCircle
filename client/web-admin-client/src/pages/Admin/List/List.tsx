@@ -1,60 +1,55 @@
 import React, { useState, memo, useEffect } from 'react';
-import { Table, Tag, Row, Col, Button, Input, Avatar, Dialog } from 'tdesign-react';
+import Input, { Table, Tag, Row, Col, Button, MessagePlugin, Avatar, Dialog } from 'tdesign-react';
 import { UserIcon } from 'tdesign-icons-react';
 import classnames from 'classnames';
 import { useAppDispatch, useAppSelector } from 'modules/store';
-import {getAdminList, getUserList, selectUserList} from 'modules/user';
+import {getAdminList, getUserList, selectAdminList, selectUserList} from 'modules/user';
 import { clearPageState } from 'modules/list/base';
 import CommonStyle from 'styles/common.module.less';
 import style from './List.module.less';
-import {
-  deleteAdminUser as deleteAdminUserApi
-} from 'services/user'
+import { deleteAdminUser as deleteAdminUserApi } from 'services/user';
 
 import AddUser from './components/AddUser';
 import UpdateAdmin from "./components/UpdateAdmin";
 import {SearchIcon} from "tdesign-icons-react/lib";
 
 export const GenderMap: {
-    [key: number]: React.ReactElement;
+  [key: number]: React.ReactElement;
 } = {
-    1: (
-        <Tag theme='warning' variant='light'>
-            男
-        </Tag>
-    ),
-    2: (
-        <Tag theme='warning' variant='light'>
-            女
-        </Tag>
-    ),
+  1: (
+    <Tag theme='warning' variant='light'>
+      男
+    </Tag>
+  ),
+  2: (
+    <Tag theme='warning' variant='light'>
+      女
+    </Tag>
+  ),
 };
 
 export const PermissionMap: {
-    [key: number]: React.ReactElement;
+  [key: number]: React.ReactElement;
 } = {
-    1: (
-        <Tag theme='primary' variant='light'>
-            高级管理员
-        </Tag>
-    ),
-    2: (
-        <Tag theme='warning' variant='light'>
-            普通管理员
-        </Tag>
-    ),
+  1: (
+    <Tag theme='primary' variant='light'>
+      高级管理员
+    </Tag>
+  ),
+  2: (
+    <Tag theme='warning' variant='light'>
+      普通管理员
+    </Tag>
+  ),
 };
-
 
 export default memo(() => {
     const dispatch = useAppDispatch();
     const [q,setQ] = useState(null);
-    const pageState = useAppSelector(selectUserList);
+    const pageState = useAppSelector(selectAdminList);
     const [isAddUser, setIsAddUser] = useState(false)
     const [isUpdateUser, setIsUpdateUser] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([1, 2]);
-    const [alertProps, setAlertProps] = useState({ visible: false, title: "", content:"", confirmBtn:"" });
-    const [delId, setDelId] = useState(0);
     const [deleteInfo, setDeleteInfo] = useState({ visible: false, id: 0 });
     const [user,setUser] = useState({
       email: '',
@@ -205,58 +200,49 @@ export default memo(() => {
         },
     ]
 
-    return (
-        <div className={classnames(CommonStyle.pageWithPadding, CommonStyle.pageWithColor)}>
-            <Row justify='space-between' className={style.toolBar}>
-                <Col>
-                    <Button onClick={() => setAddUser(true)}>新增管理</Button>
-                </Col>
-              <Col>
-                <Input suffixIcon={<SearchIcon />} placeholder='请输入你需要搜索的型号' onEnter={(v,e)=>{
-                  if (v === ""){
-                    setQ(null)
-                    return
-                  }
-                  setQ(v)
-                }}/>
-              </Col>
-            </Row>
-            <Table
-                columns={columns}
-                loading={loading}
-                data={contractList}
-                rowKey='accountId'
-                selectedRowKeys={selectedRowKeys}
-                verticalAlign='top'
-                hover
-                onSelectChange={onSelectChange}
-                maxHeight={'73vh'}
-                pagination={{
-                    pageSize,
-                    total,
-                    current,
-                    showJumper: true,
-                    onCurrentChange(current, pageInfo) {
-                        dispatch(
-                            getAdminList({
-                                p: pageInfo.current,
-                                q
-                            }),
-                        );
-                    },
-                }}
-            />
-            <AddUser setAddUser={setAddUser} isAddUser={isAddUser}/>
-            <UpdateAdmin setUpdateAdmin={setUpdateUser} isUpdateAdmin={isUpdateUser} INITIAL_DATA={user}/>
 
-          <Dialog
-            header='确认删除当前管理员？'
-            visible={deleteInfo.visible}
-            onClose={handleClose}
-            onConfirm={() => deleteAdmin(deleteInfo.id)}
-          >
-            <p>删除后该管理的所有信息将被清空,且无法恢复！</p>
-          </Dialog>
-        </div>
-    );
+  return (
+    <div className={classnames(CommonStyle.pageWithPadding, CommonStyle.pageWithColor)}>
+      <Row justify='space-between' className={style.toolBar}>
+        <Col>
+          <Button onClick={() => setAddUser(true)}>新增管理</Button>
+        </Col>
+      </Row>
+      <Table
+        columns={columns}
+        loading={loading}
+        data={contractList}
+        rowKey='accountId'
+        verticalAlign='top'
+        hover
+        onSelectChange={onSelectChange}
+        maxHeight={'73vh'}
+        pagination={{
+          pageSize,
+
+          total,
+          current,
+          showPageSize: false,
+          showJumper: true,
+          onCurrentChange(current, pageInfo) {
+            dispatch(
+              getAdminList({
+                p: pageInfo.current,
+              }),
+            );
+          },
+        }}
+      />
+      <AddUser setAddUser={setAddUser} isAddUser={isAddUser} />
+
+      <Dialog
+        header='确认删除当前管理员？'
+        visible={deleteInfo.visible}
+        onClose={handleClose}
+        onConfirm={() => deleteAdmin(deleteInfo.id)}
+      >
+        <p>删除后该管理的所有信息将被清空,且无法恢复！</p>
+      </Dialog>
+    </div>
+  );
 });
