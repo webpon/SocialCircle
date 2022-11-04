@@ -48,7 +48,7 @@ export default (params) => ({
 
   server: {
     host: '0.0.0.0',
-    port: 3003,
+    port: 13003,
     proxy: {
       '/api': {
         // 用于开发环境下的转发请求

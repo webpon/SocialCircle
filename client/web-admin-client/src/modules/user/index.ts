@@ -5,7 +5,7 @@ import {
   getUserInfo as getUserInfoApi,
   getUserList as getUserListApi,
   getAdminList as getAdminListApi,
-  logout as logoutApi
+  logout as logoutApi, getReportListApi
 } from 'services/user'
 
 const namespace = 'user';
@@ -13,13 +13,28 @@ const TOKEN_NAME = 'token';
 
 const initialState = {
   token: localStorage.getItem(TOKEN_NAME) || 'main_token', // 默认token不走权限
-  userInfo: {},
+  userInfo: {
+    email: '',
+    password: '',
+    petName: '',
+    gender: 1,
+    permission: 2,
+    headIcon: ''
+  },
   userListData: {
     contractList: [],
     current: 1,
     loading: false,
     pageSize: 10,
     total: 100,
+  },
+  reportLis:{
+    list:[],
+    current: 1,
+    loading: false,
+    pageSize: 10,
+    total: 100,
+
   }
 };
 
@@ -71,6 +86,16 @@ export const getAdminList = createAsyncThunk(`${namespace}/getAdminList`, async 
   }
 });
 
+// getReportList
+export const getReportList = createAsyncThunk(`${namespace}/getReportList`, async (p:number) => {
+  const res = await getReportListApi(p);
+  return {
+    total: res.total,
+    data: res.data,
+    current: p,
+  }
+});
+
 const userSlice = createSlice({
   name: namespace,
   initialState,
@@ -100,8 +125,6 @@ const userSlice = createSlice({
       /* 获取用户列表 */
       .addCase(getUserList.pending, (state) => {
         state.userListData.loading = true;
-
-
       })
       .addCase(getUserList.fulfilled, (state, action) => {
         state.userListData.contractList = action.payload.data;
@@ -110,6 +133,18 @@ const userSlice = createSlice({
       })
       .addCase(getUserList.rejected, (state, action) => {
         state.userListData.loading = false;
+      })
+      /* 获取举报列表 */
+      .addCase(getReportList.pending, (state) => {
+        state.reportLis.loading = true;
+      })
+      .addCase(getReportList.fulfilled, (state, action) => {
+        state.reportLis.list = action.payload.data;
+        state.reportLis.current = action.payload.current;
+        state.reportLis.loading = false;
+      })
+      .addCase(getReportList.rejected, (state, action) => {
+        state.reportLis.loading = false;
       })
       /* 获取管理列表 */
       .addCase(getAdminList.pending, (state) => {
@@ -125,10 +160,10 @@ const userSlice = createSlice({
       });
   },
 });
-console.log();
 
 export const selectListBase = (state: RootState) => state.listBase;
 export const selectUserList = (state: RootState) => state.user.userListData;
+export const selectReportList = (state: RootState) => state.user.reportLis;
 export const selectUserInfo = (state: RootState) => state.user.userInfo;
 export const selectToken = (state: RootState) => state.user.token;
 

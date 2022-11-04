@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, {memo, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Popup, Badge, Dropdown, Row, Col } from 'tdesign-react';
 import {
@@ -10,16 +10,26 @@ import {
   PoweroffIcon,
   UserCircleIcon,
 } from 'tdesign-icons-react';
-import { useAppDispatch } from 'modules/store';
+import {useAppDispatch, useAppSelector} from 'modules/store';
 import { toggleSetting } from 'modules/global';
-import { logout } from 'modules/user';
+import {getUserInfo, logout, selectUserInfo, selectUserList} from 'modules/user';
 import Style from './HeaderIcon.module.less';
+import { clearPageState } from 'modules/list/base';
 
 const { DropdownMenu, DropdownItem } = Dropdown;
 
 export default memo(() => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { petName} = useAppSelector(selectUserInfo);
+  useEffect(() => {
+    dispatch(
+      getUserInfo()
+    );
+    return () => {
+      dispatch(clearPageState());
+    };
+  }, []);
 
   const gotoWiki = () => {
     window.open('https://tdesign.tencent.com/react/overview');
@@ -41,33 +51,33 @@ export default memo(() => {
 
   return (
     <Row align='middle' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Col>
-        <Button shape='square' size='large' variant='text' className={Style.badgeBtn}>
-          <Badge count={6} style={{ zIndex: 1 }}>
-            <MailIcon />
-          </Badge>
-        </Button>
-      </Col>
-      <Col>
-        <Button shape='square' size='large' variant='text' onClick={gotoGitHub}>
-          <Popup content='代码仓库' placement='bottom' showArrow destroyOnClose>
-            <LogoGithubIcon />
-          </Popup>
-        </Button>
-      </Col>
-      <Col>
-        <Button shape='square' size='large' variant='text' onClick={gotoWiki}>
-          <Popup content='帮助文档' placement='bottom' showArrow destroyOnClose>
-            <HelpCircleIcon />
-          </Popup>
-        </Button>
-      </Col>
+      {/*<Col>*/}
+      {/*  <Button shape='square' size='large' variant='text' className={Style.badgeBtn}>*/}
+      {/*    <Badge count={6} style={{ zIndex: 1 }}>*/}
+      {/*      <MailIcon />*/}
+      {/*    </Badge>*/}
+      {/*  </Button>*/}
+      {/*</Col>*/}
+      {/*<Col>*/}
+      {/*  <Button shape='square' size='large' variant='text' onClick={gotoGitHub}>*/}
+      {/*    <Popup content='代码仓库' placement='bottom' showArrow destroyOnClose>*/}
+      {/*      <LogoGithubIcon />*/}
+      {/*    </Popup>*/}
+      {/*  </Button>*/}
+      {/*</Col>*/}
+      {/*<Col>*/}
+      {/*  <Button shape='square' size='large' variant='text' onClick={gotoWiki}>*/}
+      {/*    <Popup content='帮助文档' placement='bottom' showArrow destroyOnClose>*/}
+      {/*      <HelpCircleIcon />*/}
+      {/*    </Popup>*/}
+      {/*  </Button>*/}
+      {/*</Col>*/}
       <Col>
         <Dropdown className={Style.dropdown} trigger={'click'} onClick={clickHandler}>
           <Button variant='text'>
             <span style={{ display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
               <Icon name='user-circle' size='20px' />
-              <span style={{ display: 'inline-block', margin: '0 5px' }}>Tencent</span>
+              <span style={{ display: 'inline-block', margin: '0 5px' }}>{petName}</span>
               <Icon name='chevron-down' size='20px' />
             </span>
           </Button>

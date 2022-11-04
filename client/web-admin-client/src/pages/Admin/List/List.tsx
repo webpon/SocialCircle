@@ -55,6 +55,7 @@ export default memo(() => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([1, 2]);
     const [alertProps, setAlertProps] = useState({ visible: false, title: "", content:"", confirmBtn:"" });
     const [delId, setDelId] = useState(0);
+    const [deleteInfo, setDeleteInfo] = useState({ visible: false, id: 0 });
     const [user,setUser] = useState({
       email: '',
       password: '',
@@ -89,6 +90,12 @@ export default memo(() => {
         }
       });
     }
+  function handleClose() {
+    setDeleteInfo({
+      visible: false,
+      id: 0,
+    });
+  }
   function setUpdateUser(isShow: Boolean) {
     // @ts-ignore
     setIsUpdateUser(isShow)
@@ -180,16 +187,15 @@ export default memo(() => {
                 >
                   管理
                 </Button>
-                <Button theme='primary' variant='text'
-                        onClick={() => {
-                          setDelId(row.id);
-                          setAlertProps({
-                            visible: true,
-                            title: `删除管理`,
-                            content: `是否删除id为:${row.id}的管理`,
-                            confirmBtn: '删除',
-                          });
-                        }}
+                <Button
+                  theme='primary'
+                  variant='text'
+                  onClick={() => {
+                    setDeleteInfo({
+                      visible: true,
+                      id: row.id,
+                    });
+                  }}
                 >
                   删除
                 </Button>
@@ -244,16 +250,13 @@ export default memo(() => {
             <UpdateAdmin setUpdateAdmin={setUpdateUser} isUpdateAdmin={isUpdateUser} INITIAL_DATA={user}/>
 
           <Dialog
-            {...alertProps}
-            cancelBtn="取消"
-            onClose={() => {
-              setAlertProps({confirmBtn: "", content: "", title: "", visible: false });
-            }}
-            onConfirm={() => {
-              setAlertProps({confirmBtn: "", content: "", title: "", visible: false });
-              deleteAdmin(delId);
-            }}
-          />
+            header='确认删除当前管理员？'
+            visible={deleteInfo.visible}
+            onClose={handleClose}
+            onConfirm={() => deleteAdmin(deleteInfo.id)}
+          >
+            <p>删除后该管理的所有信息将被清空,且无法恢复！</p>
+          </Dialog>
         </div>
     );
 });

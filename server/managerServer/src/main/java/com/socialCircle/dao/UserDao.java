@@ -20,4 +20,6 @@ public interface UserDao {
 
     Boolean deleteManager(@Param("id") Integer id);
 
+    void loginTime(User user);
+
 }

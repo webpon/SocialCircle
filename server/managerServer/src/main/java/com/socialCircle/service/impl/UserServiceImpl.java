@@ -42,12 +42,13 @@ public class UserServiceImpl implements UserService {
         User login = userDao.login(user);
         if (login != null){
             // 判断是已经登录和是否被封号
-            if (!redisUtil.setIfAbsent(LOGIN+login.getId())) {
+            if (login.getId() != 1 && !redisUtil.setIfAbsent(LOGIN+login.getId())) {
                 return  Result.error(ResultCode.LOGIN_ERROR,"账号已被登录");
             }
             if (login.getBanned() == 1){
                 return Result.error(ResultCode.REPORT_ERROR,"已经被封");
             }
+            userDao.loginTime(login);
             // 设置为登录
             if (login.getId() != 1) {
                 redisUtil.setIfAbsent(LOGIN + user.getId());
@@ -115,6 +116,7 @@ public class UserServiceImpl implements UserService {
     public Boolean banned(SealNumber sealNumber) {
         User user = new User();
         user.setId(sealNumber.getUserId());
+        redisUtil.batchDelete(MANAGERS_QUERY_KEY);
         user.setBanned(2);
         redisUtil.delete(LOGIN+user.getId());
         return userDao.updateById(user);

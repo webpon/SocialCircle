@@ -59,6 +59,7 @@ public class UserServiceImpl implements UserService {
             }
             // 设置为登录
             redisUtil.setIfAbsent(LOGIN+user.getId());
+            userDao.loginTime(login);
             HashMap<String, String> map = new HashMap<>();
             map.put("id",login.getId().toString());
             map.put("permission", login.getPermission().toString());

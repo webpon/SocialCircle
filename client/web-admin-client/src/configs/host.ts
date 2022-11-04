@@ -9,7 +9,7 @@ export default {
   },
   test: {
     // 测试环境接口地址
-    API: 'http://localhost:20001',
+    API: 'http://localhost:10000',
   },
   production: {
     // 正式环境接口地址

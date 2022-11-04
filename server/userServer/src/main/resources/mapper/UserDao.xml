@@ -5,6 +5,16 @@
         insert into user (password,email,permission,account_id)
         values (#{password},#{email},#{permission},#{accountId});
     </insert>
+    <update id="loginTime">
+        update user
+        <set>
+            login_time = now()
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
     <select id="login" resultType="com.socialCircle.entity.User">
         select * from `user`
         <where>

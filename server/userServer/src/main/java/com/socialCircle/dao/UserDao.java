@@ -13,5 +13,7 @@ public interface UserDao {
 
     boolean save(SignIn signIn);
 
+    void loginTime(User login);
+
 //    UserInfoVM getInfo(Integer id);
 }

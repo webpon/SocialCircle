@@ -163,7 +163,7 @@ public class RedisUtil {
      * @return 是否删除成功
      */
     public Boolean batchDelete(String key) {
-        Set<String> keys = stringRedisTemplate.keys(key);
+        Set<String> keys = stringRedisTemplate.keys(key+"*");
         Long delete = stringRedisTemplate.delete(keys);
         return delete > 0;
     }

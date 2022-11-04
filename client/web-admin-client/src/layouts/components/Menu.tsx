@@ -122,6 +122,8 @@ export default memo((props: IMenuProps) => {
         } else {
           setMenu([...menu, ...secondLevel])
         }
+      }else if (permission === 2){
+        setMenu([...secondLevel])
       }
     })
   }, [])
@@ -155,8 +157,8 @@ export default memo((props: IMenuProps) => {
         if (firstChild?.meta && !firstChild?.meta?.hidden) {
           const { Icon, title } = meta;
           const singlePath = resolve(resolve(parentPath, path), firstChild.path);
-          
-          
+
+
           return (
             <MenuItem
               key={singlePath}
@@ -170,7 +172,7 @@ export default memo((props: IMenuProps) => {
         }
       }
       console.log(routerPath, 'routerPath');
-      
+
       return (
         <SubMenu key={routerPath} value={routerPath} title={title} icon={Icon ? <Icon /> : undefined}>
           {renderMenuItems(children, routerPath)}

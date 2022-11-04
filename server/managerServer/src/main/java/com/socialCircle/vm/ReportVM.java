@@ -2,6 +2,7 @@ package com.socialCircle.vm;
 
 import com.socialCircle.entity.Image;
 import com.socialCircle.entity.Report;
+import com.socialCircle.entity.User;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,6 +18,8 @@ public class ReportVM implements Serializable {
      * 被封号人
      */
     private Integer userId;
+    private UserInfoVM user;
+    private UserInfoVM reportUser;
     private Integer reportUserId;
     private String content;
     private List<Image> images;

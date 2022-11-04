@@ -95,8 +95,8 @@ public class DynamicServiceImpl implements DynamicService {
                 image.setDynamicId(dynamic.getId());
             });
             if (imageService.save(images)) {
-                redisUtil.batchDelete(DYNAMIC_QUERY_KEY + "*");
-                return Result.error("发布成功");
+                redisUtil.batchDelete(DYNAMIC_QUERY_KEY);
+                return Result.ok("发布成功");
             }
             ArrayList<Integer> integers = new ArrayList<>();
             integers.add(dynamic.getId());

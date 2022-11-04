@@ -7,9 +7,12 @@ import com.socialCircle.dao.ReportDao;
 import com.socialCircle.entity.Image;
 import com.socialCircle.entity.Report;
 import com.socialCircle.entity.Result;
+import com.socialCircle.entity.User;
 import com.socialCircle.service.ImageService;
 import com.socialCircle.service.ReportService;
+import com.socialCircle.service.UserService;
 import com.socialCircle.vm.ReportVM;
+import com.socialCircle.vm.UserInfoVM;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,6 +27,8 @@ public class ReportServiceImpl implements ReportService {
     private RedisUtil redisUtil;
     @Resource
     private ImageService imageService;
+    @Resource
+    private UserService userService;
 
     @Override
     public Result query(Integer p) {
@@ -38,6 +43,13 @@ public class ReportServiceImpl implements ReportService {
                 ReportVM vm = new ReportVM(item);
                 List<Image> images = imageService.queryByReportId(item.getId());
                 vm.setImages(images);
+                User user = new User();
+                user.setId(vm.getUserId());
+                UserInfoVM userInfoVM = (UserInfoVM) userService.userInfo(user).getData();
+                vm.setUser(userInfoVM);
+                user.setId(vm.getReportUserId());
+                UserInfoVM userInfoVM1 = (UserInfoVM) userService.userInfo(user).getData();
+                vm.setReportUser(userInfoVM1);
                 reportVMS.add(vm);
             });
             // 保存缓存
