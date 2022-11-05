@@ -1,24 +1,8 @@
 import React, { lazy } from 'react';
 import { BrowserRouterProps } from 'react-router-dom';
-// import dashboard from './modules/dashboard';
-// import list from './modules/list';
-// import form from './modules/form';
-// import detail from './modules/detail';
-// import result from './modules/result';
-// import user from './modules/user';
-// import login from './modules/login';
 import otherRoutes from './modules/others';
-// import { useAppSelector } from 'modules/store';
-
-// import { selectUserInfo } from 'modules/user'
-// import store from 'modules/store';
-// import { getUserInfo, selectToken, logout } from 'modules/user';
-// import { Routes, Route, Navigate, useRoutes } from "react-router";
-
 // 单独封装 默认导出
 // import { createBrowserHistory } from 'history'
-
-
 
 import firstLevel from './modules/firstlevel';
 
@@ -59,15 +43,14 @@ const routes: IRouter[] = [
   },
   {
     path: '/',
-    redirect: '/user/manage'
+    redirect: '/user/manage',
   },
   // {
   //   path: '/*',
-  //   Component: 
+  //   Component:
   // }
 ];
 
-const InitRoutes = [...routes, ...otherRoutes, ...firstLevel]
-
+const InitRoutes = [...routes, ...otherRoutes, ...firstLevel];
 
 export default InitRoutes;

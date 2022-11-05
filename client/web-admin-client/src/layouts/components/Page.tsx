@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../modules/store';
-import { selectGlobal, switchFullPage } from '../../modules/global';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { selectGlobal, switchFullPage } from '../../store/global';
 import { Layout, Breadcrumb } from 'tdesign-react';
 import Style from './Page.module.less';
 

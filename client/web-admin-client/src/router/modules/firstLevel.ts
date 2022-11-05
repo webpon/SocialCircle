@@ -12,14 +12,14 @@ const dashboard: IRouter[] = [
     children: [
       {
         path: 'manage',
-        Component: lazy(() => import('pages/User/List/List')),
+        Component: lazy(() => import('pages/User/List/Index')),
         meta: {
           title: '用户列表',
         },
       },
       {
         path: 'close',
-        Component: lazy(() => import('pages/User/Close')),
+        Component: lazy(() => import('pages/User/Violate/Index')),
         meta: {
           title: '违禁管理',
         },

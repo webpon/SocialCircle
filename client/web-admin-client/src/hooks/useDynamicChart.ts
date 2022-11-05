@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { useAppSelector } from 'modules/store';
-import { selectGlobal } from 'modules/global';
+import { useAppSelector } from 'store';
+import { selectGlobal } from 'store/global';
 import { getChartColor } from 'utils/color';
 import { CHART_COLORS } from 'configs/color';
 import lodashSet from 'lodash/set';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Row } from 'tdesign-react';
-import { useAppSelector } from 'modules/store';
-import { selectGlobal } from 'modules/global';
+import { useAppSelector } from 'store';
+import { selectGlobal } from 'store/global';
 
 const { Footer: TFooter } = Layout;
 

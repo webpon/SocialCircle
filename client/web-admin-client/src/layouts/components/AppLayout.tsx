@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout } from 'tdesign-react';
-import { ELayout } from 'modules/global';
+import { ELayout } from 'store/global';
 import Header from './Header';
 import Footer from './Footer';
 import Menu from './Menu';

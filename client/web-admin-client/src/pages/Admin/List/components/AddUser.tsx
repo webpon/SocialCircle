@@ -9,9 +9,9 @@ import {
     MessagePlugin,
 } from 'tdesign-react';
 import { SubmitContext, FormInstanceFunctions } from 'tdesign-react/es/form/type';
-import { useAppDispatch, useAppSelector } from 'modules/store';
-import {getAdminList, getUserList, selectUserList} from 'modules/user';
-import { addAdminUser } from 'services/user'
+import { useAppDispatch, useAppSelector } from 'store';
+import {getAdminList, getUserList, selectUserList} from 'store/user';
+import { addAdminUser } from 'apis/user'
 import Style from './AddUser.module.less';
 const { FormItem } = Form;
 const { Option } = Select;
@@ -68,9 +68,6 @@ function AddUser(props: IProps) {
                         <Button theme="default" onClick={handleFooterClose}>
                             返回
                         </Button>
-                        {/* <Button theme="primary" onClick={handleFooterClose}>
-                            确定
-                        </Button> */}
                     </>
                 }
                 onClose={handleFooterClose}

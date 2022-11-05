@@ -2,12 +2,12 @@ import React, { useState, memo, useEffect } from 'react';
 import Input, { Table, Tag, Row, Col, Button, MessagePlugin, Avatar, Dialog } from 'tdesign-react';
 import { UserIcon } from 'tdesign-icons-react';
 import classnames from 'classnames';
-import { useAppDispatch, useAppSelector } from 'modules/store';
-import {getAdminList, getUserList, selectAdminList, selectUserList} from 'modules/user';
-import { clearPageState } from 'modules/list/base';
+import { useAppDispatch, useAppSelector } from 'store';
+import {getAdminList, getUserList, selectAdminList, selectUserList} from 'store/user';
+import { clearPageState } from 'store/list/base';
 import CommonStyle from 'styles/common.module.less';
-import style from './List.module.less';
-import { deleteAdminUser as deleteAdminUserApi } from 'services/user';
+import style from './Index.module.less';
+import { deleteAdminUser as deleteAdminUserApi } from 'apis/user';
 
 import AddUser from './components/AddUser';
 import UpdateAdmin from "./components/UpdateAdmin";

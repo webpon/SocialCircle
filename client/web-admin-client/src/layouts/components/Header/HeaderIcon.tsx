@@ -10,11 +10,11 @@ import {
   PoweroffIcon,
   UserCircleIcon,
 } from 'tdesign-icons-react';
-import {useAppDispatch, useAppSelector} from 'modules/store';
-import { toggleSetting } from 'modules/global';
-import {getUserInfo, logout, selectUserInfo, selectUserList} from 'modules/user';
+import {useAppDispatch, useAppSelector} from 'store';
+import { toggleSetting } from 'store/global';
+import {getUserInfo, logout, selectUserInfo, selectUserList} from 'store/user';
 import Style from './HeaderIcon.module.less';
-import { clearPageState } from 'modules/list/base';
+import { clearPageState } from 'store/list/base';
 
 const { DropdownMenu, DropdownItem } = Dropdown;
 

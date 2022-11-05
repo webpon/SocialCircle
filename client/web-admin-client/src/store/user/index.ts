@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { RootState } from '../store';
+import { RootState } from '..';
 import {
   login as loginApi,
   getUserInfo as getUserInfoApi,
   getUserList as getUserListApi,
   getAdminList as getAdminListApi,
-  logout as logoutApi, getReportListApi
-} from 'services/user'
+  logout as logoutApi
+} from 'apis/user'
 
 const namespace = 'user';
 const TOKEN_NAME = 'token';
@@ -93,15 +93,6 @@ export const getAdminList = createAsyncThunk(`${namespace}/getAdminList`, async 
   }
 });
 
-// getReportList
-export const getReportList = createAsyncThunk(`${namespace}/getReportList`, async (p:number) => {
-  const res = await getReportListApi(p);
-  return {
-    total: res.total,
-    data: res.data,
-    current: p,
-  }
-});
 
 const userSlice = createSlice({
   name: namespace,
@@ -140,18 +131,6 @@ const userSlice = createSlice({
       })
       .addCase(getUserList.rejected, (state, action) => {
         state.userListData.loading = false;
-      })
-      /* 获取举报列表 */
-      .addCase(getReportList.pending, (state) => {
-        state.reportLis.loading = true;
-      })
-      .addCase(getReportList.fulfilled, (state, action) => {
-        state.reportLis.list = action.payload.data;
-        state.reportLis.current = action.payload.current;
-        state.reportLis.loading = false;
-      })
-      .addCase(getReportList.rejected, (state, action) => {
-        state.reportLis.loading = false;
       })
       /* 获取管理列表 */
       .addCase(getAdminList.pending, (state) => {
