@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ReportDao  {
     List<Report> query(@Param("p") Integer p);
+
+    Long count();
 }

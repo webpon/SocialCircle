@@ -15,7 +15,14 @@
             )
         </where>
     </delete>
-    <select id="getClassify" resultType="com.socialCircle.entity.Classify">
-        select * from classify
+    <select id="getClassify" resultType="com.socialCircle.vm.ClassifyVM">
+        select id,title,count dynamicCountNumber
+        from classify
+                 left join (
+            select classify_id, count(classify_id) as count
+            from dynamic
+            group by classify_id
+            having classify_id IS NOT NULL
+        ) as cic on classify.id = cic.classify_id
     </select>
 </mapper>

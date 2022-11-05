@@ -23,7 +23,7 @@ const PictureView: FC<ImgProps> = memo(({ imgUrl,style,images }) => {
     }
   })
   return (
-    <div>
+    <div style={{"margin": "10px"}}>
       <span onClick={handleClick}>
         <img src={imgUrl} style={style}/>
       </span>

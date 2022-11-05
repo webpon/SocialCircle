@@ -28,7 +28,6 @@ const INITIAL_DATA = {
     permission: 2,
     headIcon: ''
 };
-console.log(Style);
 
 function AddUser(props: IProps) {
     const { isAddUser, setAddUser } = props

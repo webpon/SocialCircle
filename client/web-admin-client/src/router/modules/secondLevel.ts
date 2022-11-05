@@ -17,6 +17,13 @@ const dashboard: IRouter[] = [
           title: '动态列表',
         },
       },
+      {
+        path: 'classify',
+        Component: lazy(() => import('pages/Dynamic/pages/Classify')),
+        meta: {
+          title: '分类管理',
+        },
+      },
     ],
   },
 ];

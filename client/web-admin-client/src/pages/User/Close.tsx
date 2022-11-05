@@ -100,6 +100,7 @@ const User: React.FC<BrowserRouterProps> = () => {
           total,
           current,
           showJumper: true,
+          showPageSize: false,
           onCurrentChange(current, pageInfo) {
             dispatch(
               getUserList({

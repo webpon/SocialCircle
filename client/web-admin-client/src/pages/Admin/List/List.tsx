@@ -219,7 +219,6 @@ export default memo(() => {
         maxHeight={'73vh'}
         pagination={{
           pageSize,
-
           total,
           current,
           showPageSize: false,

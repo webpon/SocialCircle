@@ -57,9 +57,11 @@ public class ReportServiceImpl implements ReportService {
             if (reportVMS.isEmpty()){
                 return Result.error("没有数据");
             }
-            return Result.ok(reportVMS);
+            bean = reportVMS;
         }
-        return Result.ok(bean);
+        Result<List<ReportVM>> ok = Result.ok(bean);
+        ok.setTotal(reportDao.count());
+        return ok;
     }
 
     private List<Report> queryByPage(Integer p) {

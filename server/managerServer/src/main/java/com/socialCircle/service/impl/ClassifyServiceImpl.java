@@ -5,6 +5,7 @@ import com.socialCircle.dao.ClassifyDao;
 import com.socialCircle.entity.Classify;
 import com.socialCircle.entity.Result;
 import com.socialCircle.service.ClassifyService;
+import com.socialCircle.vm.ClassifyVM;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,7 +25,7 @@ public class ClassifyServiceImpl implements ClassifyService {
      */
     @Override
     public Result getClassify() {
-        List<Classify> beans = redisUtil.getBeans(CLASSIFY, Classify.class);
+        List<ClassifyVM> beans = redisUtil.getBeans(CLASSIFY, ClassifyVM.class);
         if (beans == null) {
             beans = classifyDao.getClassify();
             redisUtil.save(CLASSIFY, beans);

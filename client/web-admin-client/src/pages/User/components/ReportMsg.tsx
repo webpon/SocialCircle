@@ -3,11 +3,8 @@ import {
   Dialog, Button, Form,
   Row,
   Col,
-  Input
+  Input, MessagePlugin
 } from 'tdesign-react';
-import {SubmitContext, FormInstanceFunctions} from 'tdesign-react/es/form/type';
-import {useAppDispatch, useAppSelector} from 'modules/store';
-import {selectUserList} from 'modules/user';
 import {reportApi, updateAdminUser} from 'services/user'
 import Style from './ReportMsg.module.less';
 import PictureView from "../../../components/image";
@@ -45,10 +42,10 @@ function ReportMsg(props: IProps) {
   });
 
   const formatOptions = (labels: any[]) => labels.map((label, index) => ({ label, value: index }));
-
-  const currentYear = new Date().getFullYear();  const yearOptions = formatOptions(new Array(10).fill(0).map((_, index) => `${currentYear - index}年`));
-  const monthOptions = formatOptions(new Array(12).fill(0).map((_, index) => `${index + 1}月`));
-  const dayOptions = formatOptions(new Array(31).fill(0).map((_, index) => `${index + 1}日`));
+  const currentYear = new Date().getFullYear();
+  const yearOptions = formatOptions(new Array(10).fill(0).map((_, index) => `${currentYear + index}`));
+  const monthOptions = formatOptions(new Array(12).fill(0).map((_, index) => `${index + 1}`));
+  const dayOptions = formatOptions(new Array(31).fill(0).map((_, index) => `${index + 1}`));
   const optionsListMap = {
     date: [yearOptions, monthOptions, dayOptions]
   };
@@ -81,6 +78,14 @@ function ReportMsg(props: IProps) {
     });
   };
   function reportBut() {
+    if (reason.trim() === ""){
+      MessagePlugin.error('请填写理由');
+      return
+    }
+    if (state.date.labelText.trim() === ""){
+      MessagePlugin.error('请填封号结束时间');
+      return
+    }
     var d = new Date();
     var hour= d.getHours();//得到小时数
     var minute= d.getMinutes();//得到分钟数
@@ -98,7 +103,6 @@ function ReportMsg(props: IProps) {
   return (
     <>
       <Dialog
-        className={Style.fixStyle}
         header="举报详细信息"
         visible={show}
         width={500}
@@ -144,7 +148,7 @@ function ReportMsg(props: IProps) {
                 {
                   (()=>{
                     return  report.images.map((item)=>{
-                      return <PictureView imgUrl={item.url} style={{"margin": "10px","width":80, "height":80}} key={item.id} images={report.images}/>
+                      return <PictureView imgUrl={item.url} style={{"width":80, "height":80}} key={item.id} images={report.images}/>
                     })
                   })()
                 }
@@ -160,7 +164,7 @@ function ReportMsg(props: IProps) {
       >
         <Cell
           arrow
-          title="日期"
+          title="封号结束时间"
           note={NotePanel(state.date.labelText, '选择日期')}
           onClick={() => togglePicker('date', true)}
         />

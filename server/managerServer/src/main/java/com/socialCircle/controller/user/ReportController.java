@@ -3,6 +3,7 @@ package com.socialCircle.controller.user;
 import com.socialCircle.entity.Result;
 import com.socialCircle.service.ReportService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +17,7 @@ public class ReportController {
     private ReportService reportService;
 
     @GetMapping("{p}")
-    public Result query(@PathParam("p") Integer p){
+    public Result query(@PathVariable("p") Integer p){
         return reportService.query(p);
     }
 }

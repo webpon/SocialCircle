@@ -40,8 +40,7 @@ const initialState = {
     current: 1,
     loading: false,
     pageSize: 10,
-    total: 100,
-
+    total: 0
   }
 };
 
@@ -80,6 +79,7 @@ export const getUserList = createAsyncThunk(`${namespace}/getUserList`, async (p
   return {
     data: res.data,
     current: params.p,
+    total: res.total
   }
 });
 
@@ -134,8 +134,9 @@ const userSlice = createSlice({
         state.userListData.loading = true;
       })
       .addCase(getUserList.fulfilled, (state, action) => {
-        state.userListData.adminList = action.payload.data;
+        state.userListData.contractList = action.payload.data;
         state.userListData.current = action.payload.current;
+        state.userListData.total = action.payload.total;
         state.userListData.loading = false;
       })
       .addCase(getUserList.rejected, (state, action) => {
