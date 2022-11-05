@@ -3,8 +3,8 @@ import classNames from 'classnames';
 import Login from './components/Login';
 import Register from './components/Register';
 import LoginHeader from './components/Header';
-import { useAppSelector } from 'modules/store';
-import { selectGlobal } from 'modules/global';
+import { useAppSelector } from 'store';
+import { selectGlobal } from 'store/global';
 
 import Style from './index.module.less';
 

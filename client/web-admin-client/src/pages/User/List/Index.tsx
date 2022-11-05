@@ -6,7 +6,7 @@ import {useAppDispatch, useAppSelector} from 'modules/store';
 import {getUserList, selectUserList} from 'modules/user';
 import {selectListBase, getList, clearPageState} from 'modules/list/base';
 import CommonStyle from 'styles/common.module.less';
-import style from './List.module.less';
+import style from './Index.module.less';
 import {SearchIcon} from "tdesign-icons-react/lib";
 
 export const GenderMap: {

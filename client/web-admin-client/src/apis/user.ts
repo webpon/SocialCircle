@@ -57,12 +57,12 @@ export const deleteAdminUser = async (params: any) => {
 };
 
 // !TOdO: TS类型限制
-export const getReportListApi = async (p:number) => {
-    return request.get<any, any>(`/report/${p}`);
+export const getReportList = async (page: number) => {
+    return request.get<any, any>(`/report/${page}`);
 };
 
 // !TOdO: TS类型限制
-export const reportApi = async (data:{userId:number, endTime: string, reason: string}) => {
+export const report = async (data:{userId:number, endTime: string, reason: string}) => {
     return request.post<any, any>(`/sealNumber`, data);
 };
 

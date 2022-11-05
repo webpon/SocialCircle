@@ -9,9 +9,9 @@ import {
     MessagePlugin,
 } from 'tdesign-react';
 import { SubmitContext, FormInstanceFunctions } from 'tdesign-react/es/form/type';
-import { useAppDispatch, useAppSelector } from 'modules/store';
-import {getAdminList,  selectUserList} from 'modules/user';
-import {updateAdminUser} from 'services/user'
+import { useAppDispatch, useAppSelector } from 'store';
+import {getAdminList,  selectUserList} from 'store/user';
+import {updateAdminUser} from 'apis/user'
 import Style from './AddUser.module.less';
 const { FormItem } = Form;
 const { Option } = Select;

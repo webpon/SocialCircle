@@ -12,7 +12,7 @@ const dashboard: IRouter[] = [
     children: [
       {
         path: 'manage',
-        Component: lazy(() => import('pages/Admin/List/List')),
+        Component: lazy(() => import('pages/Admin/List/Index')),
         meta: {
           title: '管理员列表',
         },

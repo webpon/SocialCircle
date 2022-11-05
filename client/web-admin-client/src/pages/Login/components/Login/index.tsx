@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Form, MessagePlugin, Input, Checkbox, Button, FormInstanceFunctions, SubmitContext } from 'tdesign-react';
 import { LockOnIcon, UserIcon, BrowseOffIcon, BrowseIcon, RefreshIcon } from 'tdesign-icons-react';
 import classnames from 'classnames';
-import { useAppDispatch } from 'modules/store';
-import { login, getUserInfo } from 'modules/user';
+import { useAppDispatch } from 'store';
+import { login, getUserInfo } from 'store/user';
 import useCountdown from '../../hooks/useCountDown';
 
 import Style from './index.module.less';

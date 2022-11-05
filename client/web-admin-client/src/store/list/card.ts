@@ -1,29 +1,35 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { RootState } from '../store';
-import { getContractList, IContract } from 'services/contract';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '..';
+import { getProductList, IProduct } from 'apis/product';
 
-const namespace = 'list/base';
+const namespace = 'list/card';
 
 interface IInitialState {
+  pageLoading: boolean;
   loading: boolean;
   current: number;
   pageSize: number;
   total: number;
-  contractList: IContract[];
+  productList: IProduct[];
 }
 
 const initialState: IInitialState = {
+  pageLoading: true,
   loading: true,
   current: 1,
-  pageSize: 10,
+  pageSize: 12,
   total: 0,
-  contractList: [],
+  productList: [],
 };
 
 export const getList = createAsyncThunk(
   `${namespace}/getList`,
   async (params: { pageSize: number; current: number }) => {
-    const result = await getContractList(params);
+    const { pageSize, current } = params;
+    const result = await getProductList({
+      pageSize,
+      current,
+    });
     return {
       list: result?.list,
       total: result?.total,
@@ -33,11 +39,14 @@ export const getList = createAsyncThunk(
   },
 );
 
-const listBaseSlice = createSlice({
+const listCardSlice = createSlice({
   name: namespace,
   initialState,
   reducers: {
     clearPageState: () => initialState,
+    switchPageLoading: (state, action: PayloadAction<boolean>) => {
+      state.pageLoading = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -46,7 +55,7 @@ const listBaseSlice = createSlice({
       })
       .addCase(getList.fulfilled, (state, action) => {
         state.loading = false;
-        state.contractList = action.payload?.list;
+        state.productList = action.payload?.list;
         state.total = action.payload?.total;
         state.pageSize = action.payload?.pageSize;
         state.current = action.payload?.current;
@@ -57,8 +66,8 @@ const listBaseSlice = createSlice({
   },
 });
 
-export const { clearPageState } = listBaseSlice.actions;
+export const { clearPageState, switchPageLoading } = listCardSlice.actions;
 
-export const selectListBase = (state: RootState) => state.listBase;
+export const selectListCard = (state: RootState) => state.listCard;
 
-export default listBaseSlice.reducer;
+export default listCardSlice.reducer;

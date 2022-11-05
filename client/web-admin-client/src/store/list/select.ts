@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { RootState } from '../store';
-import { getContractList, IContract } from 'services/contract';
+import { RootState } from '..';
+import { getContractList, IContract } from 'apis/contract';
 
 const namespace = 'list/select';
 

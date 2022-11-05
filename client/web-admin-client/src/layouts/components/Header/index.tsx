@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
 import { Layout, Button, Row, Col } from 'tdesign-react';
 import { ViewListIcon } from 'tdesign-icons-react';
-import { useAppDispatch, useAppSelector } from 'modules/store';
-import { selectGlobal, toggleMenu } from 'modules/global';
+import { useAppDispatch, useAppSelector } from 'store';
+import { selectGlobal, toggleMenu } from 'store/global';
 import HeaderIcon from './HeaderIcon';
 import { HeaderMenu } from '../Menu';
 import Search from './Search';

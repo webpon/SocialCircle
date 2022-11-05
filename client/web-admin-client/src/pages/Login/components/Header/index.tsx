@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Tag } from 'tdesign-react';
 import { LogoGithubIcon, HelpCircleIcon, SettingIcon } from 'tdesign-icons-react';
-import { useAppDispatch } from 'modules/store';
-import { toggleSetting } from 'modules/global';
+import { useAppDispatch } from 'store';
+import { toggleSetting } from 'store/global';
 
 import LogoFullIcon from 'assets/svg/assets-logo-full.svg?component';
 import Style from './index.module.less';
