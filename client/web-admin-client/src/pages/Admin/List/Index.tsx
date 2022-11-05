@@ -1,19 +1,13 @@
 import React, { useState, memo, useEffect } from 'react';
-import Input, { Table, Tag, Row, Col, Button, MessagePlugin, Avatar, Dialog } from 'tdesign-react';
+import { Table, Tag, Row, Col, Button, MessagePlugin, Avatar, Dialog } from 'tdesign-react';
 import { UserIcon } from 'tdesign-icons-react';
 import classnames from 'classnames';
-import { useAppDispatch, useAppSelector } from 'store';
-import {getAdminList, getUserList, selectAdminList, selectUserList} from 'store/user';
-import { clearPageState } from 'store/list/base';
 import CommonStyle from 'styles/common.module.less';
 import style from './Index.module.less';
-import { deleteAdminUser as deleteAdminUserApi } from 'apis/user';
-
 import AddUser from './components/AddUser';
-import UpdateAdmin from "./components/UpdateAdmin";
-import {SearchIcon} from "tdesign-icons-react/lib";
+import { getAdminList, deleteAdminUser } from 'apis/admin';
 
-export const GenderMap: {
+const GenderMap: {
   [key: number]: React.ReactElement;
 } = {
   1: (
@@ -28,7 +22,7 @@ export const GenderMap: {
   ),
 };
 
-export const PermissionMap: {
+const PermissionMap: {
   [key: number]: React.ReactElement;
 } = {
   1: (
@@ -44,204 +38,195 @@ export const PermissionMap: {
 };
 
 export default memo(() => {
-    const dispatch = useAppDispatch();
-    const [q,setQ] = useState(null);
-    const pageState = useAppSelector(selectAdminList);
-    const [isAddUser, setIsAddUser] = useState(false)
-    const [isUpdateUser, setIsUpdateUser] = useState(false)
-    const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([1, 2]);
-    const [deleteInfo, setDeleteInfo] = useState({ visible: false, id: 0 });
-    const [user,setUser] = useState({
-      email: '',
-      password: '',
-      petName: '',
-      gender: 1,
-      permission: 2,
-      headIcon: ''
-    });
-    const { loading, contractList, current, pageSize, total } = pageState;
-    useEffect(() => {
-        dispatch(
-          getAdminList({ p: 1 ,q}),
-        );
-        return () => {
-            dispatch(clearPageState());
-        };
-    }, [q]);
-
-    function onSelectChange(value: (string | number)[]) {
-        setSelectedRowKeys(value);
-    }
-    function setAddUser(isShow: Boolean) {
-        // @ts-ignore
-      setIsAddUser(isShow)
-    }
-    function deleteAdmin(id:number) {
-      deleteAdminUserApi({id}).then(({code})=>{
-        if (code === 200){
-          dispatch(
-            getAdminList({ p: 1 ,q}),
-          );
-        }
-      });
-    }
-  function handleClose() {
-    setDeleteInfo({
-      visible: false,
-      id: 0,
-    });
-  }
-  function setUpdateUser(isShow: Boolean) {
-    // @ts-ignore
-    setIsUpdateUser(isShow)
-  }
-
+  /*-------------- 数据初始化 --------------*/
+  // 管理员数据
+  const [adminData, setAdminData] = useState({ list: [], total: 0 });
+  // 表格options
+  const [loading, setLoading] = useState(false);
+  const [current, setCurrent] = useState(1);
   const columns: any = [
-        {
-            align: 'left',
-            width: 100,
-            ellipsis: true,
-            colKey: 'id',
-            title: '用户ID',
-        },
-        {
-            align: 'left',
-            width: 250,
-            ellipsis: true,
-            colKey: 'email',
-            title: 'Email',
-        },
-        {
-            align: 'left',
-            width: 200,
-            ellipsis: true,
-            colKey: 'accountId',
-            title: '账号',
-        },
-        {
-            align: 'left',
-            width: 200,
-            ellipsis: true,
-            colKey: 'loginTime',
-            title: '最近一次登录时间',
-            cell({ row }) {
-                return <div>{new Date(row.loginTime).toLocaleString()}</div>
-            },
-        },
-        {
-            align: 'left',
-            width: 200,
-            ellipsis: true,
-            colKey: 'permission',
-            title: '权限',
-            cell({ row }) {
-                return PermissionMap[row.permission]
-            }
-        },
-        {
-            align: 'left',
-            width: 200,
-            ellipsis: true,
-            colKey: 'petName',
-            title: '账户名称',
-        },
-        {
-            align: 'left',
-            width: 100,
-            ellipsis: true,
-            colKey: 'headIcon',
-            title: '头像',
-            cell({ row }) {
-                return <Avatar image={row.headIcon} icon={<UserIcon />} style={{ marginRight: '40px' }} />
-            }
-        },
-        {
-            align: 'left',
-            width: 100,
-            ellipsis: true,
-            colKey: 'gender',
-            title: '性别',
-            cell({ row }) {
-                return GenderMap[row.gender];
-            },
-        },
-        {
-            align: 'left',
-            fixed: 'right',
-            width: 180,
-            colKey: 'op',
-            title: '操作',
-          cell: function ({row}: any) {
-            return (
-              <>
-                <Button theme='primary' variant='text'
-                        onClick={()=> {
-                          setUser(row)
-                          setIsUpdateUser(true)
-                        }}
-                >
-                  管理
-                </Button>
-                <Button
-                  theme='primary'
-                  variant='text'
-                  onClick={() => {
-                    setDeleteInfo({
-                      visible: true,
-                      id: row.id,
-                    });
-                  }}
-                >
-                  删除
-                </Button>
-              </>
-            );
-          },
-        },
-    ]
+    {
+      align: 'left',
+      width: 100,
+      ellipsis: true,
+      colKey: 'id',
+      title: '用户ID',
+    },
+    {
+      align: 'left',
+      width: 250,
+      ellipsis: true,
+      colKey: 'email',
+      title: 'Email',
+    },
+    {
+      align: 'left',
+      width: 200,
+      ellipsis: true,
+      colKey: 'accountId',
+      title: '账号',
+    },
+    {
+      align: 'left',
+      width: 200,
+      ellipsis: true,
+      colKey: 'loginTime',
+      title: '最近一次登录时间',
+      cell({ row }: any) {
+        return <div>{new Date(row.loginTime).toLocaleString()}</div>;
+      },
+    },
+    {
+      align: 'left',
+      width: 200,
+      ellipsis: true,
+      colKey: 'permission',
+      title: '权限',
+      cell({ row }: any) {
+        return PermissionMap[row.permission];
+      },
+    },
+    {
+      align: 'left',
+      width: 200,
+      ellipsis: true,
+      colKey: 'petName',
+      title: '账户名称',
+    },
+    {
+      align: 'left',
+      width: 100,
+      ellipsis: true,
+      colKey: 'headIcon',
+      title: '头像',
+      cell({ row }: any) {
+        return <Avatar image={row.headIcon} icon={<UserIcon />} style={{ marginRight: '40px' }} />;
+      },
+    },
+    {
+      align: 'left',
+      width: 100,
+      ellipsis: true,
+      colKey: 'gender',
+      title: '性别',
+      cell({ row }: any) {
+        return GenderMap[row.gender];
+      },
+    },
+    {
+      align: 'left',
+      fixed: 'right',
+      width: 180,
+      colKey: 'op',
+      title: '操作',
+      cell: function ({ row }: any) {
+        return (
+          <>
+            <Button theme='primary' variant='text'>
+              管理
+            </Button>
+            <Button
+              theme='primary'
+              variant='text'
+              onClick={() => {
+                setDeleteInfo({
+                  visible: true,
+                  id: row.id,
+                });
+              }}
+            >
+              删除
+            </Button>
+          </>
+        );
+      },
+    },
+  ];
 
+  // 生命周期
+  useEffect(() => {
+    getAdminData(1);
+  }, [current]);
+  // 请求函数
+  const getAdminData = async (page: number) => {
+    setLoading(true);
+    const res = await getAdminList({
+      p: page,
+    });
+    setLoading(false);
+    setAdminData({ list: res.data, total: res.total });
+  };
+
+  /*-------------- 新增管理员 --------------*/
+  const [isAddUser, setIsAddUser] = useState(false);
+
+  /*-------------- 删除管理员 --------------*/
+  const [deleteInfo, setDeleteInfo] = useState({ visible: false, id: 0 });
+  const [delLoading, setDelLoading] = useState(false);
+  async function deleteAdmin(id: number) {
+    setDelLoading(true);
+    try {
+      const { code } = await deleteAdminUser({ id });
+      if (code === 200) {
+        setDeleteInfo({
+          visible: false,
+          id: 0,
+        });
+        getAdminData(1);
+      }
+    } catch (error: any) {
+      MessagePlugin.error(error.msg);
+    } finally {
+      setDelLoading(false);
+    }
+  }
 
   return (
     <div className={classnames(CommonStyle.pageWithPadding, CommonStyle.pageWithColor)}>
       <Row justify='space-between' className={style.toolBar}>
         <Col>
-          <Button onClick={() => setAddUser(true)}>新增管理</Button>
+          <Button onClick={() => setIsAddUser(true)}>新增管理</Button>
         </Col>
       </Row>
       <Table
+        hover
         columns={columns}
         loading={loading}
-        data={contractList}
+        data={adminData.list}
         rowKey='accountId'
         verticalAlign='top'
-        hover
-        onSelectChange={onSelectChange}
         maxHeight={'73vh'}
         pagination={{
-          pageSize,
-
-          total,
+          pageSize: 10,
           current,
+          total: adminData.total,
           showPageSize: false,
           showJumper: true,
-          onCurrentChange(current, pageInfo) {
-            dispatch(
-              getAdminList({
-                p: pageInfo.current,
-              }),
-            );
+          onCurrentChange(current) {
+            setCurrent(current);
+            getAdminData(current);
           },
         }}
       />
-      <AddUser setAddUser={setAddUser} isAddUser={isAddUser} />
+      <AddUser setAddUser={setIsAddUser} isAddUser={isAddUser} />
 
       <Dialog
-        header='确认删除当前管理员？'
+        header='确认删除？'
         visible={deleteInfo.visible}
-        onClose={handleClose}
+        confirmBtn={
+          <Button theme='danger' loading={delLoading}>
+            删除
+          </Button>
+        }
+        onClose={() => {
+          setDeleteInfo({
+            visible: false,
+            id: 0,
+          });
+        }}
         onConfirm={() => deleteAdmin(deleteInfo.id)}
       >
-        <p>删除后该管理的所有信息将被清空,且无法恢复！</p>
+        <p>删除后将无法恢复！</p>
       </Dialog>
     </div>
   );
