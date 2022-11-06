@@ -28,5 +28,9 @@ public class Topic implements Serializable {
      */
     private Integer concernNum;
 
+    /**
+     * 用户id
+     */
+    private Integer userId;
 
 }
