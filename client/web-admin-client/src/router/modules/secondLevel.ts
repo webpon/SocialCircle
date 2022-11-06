@@ -24,6 +24,13 @@ const dashboard: IRouter[] = [
           title: '分类管理',
         },
       },
+      {
+        path: 'topic',
+        Component: lazy(() => import('pages/Dynamic/pages/Topic')),
+        meta: {
+          title: '话题管理',
+        },
+      },
     ],
   },
 ];

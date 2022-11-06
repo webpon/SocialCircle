@@ -2,7 +2,7 @@ import React, {useState, memo, useEffect} from 'react';
 import {Input, Table, Tag, Row, Col, Button, MessagePlugin, Avatar, Dialog} from 'tdesign-react';
 import classnames from 'classnames';
 import CommonStyle from 'styles/common.module.less';
-import {addClassifyApi, deleteClassifyApi, getClassifyApi} from "services/classify";
+import {addClassifyApi, deleteClassifyApi, getClassifyApi} from "apis/classify";
 
 
 export default memo(() => {
