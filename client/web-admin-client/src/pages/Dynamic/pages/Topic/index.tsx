@@ -10,7 +10,7 @@ export default memo(() => {
   const [total,setTotal] = useState(0);
   const [del, setDel] = useState({id: 0, show: false});
   const [add, setAdd] = useState({title: '', show: false, describe: ''});
-  const [topic,setTopic] = useState({title: '', show: false, describe: '', id: 0});
+  const [topic,setTopic] = useState({title: '', show: false, describe: '', id: 0, concernNum: 0});
   let p = 1;
 
   function getTopic() {
@@ -25,6 +25,7 @@ export default memo(() => {
   function handler() {
     setDel({show: false, id: 0})
     setAdd({show: false, title: "", describe:""})
+    setTopic({show: false, title: "", describe:"", id:0, concernNum:0})
   }
 
 
@@ -77,11 +78,11 @@ export default memo(() => {
       cell({row}) {
         return (
           <>
-            <Button variant='text' onClick={() => {
-              setDel({show: true, id: row.id})
+          <Button theme='primary' variant='text' onClick={() => {
+              setTopic({show: true, id: row.id, describe: row.describe, title: row.title, concernNum: row.concernNum})
             }}>
               详细信息
-            </Button>
+          </Button>
           <Button theme='danger' variant='text'
                   onClick={() => setDel({show: true, id: row.id})}>
               删除
@@ -123,6 +124,22 @@ export default memo(() => {
         onConfirm={delTopic}
       >
         <p>删除后该话题的所有信息将被清空,且无法恢复！</p>
+      </Dialog>
+      <Dialog
+        header='详细信息'
+        visible={topic.show}
+        onClose={handler}
+        onConfirm={delTopic}
+      >
+        <p>id:{topic.id}</p>
+        <p>标题:{topic.title}</p>
+        <p>关注数:{topic.concernNum}</p>
+        <p>
+          <span>描述:</span>
+          <br/>
+          {topic.describe}
+        </p>
+        <br/>
       </Dialog>
       <Dialog
         header='添加分类'

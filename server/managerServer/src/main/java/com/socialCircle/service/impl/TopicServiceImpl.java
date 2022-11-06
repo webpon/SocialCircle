@@ -91,6 +91,7 @@ public class TopicServiceImpl implements TopicService {
      */
     @Override
     public Result addTopic(Topic topic) {
+        topic.setUserId(1);
         if (topicDao.addTopic(topic)){
             threadPoolExecutor.execute(()-> {
                 redisUtil.delete(RedisKey.TOPIC_QUERY_KEY+1);
