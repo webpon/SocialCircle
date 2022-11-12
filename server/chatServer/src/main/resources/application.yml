@@ -1,0 +1,38 @@
+server:
+  port: 10333
+spring:
+  profiles:
+    active: dev
+#  datasource:
+#    username: xxxx
+#    password: xxxx
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://xxxxxx?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&serverTimezone=GMT&useSSL=false&allowPublicKeyRetrieval=true
+#  redis:
+#    host:
+#    port: 6379
+#    lettuce:
+#      pool:
+#        max-active: 10
+#        max-idle: 10
+#        min-idle: 1
+
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.webpom.moments.entity #实体类取别名
+  configuration:
+    ## 下划线转驼峰配置
+    map-underscore-to-camel-case: true
+## 显示dao 执⾏sql语句
+logging:
+  level:
+      com:
+        socialCircle:
+          dao: debug # 改成你的dao接口文件所在包路径可以打印出sql语句
+#com:
+#  socialCircle:
+#    tokenKey:
+#    email:
+#      addr:
+#      password:
+#      host:

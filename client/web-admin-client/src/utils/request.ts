@@ -30,10 +30,7 @@ instance.interceptors.response.use(
   (response) => {
     if (response.status === 200) {
       const { data } = response;
-      if (data.code === SUCCESS_CODE) {
-        return data;
-      }
-      return Promise.reject(data);
+      return data;
     }
     return Promise.reject(response?.data);
   },

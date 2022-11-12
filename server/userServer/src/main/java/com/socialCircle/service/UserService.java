@@ -17,10 +17,21 @@ public interface UserService {
     Result signIn(SignIn signIn);
 
     /**
-     * 发送验证码
-     * @param sessionCode 正确验证码
-     * @param email 用户邮箱
-     * @param code 用户输入的验证码
+     * 邮箱登录
+     * @param email 邮箱
+     * @param emailCode 验证码
      */
-    Result emailCode(String sessionCode, String email, String code);
+    Result login(String email, String emailCode);
+
+    /**
+     * 忘记密码，修改密码
+     * @param signIn
+     */
+    Result forgetPassword(SignIn signIn,User user);
+
+
+    /**
+     * 修改密码
+     */
+    Result updatePassword(SignIn signIn, User user);
 }

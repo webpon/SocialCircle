@@ -1,4 +1,8 @@
 package com.socialCircle.entity;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,6 +16,7 @@ public class Dynamic implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
@@ -51,6 +56,7 @@ public class Dynamic implements Serializable {
     /**
      * 发布时间
      */
+//    @TableField(fill = FieldFill.INSERT) //创建时自动填充——
     private Date publishTime;
 
 }

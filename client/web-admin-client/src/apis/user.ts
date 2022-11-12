@@ -62,6 +62,11 @@ export const getReportList = async (page: number) => {
 };
 
 // !TOdO: TS类型限制
+export const deleteReport = async (id: number) => {
+    return request.delete<any, any>(`/report/`, {params:{id}});
+};
+
+// !TOdO: TS类型限制
 export const report = async (data:{userId:number, endTime: string, reason: string}) => {
     return request.post<any, any>(`/sealNumber`, data);
 };

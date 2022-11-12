@@ -1,8 +1,8 @@
-package com.socialCircle.config;
+package com.socialcircle.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.socket.WebSocketSession;
 
-import javax.websocket.Session;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,18 +11,18 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version WsSessionManager.java, v 0.1 2019-10-22 10:24 buhao
  */
 @Slf4j
-public class SessionManager {
+public class WsSessionManager {
     /**
      * 保存连接 session 的地方
      */
-    private static ConcurrentHashMap<String, Session> SESSION_POOL = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, WebSocketSession> SESSION_POOL = new ConcurrentHashMap<>();
 
     /**
      * 添加 session
      *
      * @param key
      */
-    public static void add(String key, Session session) {
+    public static void add(String key, WebSocketSession session) {
         // 添加 session
         SESSION_POOL.put(key, session);
     }
@@ -33,7 +33,7 @@ public class SessionManager {
      * @param key
      * @return
      */
-    public static Session remove(String key) {
+    public static WebSocketSession remove(String key) {
         // 删除 session
         return SESSION_POOL.remove(key);
     }
@@ -44,12 +44,13 @@ public class SessionManager {
      * @param key
      */
     public static void removeAndClose(String key) {
-        Session session = remove(key);
+        WebSocketSession session = remove(key);
         if (session != null) {
             try {
                 // 关闭连接
                 session.close();
             } catch (IOException e) {
+                // todo: 关闭出现异常处理
                 e.printStackTrace();
             }
         }
@@ -61,9 +62,8 @@ public class SessionManager {
      * @param key
      * @return
      */
-    public static Session get(String key) {
+    public static WebSocketSession get(String key) {
         // 获得 session
         return SESSION_POOL.get(key);
     }
-
 }
