@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev:mock": "vite --open --mode mock",
-    "dev": "vite --open --mode development",
+    "dev": "vite --mode development",
     "test": "vite --open --mode test",
     "dev:linux": "vite --mode development",
     "build:test": "vite build --mode test",
