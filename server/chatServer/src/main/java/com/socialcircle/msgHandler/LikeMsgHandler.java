@@ -21,7 +21,7 @@ public class LikeMsgHandler extends AbstractMsgHandler{
     }
 
     @Override
-    public void saveHandler(Message message) throws IOException {
+    public void saveHandler(Message message) {
         LikeMsg msg = JSON.parseObject(message.getMsg(), LikeMsg.class);
         msg.setForm(message.getForm());
         msg.setTo(message.getTo());

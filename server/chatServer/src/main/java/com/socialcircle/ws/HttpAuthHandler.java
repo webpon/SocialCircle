@@ -35,9 +35,9 @@ public class HttpAuthHandler extends TextWebSocketHandler {
             // 用户连接成功，放入在线用户缓存
             WsSessionManager.add(user.getId().toString(), session);
             redisUtil.setIfAbsent(RedisKey.LOGIN+user.getId());
-            msgHandlers.forEach(handler -> {
+            for (AbstractMsgHandler handler : msgHandlers) {
                 handler.receiveHandler(session, user);
-            });
+            }
         } else {
             throw new RuntimeException("用户登录已经失效!");
         }

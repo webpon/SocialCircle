@@ -26,7 +26,7 @@ public class InformController {
     @Resource
     private RedisUtil redisUtil;
     @GetMapping
-    public void informUser(String key, @RequestAttribute User user) throws IOException {
+    public void informUser(String key, @RequestAttribute User user)  {
         WebSocketSession session = WsSessionManager.get(user.getId().toString());
         if (session == null) {
             return;

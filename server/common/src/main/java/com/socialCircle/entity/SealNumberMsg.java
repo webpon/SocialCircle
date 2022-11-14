@@ -1,7 +1,9 @@
 package com.socialCircle.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class SealNumberMsg extends Message<SealNumberMsg>{
     /**
