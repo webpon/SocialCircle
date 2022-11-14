@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSON;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
+import java.util.List;
+
 @Data
-public class Message {
+public class Message<T extends Message> {
     public Message() {
     }
 
-    public <T extends Message> Message(T  message) {
+    public Message(T  message) {
         this.setForm(message.getForm());
         message.setForm(null);
         this.setTo(message.getTo());
@@ -25,4 +27,5 @@ public class Message {
     private String sendTime;
     @Id
     private String _id;
+    private List<T> list;
 }

@@ -10,4 +10,8 @@ public interface RedisKey {
     String HOBBY = "hobby";
     String EMAIL_CODE = "email:";
     String MANAGERS_QUERY_KEY = "query:managers:";
+    String DYNAMIC_QUERY_CONCERN_KEY = "query:dynamic:concern:";
+    String DYNAMIC_QUERY_TOPIC_KEY = "query:dynamic:topic:";
+    String LIKE_DYNAMIC_QUERY_KEY = "query:like:dynamic:";
+    String LIKE_COMMENT_QUERY_KEY = "query:like:comment:";
 }

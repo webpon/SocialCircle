@@ -28,6 +28,18 @@ public class DynamicController {
         return dynamicService.getDynamicsByUserId(p, userId != null ? userId : user.getId());
     }
 
+    @GetMapping("/byTopicId")
+    public Result getDynamicsByTopicId(@RequestParam(defaultValue = "1") Integer p,
+                                       Integer topicId) {
+        return dynamicService.getDynamicsByTopicId(p, topicId);
+    }
+
+    @GetMapping("/concern")
+    public Result getDynamics(@RequestParam(defaultValue = "1") Integer p,
+                              @RequestAttribute User user) {
+        return dynamicService.getDynamicsByConcern(p, user.getId());
+    }
+
     @PostMapping
     public Result addDynamic(@RequestBody DynamicVM dynamicVM,
                              @RequestAttribute User user) {

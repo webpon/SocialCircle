@@ -9,5 +9,4 @@ import java.util.List;
 @Data
 public class ChatMsg extends Message {
     private String content;
-    private List<ChatMsg> list;
 }

@@ -33,14 +33,6 @@ public class InformController {
         }
         Message message = redisUtil.getBean(key, Message.class);
         message.setForm(user.getId());
-        Integer bean = redisUtil.getBean(LOGIN + message.getTo(), Integer.class);
-        // 判断是否在线
-        if (bean != null) {
-            String s = JSON.toJSONString(message);
-            WebSocketSession wss = WsSessionManager.get(message.getTo().toString());
-            wss.sendMessage(new TextMessage(s));
-            return;
-        }
         msgHandlers.forEach(handler -> {
             if (handler.getType().equals(message.getType())) {
                 try {

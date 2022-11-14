@@ -17,8 +17,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.socialCircle.constant.RedisKey.LOGIN;
-
 @Component
 public class HttpAuthHandler extends TextWebSocketHandler {
 
@@ -59,18 +57,10 @@ public class HttpAuthHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
         Message message1 = JSON.parseObject(payload, Message.class);
         message1.setForm(user.getId());
-        Integer bean = redisUtil.getBean(LOGIN + message1.getTo(), Integer.class);
-        // 判断是否在线
-        if (bean != null) {
-            String s = JSON.toJSONString(message1);
-            WebSocketSession wss = WsSessionManager.get(message1.getTo().toString());
-            wss.sendMessage(new TextMessage(s));
-            return;
-        }
         msgHandlers.forEach(handler -> {
             if (handler.getType().equals(message1.getType())) {
                 try {
-                    handler.sendHandler(message1, session);
+                    handler.saveHandler(message1);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

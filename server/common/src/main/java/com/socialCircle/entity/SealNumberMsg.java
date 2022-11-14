@@ -3,7 +3,7 @@ package com.socialCircle.entity;
 import lombok.Data;
 
 @Data
-public class SealNumberMsg extends Message{
+public class SealNumberMsg extends Message<SealNumberMsg>{
     /**
      * 结束时间
      */
