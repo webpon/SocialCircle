@@ -1,6 +1,5 @@
 import axios from 'axios';
 import proxy from '../configs/host';
-
 const env = import.meta.env.MODE || 'development';
 const API_HOST = proxy[env].API;
 
@@ -32,6 +31,9 @@ instance.interceptors.response.use(
       const { data } = response;
       if (data.code === SUCCESS_CODE) {
         return data;
+      } else if (data.code === 401) {
+        window.location.replace('/#/login')
+        localStorage.removeItem('token')
       }
       return Promise.reject(data);
     }

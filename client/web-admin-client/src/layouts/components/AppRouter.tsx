@@ -49,7 +49,7 @@ const renderRoutes: TRenderRoutes = (routes, parentPath = '', breadcrumb = []) =
     // 无路由菜单
     return children ? renderRoutes(children, currentPath, currentBreadcrumb) : null;
   });
-const RequireAuth = ({ children }) => {
+const RequireAuth = ({ children }: any) => {
   const isLogin = localStorage.getItem('token') //登录状态逻辑判断
   return isLogin ? (children) : (<Navigate to='/login' replace />);
 }
