@@ -51,4 +51,13 @@ public class DynamicController {
                                 @RequestAttribute User user) {
         return dynamicService.deleteDynamicById(id, user);
     }
+
+    @GetMapping("/{id}")
+    public Result getById(@RequestPart("id") Integer id){
+        DynamicVM dynamicById = dynamicService.getDynamicById(id);
+        if (dynamicById == null) {
+            return Result.error();
+        }
+        return Result.ok(dynamicById);
+    }
 }

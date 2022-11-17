@@ -14,6 +14,7 @@ export interface IRouter {
    * 当前路由是否全屏显示
    */
   isFullPage?: boolean;
+  level?: number;
   /**
    * meta未赋值 路由不显示到菜单中
    */
@@ -43,14 +44,10 @@ const routes: IRouter[] = [
   },
   {
     path: '/',
-    redirect: '/user/manage',
+    redirect: '/trends/manage',
   },
-  // {
-  //   path: '/*',
-  //   Component:
-  // }
 ];
 
 const InitRoutes = [...routes, ...otherRoutes, ...firstLevel];
-
+console.log(InitRoutes)
 export default InitRoutes;

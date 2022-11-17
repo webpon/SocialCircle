@@ -16,4 +16,8 @@ public interface LikeService {
     Result whetherLikeByDynamicId(Integer dynamicId, User user);
 
     Result whetherLikeByCommentId(Integer commentId, User user);
+
+    void deleteByDynamicId(Integer id);
+
+    void deleteByCommentId(Long commentId);
 }

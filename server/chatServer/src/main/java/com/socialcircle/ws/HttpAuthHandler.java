@@ -4,7 +4,7 @@ import com.socialCircle.common.RedisUtil;
 import com.socialCircle.constant.RedisKey;
 import com.socialCircle.entity.User;
 import com.socialcircle.config.WsSessionManager;
-import com.socialcircle.msgHandler.AbstractMsgHandler;
+import com.socialcircle.msgHandler.BaseMsgHandler;
 import com.socialCircle.entity.Message;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -20,7 +20,7 @@ import java.util.List;
 @Component
 public class HttpAuthHandler extends TextWebSocketHandler {
 
-    public static List<AbstractMsgHandler> msgHandlers = new ArrayList<>();
+    public static List<BaseMsgHandler> msgHandlers = new ArrayList<>();
 
     @Resource
     private RedisUtil redisUtil;
@@ -35,7 +35,7 @@ public class HttpAuthHandler extends TextWebSocketHandler {
             // 用户连接成功，放入在线用户缓存
             WsSessionManager.add(user.getId().toString(), session);
             redisUtil.setIfAbsent(RedisKey.LOGIN+user.getId());
-            for (AbstractMsgHandler handler : msgHandlers) {
+            for (BaseMsgHandler handler : msgHandlers) {
                 handler.receiveHandler(session, user);
             }
         } else {

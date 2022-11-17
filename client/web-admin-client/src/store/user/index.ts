@@ -48,8 +48,6 @@ const initialState = {
 export const login = createAsyncThunk(`${namespace}/login`, async (params: { accountId: string; password: string }) => {
   try {
     const res = await loginApi(params)
-    console.log(res);
-
     return res.data
   } catch (error: any) {
     return Promise.reject(error.msg);
@@ -69,6 +67,7 @@ export const logout = createAsyncThunk(`${namespace}/logout`, async () => {
 // getUserInfo
 export const getUserInfo = createAsyncThunk(`${namespace}/getUserInfo`, async () => {
   const res = await getUserInfoApi();
+  console.log(res.data,11);
   return res.data;
 });
 

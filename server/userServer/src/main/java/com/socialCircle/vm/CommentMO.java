@@ -1,26 +1,22 @@
-package com.socialCircle.entity;
+package com.socialCircle.vm;
 
+import com.socialCircle.entity.Comment;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
-/**
- * 评论消息
- */
 @Data
-public class CommentMsg extends Message {
-    public CommentMsg() {
+public class CommentMO {
+    public CommentMO() {
     }
-
-    public CommentMsg(Comment c) {
-        id = c.getId();
-        parentId = c.getParentId();
-        userId = c.getUserId();
-        dynamicId = c.getDynamicId();
-        likeNum = c.getLikeNum();
-        content = c.getContent();
-        createTime = c.getCreateTime();
+    public CommentMO(Comment c) {
+        id=c.getId();
+        parentId=c.getParentId();
+        userId=c.getUserId();
+        dynamicId=c.getDynamicId();
+        likeNum=c.getLikeNum();
+        content=c.getContent();
     }
 
     private Long id;
@@ -52,5 +48,5 @@ public class CommentMsg extends Message {
      */
     private Date createTime;
 
-
+    private List<CommentMO> childList;
 }

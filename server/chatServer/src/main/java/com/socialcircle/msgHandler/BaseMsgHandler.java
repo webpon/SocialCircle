@@ -5,7 +5,7 @@ import com.socialCircle.common.RedisUtil;
 import com.socialCircle.entity.*;
 import com.socialcircle.config.WsSessionManager;
 import com.socialcircle.ws.HttpAuthHandler;
-import lombok.Data;
+import lombok.Getter;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -19,20 +19,31 @@ import java.util.List;
 
 import static com.socialCircle.constant.RedisKey.LOGIN;
 
-@Data
-public abstract class AbstractMsgHandler<T extends Message> {
-    protected String type;
-    protected Class<T> clazz;
+@Getter
+public class BaseMsgHandler<T extends Message> {
+    private String type;
+    private Class<T> clazz;
+    private Boolean save;
     @Resource
     private RedisUtil redisUtil;
     @Resource
     protected MongoTemplate mongoTemplate;
 
-    public AbstractMsgHandler() {
+    public BaseMsgHandler() {
+        Class<? extends BaseMsgHandler> aClass = this.getClass();
+        MsgHandlerType annotation = aClass.getAnnotation(MsgHandlerType.class);
+        if (annotation != null) {
+            type = annotation.value();
+            clazz = (Class<T>) annotation.clazz();
+            save = annotation.save();
+        }
         HttpAuthHandler.msgHandlers.add(this);
     }
 
     public void receiveHandler(WebSocketSession session, User user) {
+        if (!save){
+            return;
+        }
         try {
             Query query = new Query();
             Criteria criteria = new Criteria();
@@ -49,20 +60,18 @@ public abstract class AbstractMsgHandler<T extends Message> {
                     String s = JSON.toJSONString(message);
                     try {
                         session.sendMessage(new TextMessage(s));
-                    } catch (IOException e) {
-                    }
+                    } catch (IOException ignored) {}
                 });
                 // 删除动态记录
                 mongoTemplate.remove(
                         new Query(Criteria.where("_id").is(msg.get_id())),
                         ChatMsg.class,type);
             }
-        } catch (Exception e) {
-        }
+        } catch (Exception ignored) {}
 
     }
 
-    public void sendHandler(Message message, WebSocketSession session) throws IOException{
+    public void sendHandler(Message message) throws IOException{
         Integer bean = redisUtil.getBean(LOGIN + message.getTo(), Integer.class);
         // 判断是否在线
         if (bean != null) {
@@ -71,10 +80,12 @@ public abstract class AbstractMsgHandler<T extends Message> {
             wss.sendMessage(new TextMessage(s));
             return;
         }
-        saveHandler(message);
+        if (save) {
+            saveHandler(message);
+        }
     }
 
-    public void saveHandler(Message message) throws IOException {
+    public void saveHandler(Message message){
         T msg = JSON.parseObject(message.getMsg(), clazz);
         msg.setForm(message.getForm());
         msg.setTo(message.getTo());

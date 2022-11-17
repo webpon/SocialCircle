@@ -10,7 +10,7 @@ export default memo(() => {
   const [total,setTotal] = useState(0);
   const [del, setDel] = useState({id: 0, show: false});
   const [add, setAdd] = useState({title: '', show: false, describe: ''});
-  const [topic,setTopic] = useState({title: '', show: false, describe: '', id: 0, concernNum: 0});
+  const [topic,setTopic] = useState({title: '', show: false, describe: '', id: 0});
   let p = 1;
 
   function getTopic() {

@@ -1,4 +1,4 @@
-package com.socialCircle.service.impl;
+package com.socialCircle.service;
 
 import com.socialCircle.entity.Friend;
 

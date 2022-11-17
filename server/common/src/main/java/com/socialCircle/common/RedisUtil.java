@@ -62,12 +62,7 @@ public class RedisUtil {
                 redisCommand.run(key);
                 delete(key);
             }
-            try {
-                Thread.sleep(200);
-                return getBean(redisQuery,redisCommand,clazz);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            return getBean(redisQuery,redisCommand,clazz);
         }
         // 转换对象
         RedisQuery redisQuery1 = JSON.parseObject(s, RedisQuery.class);

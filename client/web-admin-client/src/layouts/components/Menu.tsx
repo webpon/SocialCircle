@@ -114,7 +114,11 @@ export default memo((props: IMenuProps) => {
   const navigate = useNavigate();
   useEffect(() => {
     request.get<any, any>('/userInfo').then(res => {
-      const { data = {} } = res
+      const { data = {}, code } = res
+      if (code === 401){
+          navigate("/login");
+          return;
+      }
       const { permission, id } = data
       if (permission === 1) {
         if (id === 1) {

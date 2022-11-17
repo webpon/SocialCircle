@@ -61,7 +61,13 @@ public class LikeServiceImpl implements LikeService {
         if (beans == null) {
             return Result.error("没有数据");
         }
-        return Result.ok(beans);
+        QueryWrapper<Like> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("dynamic_id", dynamicId);
+        Integer integer = likeDao.selectCount(queryWrapper);
+
+        Result<List<Like>> ok = Result.ok(beans);
+        ok.setTotal(integer.longValue());
+        return ok;
     }
 
     @Override
@@ -74,9 +80,11 @@ public class LikeServiceImpl implements LikeService {
         );
         // 是否有点赞
         if (one != null || one.getId() != null) {
-            return likeDao.deleteById(one.getId()) > 0 ?
-                    Result.ok("取消成功") :
-                    Result.error("取消失败");
+            if (likeDao.deleteById(one.getId()) > 0) {
+                dynamicService.subtractLikeNum(like.getDynamicId());
+                return Result.ok("取消成功");
+            }
+            return Result.error("取消失败");
         }
 
         // 点赞
@@ -84,6 +92,7 @@ public class LikeServiceImpl implements LikeService {
         if (likeDao.insert(like) > 0) {
             redisUtil.batchDelete(LIKE_DYNAMIC_QUERY_KEY + like.getDynamicId());
             send(like);
+            dynamicService.addLikeNum(like.getDynamicId());
             return Result.ok("点赞成功", like);
         }
         return Result.error("点赞失败");
@@ -162,6 +171,16 @@ public class LikeServiceImpl implements LikeService {
             return Result.error(false);
         }
         return Result.ok(true);
+    }
+
+    @Override
+    public void deleteByDynamicId(Integer id) {
+        likeDao.delete(new QueryWrapper<Like>().eq("dynamic_id", id));
+    }
+
+    @Override
+    public void deleteByCommentId(Long commentId) {
+        likeDao.delete(new QueryWrapper<Like>().eq("comment_id", commentId));
     }
 
     private void send(Like like) {

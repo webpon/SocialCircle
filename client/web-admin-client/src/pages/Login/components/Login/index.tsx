@@ -8,6 +8,7 @@ import { login, getUserInfo } from 'store/user';
 import useCountdown from '../../hooks/useCountDown';
 
 import Style from './index.module.less';
+import {login as loginApi} from "apis/user";
 
 const { FormItem } = Form;
 
@@ -25,10 +26,16 @@ export default function Login() {
     if (e.validateResult === true) {
       try {
         const formValue = formRef.current?.getFieldsValue?.(true) || {};
-        await dispatch(login(formValue));
-        await dispatch(getUserInfo());
-        MessagePlugin.success('登录成功');
-        navigate('/user/manage');
+        loginApi(formValue).then( async ({code,data})=>{
+          if (code === 200){
+          localStorage.setItem("token", data)
+          await dispatch(getUserInfo());
+          MessagePlugin.success('登录成功');
+          navigate('/');
+          }else {
+            MessagePlugin.error('登录失败');
+          }
+        })
       } catch (e: any) {
         MessagePlugin.error(e.message);
       }
@@ -57,7 +64,7 @@ export default function Login() {
         {loginType === 'password' && (
           <>
             <FormItem name='email' rules={[{ required: true, message: '账号必填', type: 'error' }]}>
-              <Input clearable size='large' placeholder='请输入邮箱：' prefixIcon={<UserIcon />}></Input>
+              <Input clearable size='large' placeholder='请输入邮箱：' prefixIcon={<UserIcon />}/>
             </FormItem>
             <FormItem name='password' rules={[{ required: true, message: '密码必填', type: 'error' }]}>
               <Input

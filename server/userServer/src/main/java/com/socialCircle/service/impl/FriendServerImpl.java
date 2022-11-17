@@ -3,6 +3,7 @@ package com.socialCircle.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.socialCircle.dao.FriendDao;
 import com.socialCircle.entity.Friend;
+import com.socialCircle.service.FriendServer;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

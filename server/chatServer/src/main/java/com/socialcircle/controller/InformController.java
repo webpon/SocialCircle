@@ -36,7 +36,7 @@ public class InformController {
         msgHandlers.forEach(handler -> {
             if (handler.getType().equals(message.getType())) {
                 try {
-                    handler.sendHandler(message, session);
+                    handler.sendHandler(message);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

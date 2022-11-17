@@ -1,7 +1,7 @@
 package com.socialCircle.controller;
 
-import com.baomidou.mybatisplus.extension.api.R;
-import com.google.code.kaptcha.Constants;
+//import com.baomidou.mybatisplus.extension.api.R;
+//import com.google.code.kaptcha.Constants;
 import com.socialCircle.common.RedisUtil;
 import com.socialCircle.common.ResponseChatUtil;
 import com.socialCircle.common.SentSimpleMail;

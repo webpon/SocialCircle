@@ -75,7 +75,7 @@ public class HobbyServiceImpl implements HobbyService {
         userHobbyService.deleteByHobbyId(ids);
         if (hobbyDao.deleteHobby(ids)){
             redisUtil.delete(HOBBY);
-            return Result.error("删除成功");
+            return Result.ok("删除成功");
         }
         return Result.error("删除失败");
     }

@@ -18,4 +18,11 @@ public interface DynamicService {
     Result getDynamicsByTopicId(Integer p, Integer topicId);
 
     DynamicVM getDynamicById(Integer dynamicId);
+
+    void addCommentNum(int dynamicId, int num);
+
+    void subtractCommentNum(Integer dynamicId, int num);
+
+    void addLikeNum(Integer dynamicId);
+    void subtractLikeNum(Integer dynamicId);
 }
