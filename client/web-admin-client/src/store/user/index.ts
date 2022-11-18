@@ -67,7 +67,6 @@ export const logout = createAsyncThunk(`${namespace}/logout`, async () => {
 // getUserInfo
 export const getUserInfo = createAsyncThunk(`${namespace}/getUserInfo`, async () => {
   const res = await getUserInfoApi();
-  console.log(res.data,11);
   return res.data;
 });
 

@@ -28,6 +28,11 @@ export const getUserInfo = async () => {
     return request.get<any, any>('/userInfo');
 };
 
+export const getUserInfoById = async (params:{id:number}) => {
+    const {data}=await request.get<any, any>('/user/info', {params});
+    return {data}
+};
+
 // !TOdO: TS类型限制
 export const getUserList = async (params: any) => {
     return request.get<any, any>('/manage/user', {
