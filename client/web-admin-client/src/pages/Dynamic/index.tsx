@@ -56,12 +56,12 @@ const Dynamic: React.FC<BrowserRouterProps> = () => {
   return (
     <div
       className={style.list}
-      ref={listRef}
     >
       <List
-        onScroll={({scrollTop, scrollBottom}) => {
-          console.log(scrollTop)
-        }}
+        ref={listRef}
+        // onScroll={({scrollTop, scrollBottom}) => {
+        //   console.log(scrollTop)
+        // }}
         split
         asyncLoading={'加载中'}
         onLoadMore={(e) => {
