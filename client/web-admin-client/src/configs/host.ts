@@ -13,6 +13,6 @@ export default {
   },
   production: {
     // 正式环境接口地址
-    API: 'https://service-bv448zsw-1257786608.gz.apigw.tencentcs.com',
+    API: 'http://39.103.233.82:10000',
   },
 };

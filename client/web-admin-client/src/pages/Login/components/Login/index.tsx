@@ -1,23 +1,23 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Form, MessagePlugin, Input, Checkbox, Button, FormInstanceFunctions, SubmitContext } from 'tdesign-react';
-import { LockOnIcon, UserIcon, BrowseOffIcon, BrowseIcon, RefreshIcon } from 'tdesign-icons-react';
+import React, {useState, useRef} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {Form, MessagePlugin, Input, Checkbox, Button, FormInstanceFunctions, SubmitContext} from 'tdesign-react';
+import {LockOnIcon, UserIcon, BrowseOffIcon, BrowseIcon, RefreshIcon} from 'tdesign-icons-react';
 import classnames from 'classnames';
-import { useAppDispatch } from 'store';
-import { login, getUserInfo } from 'store/user';
+import {useAppDispatch} from 'store';
+import {login, getUserInfo} from 'store/user';
 import useCountdown from '../../hooks/useCountDown';
 
 import Style from './index.module.less';
 import {login as loginApi} from "apis/user";
 
-const { FormItem } = Form;
+const {FormItem} = Form;
 
 export type ELoginType = 'password' | 'phone' | 'qrcode';
 
 export default function Login() {
   const [loginType, changeLoginType] = useState<ELoginType>('password');
   const [showPsw, toggleShowPsw] = useState(false);
-  const { countdown, setupCountdown } = useCountdown(60);
+  const {countdown, setupCountdown} = useCountdown(60);
   const formRef = useRef<FormInstanceFunctions>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -26,13 +26,13 @@ export default function Login() {
     if (e.validateResult === true) {
       try {
         const formValue = formRef.current?.getFieldsValue?.(true) || {};
-        loginApi(formValue).then( async ({code,data})=>{
-          if (code === 200){
-          localStorage.setItem("token", data)
-          await dispatch(getUserInfo());
-          MessagePlugin.success('登录成功');
-          navigate('/');
-          }else {
+        loginApi(formValue).then(async ({code, data}) => {
+          if (code === 200) {
+            localStorage.setItem("token", data)
+            await dispatch(getUserInfo());
+            MessagePlugin.success('登录成功');
+            navigate('/');
+          } else {
             MessagePlugin.error('登录失败');
           }
         })
@@ -44,8 +44,8 @@ export default function Login() {
 
   const emailCheck = (val: string) => {
     const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
-    if (reg.test(val)) return { result: true, type: 'success' };
-    return { result: false, message: '请输入正确的邮箱', type: 'error' };
+    if (reg.test(val)) return {result: true, type: 'success'};
+    return {result: false, message: '请输入正确的邮箱', type: 'error'};
   };
 
   const switchType = (val: ELoginType) => {
@@ -63,20 +63,20 @@ export default function Login() {
       >
         {loginType === 'password' && (
           <>
-            <FormItem name='email' rules={[{ required: true, message: '账号必填', type: 'error' }]}>
-              <Input clearable size='large' placeholder='请输入邮箱：' prefixIcon={<UserIcon />}/>
+            <FormItem name='email' rules={[{required: true, message: '账号必填', type: 'error'}]}>
+              <Input clearable size='large' placeholder='请输入邮箱：' prefixIcon={<UserIcon/>}/>
             </FormItem>
-            <FormItem name='password' rules={[{ required: true, message: '密码必填', type: 'error' }]}>
+            <FormItem name='password' rules={[{required: true, message: '密码必填', type: 'error'}]}>
               <Input
                 size='large'
                 type={showPsw ? 'text' : 'password'}
                 placeholder='请输入登录密码：'
-                prefixIcon={<LockOnIcon />}
+                prefixIcon={<LockOnIcon/>}
                 suffixIcon={
                   showPsw ? (
-                    <BrowseIcon onClick={() => toggleShowPsw((current) => !current)} />
+                    <BrowseIcon onClick={() => toggleShowPsw((current) => !current)}/>
                   ) : (
-                    <BrowseOffIcon onClick={() => toggleShowPsw((current) => !current)} />
+                    <BrowseOffIcon onClick={() => toggleShowPsw((current) => !current)}/>
                   )
                 }
               />
@@ -93,12 +93,12 @@ export default function Login() {
           <>
             <FormItem
               name='email'
-              rules={[{ required: true, message: '邮箱必填', type: 'error' }, { validator: emailCheck }]}
+              rules={[{required: true, message: '邮箱必填', type: 'error'}, {validator: emailCheck}]}
             >
-              <Input maxlength={20} size='large' placeholder='请输入您的邮箱' prefixIcon={<UserIcon />} />
+              <Input maxlength={20} size='large' placeholder='请输入您的邮箱' prefixIcon={<UserIcon/>}/>
             </FormItem>
-            <FormItem name='verifyCode' rules={[{ required: true, message: '验证码必填', type: 'error' }]}>
-              <Input size='large' placeholder='请输入验证码' />
+            <FormItem name='verifyCode' rules={[{required: true, message: '验证码必填', type: 'error'}]}>
+              <Input size='large' placeholder='请输入验证码'/>
               <Button
                 variant='outline'
                 className={Style.verificationBtn}

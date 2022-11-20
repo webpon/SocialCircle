@@ -15,4 +15,6 @@ public interface DynamicDao {
     void updateByTopicIds(@Param("ids") List<Integer> ids);
 
     Long count(@Param("classify") Integer classify);
+
+    List<Dynamic> getDynamicById(List<Integer> ids);
 }

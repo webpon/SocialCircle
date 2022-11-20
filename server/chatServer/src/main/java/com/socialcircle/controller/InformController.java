@@ -32,7 +32,9 @@ public class InformController {
             return;
         }
         Message message = redisUtil.getBean(key, Message.class);
-        message.setForm(user.getId());
+        if (message == null) {
+            return;
+        }
         msgHandlers.forEach(handler -> {
             if (handler.getType().equals(message.getType())) {
                 try {

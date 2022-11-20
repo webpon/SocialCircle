@@ -20,10 +20,10 @@ interface IParams {
 
 export const getProductList = async (params: IParams) => {
   const result = await request.get<IResult>('api/get-card-list');
-  console.log('================================');
-  console.log(result);
-  
-  
+
+
+
+
   // 模拟接口分页
   let list = result?.data?.list || [];
   const total = list.length;

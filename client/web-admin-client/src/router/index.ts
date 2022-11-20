@@ -49,5 +49,5 @@ const routes: IRouter[] = [
 ];
 
 const InitRoutes = [...routes, ...otherRoutes, ...firstLevel];
-console.log(InitRoutes)
+
 export default InitRoutes;

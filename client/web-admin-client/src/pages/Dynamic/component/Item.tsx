@@ -95,7 +95,9 @@ function Item(props: type) {
               {time}
             </span>
             <span style={{float: "right"}}>
-              <DeleteIcon/>
+              <DeleteIcon onClick={()=>{
+                del({visible: true ,id: dynamic.id,petName: user.petName})
+              }}/>
             </span>
           </div>
         </Content>

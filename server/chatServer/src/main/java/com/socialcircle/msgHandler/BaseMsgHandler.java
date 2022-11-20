@@ -73,6 +73,7 @@ public class BaseMsgHandler<T extends Message> {
 
     public void sendHandler(Message message) throws IOException{
         Integer bean = redisUtil.getBean(LOGIN + message.getTo(), Integer.class);
+
         // 判断是否在线
         if (bean != null) {
             String s = JSON.toJSONString(message);

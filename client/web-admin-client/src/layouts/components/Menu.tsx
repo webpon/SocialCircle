@@ -175,7 +175,7 @@ export default memo((props: IMenuProps) => {
           );
         }
       }
-      console.log(routerPath, 'routerPath');
+
 
       return (
         <SubMenu key={routerPath} value={routerPath} title={title} icon={Icon ? <Icon /> : undefined}>
@@ -184,7 +184,7 @@ export default memo((props: IMenuProps) => {
       );
     });
   };
-  console.log(menu, 'menu');
+
 
   const location = useLocation();
   const defaultExpanded = ["/" + location.pathname.split("/")[1]]

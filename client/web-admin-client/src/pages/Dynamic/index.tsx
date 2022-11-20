@@ -1,8 +1,8 @@
-import {getDynamicApi} from 'apis/dunamic';
+import {getDynamicApi, deleteDynamicApi} from 'apis/dynamic';
 import React, {memo, useEffect, useRef, useState} from 'react';
 import {BrowserRouterProps} from 'react-router-dom';
 import style from './Index.module.less';
-import  { Pagination,Button, Dialog, List, Layout} from 'tdesign-react';
+import {Pagination, Button, Dialog, List, Layout, MessagePlugin} from 'tdesign-react';
 import Item from "./component/Item";
 
 export interface dynamicType {
@@ -40,17 +40,31 @@ const Dynamic: React.FC<BrowserRouterProps> = () => {
   const [list, setList] = useState<Array<dynamicType>>([]);
   const [p, setP] = useState(1);
   const [total, setTotal] = useState(1);
-  const [delInfo,setDelInfo] = useState({visible:false, id:0, petName:""});
+  const [delInfo, setDelInfo] = useState({visible: false, id: 0, petName: ""});
   const listRef = useRef();
 
-  useEffect(() => {
+  function getList(){
     getDynamicApi({p}).then(({code, data, total}) => {
       if (code === 200) {
         setList(data)
         setTotal(total);
       }
     })
-  }, [p])
+
+  }
+  useEffect(getList, [p]);
+
+  function delDynamic() {
+    deleteDynamicApi(delInfo.id).then(({code, msg}) => {
+      if (code === 200) {
+        MessagePlugin.success(msg);
+        setDelInfo({visible: false, id: 0, petName: ''})
+        getList();
+        return
+      }
+      MessagePlugin.error(msg);
+    })
+  }
 
 
   return (
@@ -60,12 +74,12 @@ const Dynamic: React.FC<BrowserRouterProps> = () => {
       <List
         ref={listRef}
         // onScroll={({scrollTop, scrollBottom}) => {
-        //   console.log(scrollTop)
+        //
         // }}
         split
         asyncLoading={'加载中'}
         onLoadMore={(e) => {
-          console.log(e)
+
         }}
       >
         {list.map((item, i) => <Item {...item} key={i} del={setDelInfo}/>)}
@@ -74,21 +88,21 @@ const Dynamic: React.FC<BrowserRouterProps> = () => {
         total={total}
         totalContent
         showPageSize={false}
-        onChange={({current})=>{
+        onChange={({current}) => {
           setP(current)
-          console.log(listRef.current.scrollTop)
+
           // @ts-ignore
           listRef.current.scrollTop = 0;
-          console.log(listRef.current)
+
         }}
       />
       <Dialog
-        header="Basic Modal"
+        header="删除动态"
         visible={delInfo.visible}
-        onClose={()=>setDelInfo({visible: false,id: 0,petName: ''})}
-        // onConfirm={onConfirm}
+        onClose={() => setDelInfo({visible: false, id: 0, petName: ''})}
+        onConfirm={delDynamic}
       >
-        <p>This is a dialog</p>
+        <p>是否删除{delInfo.petName}的动态？动态id为：{delInfo.id}</p>
       </Dialog>
     </div>
   );
