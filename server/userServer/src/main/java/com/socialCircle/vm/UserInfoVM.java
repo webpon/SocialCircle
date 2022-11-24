@@ -1,5 +1,7 @@
 package com.socialCircle.vm;
 
+import com.socialCircle.entity.Hobby;
+import com.socialCircle.entity.UserHobby;
 import com.socialCircle.entity.WorkExperience;
 import lombok.Data;
 
@@ -73,4 +75,6 @@ public class UserInfoVM {
     private String phone;
 
     private List<WorkExperience> workExperiences;
+
+    private List<UserHobby> hobbies;
 }
