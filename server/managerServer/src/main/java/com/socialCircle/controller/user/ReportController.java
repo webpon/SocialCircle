@@ -2,10 +2,7 @@ package com.socialCircle.controller.user;
 
 import com.socialCircle.entity.Result;
 import com.socialCircle.service.ReportService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.websocket.server.PathParam;
@@ -19,5 +16,10 @@ public class ReportController {
     @GetMapping("{p}")
     public Result query(@PathVariable("p") Integer p){
         return reportService.query(p);
+    }
+
+    @DeleteMapping
+    public Result deleteById(Integer id){
+        return reportService.deleteById(id);
     }
 }

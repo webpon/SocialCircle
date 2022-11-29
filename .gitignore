@@ -1,6 +1,8 @@
 /server/userServer/src/main/resources/application-dev.yml
 
-/server/communicationServer/src/main/resources/application-dev.yml
+/server/chatServer/src/main/resources/application-dev.yml
 /server/managerServer/src/main/resources/application-dev.yml
+*/application-dev.yml
+/server/chatServer/src/main/resources/application-dev.yml
 /server/.idea
 /server/managerServer/build.cmd

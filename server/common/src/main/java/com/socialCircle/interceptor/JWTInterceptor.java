@@ -43,13 +43,13 @@ public class JWTInterceptor implements HandlerInterceptor {
                 request.setAttribute("user", user);
                 return true;//放行请求
             } catch (SignatureVerificationException e) {
-                r = Result.error("无效签名");
+                r = Result.error(401,"无效签名");
             } catch (TokenExpiredException e) {
-                r = Result.error("token过期");
+                r = Result.error(401,"token过期");
             } catch (AlgorithmMismatchException e) {
-                r = Result.error("token算法不一致");
+                r = Result.error(401,"token算法不一致");
             } catch (Exception e) {
-                r = Result.error("token失效");
+                r = Result.error(401,"token失效");
             }
         }else {
             r = Result.error("请登录");

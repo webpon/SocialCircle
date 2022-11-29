@@ -1,4 +1,5 @@
 package com.socialCircle.entity;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -21,6 +22,7 @@ public class Topic implements Serializable {
     /**
      * 描述
      */
+    @TableField(value = "`describe`")
     private String describe;
 
     /**

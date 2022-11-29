@@ -9,4 +9,6 @@ public interface ReportDao  {
     List<Report> query(@Param("p") Integer p);
 
     Long count();
+
+    boolean delete(Integer id);
 }

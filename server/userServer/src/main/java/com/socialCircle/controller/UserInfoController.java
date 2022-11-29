@@ -1,0 +1,36 @@
+package com.socialCircle.controller;
+
+import com.socialCircle.common.JWTUtil;
+import com.socialCircle.entity.Result;
+import com.socialCircle.entity.SignIn;
+import com.socialCircle.entity.User;
+import com.socialCircle.service.UserInfoService;
+import com.socialCircle.service.UserService;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+
+@RestController
+@RequestMapping("/user")
+public class UserInfoController {
+
+    @Resource
+    private UserInfoService userInfoService;
+    @Resource
+    private UserService userService;
+
+    @GetMapping
+    public Result info(@RequestAttribute("user")User user){
+        return userInfoService.userInfo(user);
+    }
+
+    @PutMapping
+    public Result updateUser(@RequestBody SignIn signIn, @RequestAttribute User user){
+       if (signIn.getNewPassword() != null){
+           return userService.updatePassword(signIn,user);
+       }
+       return userInfoService.updateUserInfo(signIn, user);
+    }
+
+
+}

@@ -5,7 +5,38 @@
         insert into user_info (pet_name, head_icon, gender,user_id)
         values (#{petName},#{headIcon},#{gender},#{id});
     </insert>
-<!--    <delete id="deleteById">-->
+    <update id="updateUserInfo">
+        update `user_info`
+        <set>
+            <if test="petName != null">
+                pet_name = #{petName},
+            </if>
+            <if test="headIcon != null">
+                head_icon = #{headIcon},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="job != null">
+                job = #{job},
+            </if>
+            <if test="phone != null">
+                phone = #{phone}
+            </if>
+        </set>
+        <where>
+            user_id = #{id}
+        </where>
+    </update>
+    <select id="getInfo" resultType="com.socialCircle.vm.UserInfoVM">
+        select *,user.id as id
+        from user
+        left join user_info ui on user.id = ui.user_id
+        <where>
+            user.id = #{id}
+        </where>
+    </select>
+    <!--    <delete id="deleteById">-->
 <!--        delete from user_info-->
 <!--        <where>-->
 <!--            user_id = #{id}-->

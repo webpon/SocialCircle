@@ -24,6 +24,13 @@ const dashboard: IRouter[] = [
           title: '违禁管理',
         },
       },
+      {
+        path: 'hobby',
+        Component: lazy(() => import('pages/User/Hoobby/Index')),
+        meta: {
+          title: '用户兴趣',
+        },
+      },
     ],
   },
 ];

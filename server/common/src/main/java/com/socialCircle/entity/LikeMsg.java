@@ -1,35 +1,42 @@
 package com.socialCircle.entity;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
- * 点赞消息
+ * 点赞
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class LikeMsg implements Serializable {
+public class LikeMsg extends Message<LikeMsg>{
+    public LikeMsg() {
+    }
+    public LikeMsg(Like like) {
+        dynamicId = like.getDynamicId();
+        commentId = like.getCommentId();
+        userId = like.getUserId();
+    }
 
     private static final long serialVersionUID = 1L;
 
     private Integer id;
 
-    /**
-     * 发送者
-     */
-    private Integer liker;
-
-    /**
-     * 动态作者
-     */
-    private Integer receiver;
-
     private Integer dynamicId;
+    private Integer commentId;
 
     /**
-     * 发送时间
+     * 点赞时间
      */
-    private Date sendTime;
+    private Date createTime;
+    /**
+     * 用户id
+     */
+    private Integer userId;
 
 }

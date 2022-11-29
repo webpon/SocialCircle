@@ -9,29 +9,48 @@ import java.util.Date;
  * 评论消息
  */
 @Data
-public class CommentMsg implements Serializable {
+public class CommentMsg extends Message {
+    public CommentMsg() {
+    }
 
-    private static final long serialVersionUID = 1L;
+    public CommentMsg(Comment c) {
+        id = c.getId();
+        parentId = c.getParentId();
+        userId = c.getUserId();
+        dynamicId = c.getDynamicId();
+        likeNum = c.getLikeNum();
+        content = c.getContent();
+        createTime = c.getCreateTime();
+    }
 
-    private Integer id;
+    private Long id;
 
     /**
-     * 评论者
+     * 评论父id
      */
-    private Integer commenter;
+    private Long parentId;
 
     /**
-     * 动态作者
+     * 用户id
      */
-    private Integer receiver;
-
-    private Long commentId;
+    private Integer userId;
 
     private Integer dynamicId;
 
     /**
-     * 发送时间
+     * 点赞数
      */
-    private Date sendTime;
+    private Integer likeNum;
+
+    /**
+     * 分享数
+     */
+    private String content;
+
+    /**
+     * 点赞时间
+     */
+    private Date createTime;
+
 
 }

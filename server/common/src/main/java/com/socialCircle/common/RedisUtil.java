@@ -57,18 +57,19 @@ public class RedisUtil {
         String key = redisQuery.getPrefixKey() + redisQuery.getSuffixKey();
         String s = stringRedisTemplate.opsForValue().get(key);
         if (s == null) {
-            // 开启线程查询
-            threadPoolExecutor.execute(()-> {
-                // 获取锁
-                if (lock(key, 10, TimeUnit.SECONDS)) {
-                    redisCommand.run(key);
-                    delete(key);
-                }
-            });
-            return null;
+            // 获取锁
+            if (lock(key, 10, TimeUnit.SECONDS)) {
+                redisCommand.run(key);
+                delete(key+":lock");
+            }
+            try {
+                Thread.sleep(200);
+                return getBean(redisQuery,redisCommand,clazz);
+            } catch (InterruptedException e) {
+            }
         }
         // 转换对象
-        RedisQuery redisQuery1 = JSON.parseObject(s, RedisQuery.class);
+        RedisQuery<T> redisQuery1 = JSON.parseObject(s, RedisQuery.class);
         long time = redisQuery1.getDate().getTime();
         String now = DateUtil.now();
         long l = DateUtil.parse(now).getTime();
@@ -78,7 +79,7 @@ public class RedisUtil {
                 // 获取锁
                 if (lock(key, 10, TimeUnit.SECONDS)) {
                     redisCommand.run(key);
-                    delete(key);
+                    delete(key+":lock");
                 }
             });
         }
@@ -94,13 +95,16 @@ public class RedisUtil {
         String key = redisQuery.getPrefixKey() + redisQuery.getSuffixKey();
         String s = stringRedisTemplate.opsForValue().get(key);
         if (s == null) {
-            threadPoolExecutor.execute(()-> {
-                if (lock(key, 10, TimeUnit.SECONDS)) {
-                    redisCommand.run(key);
-                    delete(key+":lock");
-                }
-            });
-            return null;
+            if (lock(key, 10, TimeUnit.SECONDS)) {
+                redisCommand.run(key);
+                delete(key+":lock");
+            }
+            try {
+                Thread.sleep(200);
+                return getBeans(redisQuery, redisCommand, clazz);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         RedisQuery redisQuery1 = JSON.parseObject(s, RedisQuery.class);
         long time = redisQuery1.getDate().getTime();
@@ -110,7 +114,7 @@ public class RedisUtil {
             threadPoolExecutor.execute(()-> {
                 if (lock(key, 10, TimeUnit.SECONDS)) {
                     redisCommand.run(key);
-                    delete(key);
+                    delete(key+":lock");
                 }
             });
         }

@@ -36,7 +36,6 @@ export default memo(() => {
       getUserList({p: 1, q: q}),
     );
     return () => {
-      console.log('clear');
       dispatch(clearPageState());
     };
   }, [q]);
@@ -113,9 +112,6 @@ export default memo(() => {
       cell() {
         return (
           <>
-            {/*<Button theme='primary' variant='text'>*/}
-            {/*    管理*/}
-            {/*</Button>*/}
             <Button theme='primary' variant='text'>
               封号
             </Button>

@@ -18,6 +18,7 @@
         <module>common</module>
         <module>managerServer</module>
         <module>userServer</module>
+        <module>chatServer</module>
     </modules>
     <properties>
         <spring.boot.version>2.5.6</spring.boot.version>

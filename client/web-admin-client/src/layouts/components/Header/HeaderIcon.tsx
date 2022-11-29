@@ -21,7 +21,7 @@ const { DropdownMenu, DropdownItem } = Dropdown;
 export default memo(() => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { petName} = useAppSelector(selectUserInfo);
+  const user = useAppSelector(selectUserInfo);
   useEffect(() => {
     dispatch(
       getUserInfo()
@@ -77,7 +77,13 @@ export default memo(() => {
           <Button variant='text'>
             <span style={{ display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
               <Icon name='user-circle' size='20px' />
-              <span style={{ display: 'inline-block', margin: '0 5px' }}>{petName}</span>
+              <span style={{ display: 'inline-block', margin: '0 5px' }}>{()=>{
+                if (user == null){
+                  handleLogout();
+                  return;
+                }
+                return user.petName;
+              }}</span>
               <Icon name='chevron-down' size='20px' />
             </span>
           </Button>

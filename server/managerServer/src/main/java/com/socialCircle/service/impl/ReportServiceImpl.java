@@ -64,6 +64,14 @@ public class ReportServiceImpl implements ReportService {
         return ok;
     }
 
+    @Override
+    public Result deleteById(Integer id) {
+        if (reportDao.delete(id)){
+            return Result.ok();
+        }
+        return Result.error();
+    }
+
     private List<Report> queryByPage(Integer p) {
         p--;
         p *= 15;

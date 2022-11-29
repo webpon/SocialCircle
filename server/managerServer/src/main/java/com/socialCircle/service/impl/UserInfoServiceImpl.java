@@ -1,7 +1,10 @@
 package com.socialCircle.service.impl;
 
+import cn.hutool.core.date.DateField;
 import com.socialCircle.common.RedisUtil;
+import com.socialCircle.constant.RedisCommand;
 import com.socialCircle.constant.RedisKey;
+import com.socialCircle.constant.RedisQuery;
 import com.socialCircle.constant.ResultCode;
 import com.socialCircle.dao.UserInfoDao;
 import com.socialCircle.entity.Result;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
@@ -76,7 +80,13 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public UserInfo getUserInfoByUserId(Integer id) {
-        return userInfoDao.getUserInfoByUserId(id);
+        String key = "query:user:info:" + id;
+        UserInfo bean = redisUtil.getBean(key, UserInfo.class);
+        if (bean == null) {
+            bean = userInfoDao.getUserInfoByUserId(id);
+            redisUtil.save(key, bean);
+        }
+        return bean;
     }
 
     @Override

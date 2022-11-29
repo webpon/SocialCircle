@@ -33,6 +33,22 @@ public class SignIn {
      * 性别
      */
     private Integer gender;
+    private String newPassword;
+
+    /**
+     * 职业
+     */
+    private String job;
+
+    /**
+     * 地区
+     */
+    private String region;
+
+    /**
+     * 手机号
+     */
+    private String phone;
 
     private String emailCode;
 }

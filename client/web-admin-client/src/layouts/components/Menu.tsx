@@ -114,7 +114,11 @@ export default memo((props: IMenuProps) => {
   const navigate = useNavigate();
   useEffect(() => {
     request.get<any, any>('/userInfo').then(res => {
-      const { data = {} } = res
+      const { data = {}, code } = res
+      if (code === 401){
+          navigate("/login");
+          return;
+      }
       const { permission, id } = data
       if (permission === 1) {
         if (id === 1) {
@@ -171,7 +175,7 @@ export default memo((props: IMenuProps) => {
           );
         }
       }
-      console.log(routerPath, 'routerPath');
+
 
       return (
         <SubMenu key={routerPath} value={routerPath} title={title} icon={Icon ? <Icon /> : undefined}>
@@ -180,7 +184,7 @@ export default memo((props: IMenuProps) => {
       );
     });
   };
-  console.log(menu, 'menu');
+
 
   const location = useLocation();
   const defaultExpanded = ["/" + location.pathname.split("/")[1]]

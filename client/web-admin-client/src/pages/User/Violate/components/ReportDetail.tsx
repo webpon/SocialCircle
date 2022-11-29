@@ -1,8 +1,8 @@
 import React, { memo, useState } from 'react';
 import { Dialog, Button, Form, Row, Col, Image, ImageViewer } from 'tdesign-react';
 import { BrowseIcon } from 'tdesign-icons-react';
-import { report } from 'apis/user';
 import Styles from './ReportDetail.module.less';
+import {deleteReport} from "apis/user";
 interface IProps {
   show: boolean;
   setShow: Function;
@@ -19,8 +19,8 @@ interface IProps {
 }
 
 function ReportMsg(props: IProps) {
-  const [form] = Form.useForm();
   const { show, setShow, setShowBan, report } = props;
+  const [showDel,setShowDel] = useState(false);
 
   const handleFooterClose = () => {
     setShow(false);
@@ -38,12 +38,21 @@ function ReportMsg(props: IProps) {
               size='large'
               theme='danger'
               shape='rectangle'
-              block
               onClick={() => {
                 setShowBan(true);
               }}
             >
               封号
+            </Button>
+            <Button
+              size='large'
+              theme='danger'
+              shape='rectangle'
+              onClick={() => {
+                setShowDel(true);
+              }}
+            >
+              删除
             </Button>
           </>
         }
@@ -117,6 +126,44 @@ function ReportMsg(props: IProps) {
             </div>
           </Col>
         </Row>
+      </Dialog>
+      <Dialog
+        className={Styles.fixStyle}
+        header='删除举报'
+        visible={showDel}
+        width={500}
+        footer={
+          <>
+            <Button
+              size='large'
+              theme='danger'
+              shape='rectangle'
+              onClick={() => {
+                deleteReport(report.id).then(({code}) => {
+                  if (code === 200){
+                    setShowDel(false)
+                    setShow(false)
+                  }
+                })
+              }}
+            >
+              删除
+            </Button>
+            <Button
+              size='large'
+              theme='danger'
+              shape='rectangle'
+              onClick={() => {
+                setShowDel(false)
+              }}
+            >
+              取消
+            </Button>
+          </>
+        }
+        // onClose={handleFooterClose}
+      >
+
       </Dialog>
     </>
   );

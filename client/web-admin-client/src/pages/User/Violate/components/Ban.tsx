@@ -11,7 +11,7 @@ interface IProps {
 }
 
 function ReportMsg(props: IProps) {
-  console.log(props);
+
 
   const [form] = Form.useForm();
   const { visible, setShowBan, userId } = props;
@@ -22,8 +22,8 @@ function ReportMsg(props: IProps) {
   };
 
   function reportBan() {
-    console.log(userId);
-    console.log(form.getFieldsValue!(true));
+
+
   }
   return (
     <>

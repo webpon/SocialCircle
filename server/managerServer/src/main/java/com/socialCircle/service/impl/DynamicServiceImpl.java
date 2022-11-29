@@ -1,14 +1,13 @@
 package com.socialCircle.service.impl;
 
 import cn.hutool.core.date.DateField;
+import cn.hutool.core.lang.UUID;
 import com.socialCircle.common.RedisUtil;
+import com.socialCircle.common.ResponseChatUtil;
 import com.socialCircle.constant.RedisCommand;
 import com.socialCircle.constant.RedisQuery;
 import com.socialCircle.dao.DynamicDao;
-import com.socialCircle.entity.Dynamic;
-import com.socialCircle.entity.Image;
-import com.socialCircle.entity.Result;
-import com.socialCircle.entity.Topic;
+import com.socialCircle.entity.*;
 import com.socialCircle.service.DynamicService;
 import com.socialCircle.service.ImageService;
 import com.socialCircle.service.TopicService;
@@ -33,6 +32,8 @@ public class DynamicServiceImpl implements DynamicService {
     private ImageService imageService;
     @Resource
     private TopicService topicService;
+    @Resource
+    private ResponseChatUtil chatUtil;
 
 
     @Override
@@ -77,8 +78,23 @@ public class DynamicServiceImpl implements DynamicService {
 
     @Override
     public Result deleteDynamicById(List<Integer> ids) {
+        List<Dynamic> dynamicById = dynamicDao.getDynamicById(ids);
         imageService.deleteDynamicById(ids);
         if (dynamicDao.deleteDynamicById(ids)) {
+            redisUtil.batchDelete(DYNAMIC_QUERY_KEY);
+            dynamicById.forEach(item -> {
+                if (item.getUserId() != 1){
+                    ChatMsg chatMsg = new ChatMsg();
+                    chatMsg.setTo(item.getUserId());
+                    chatMsg.setContent("你动态涉嫌违规已被删除");
+                    chatMsg.setForm(1);
+                    Message message = new Message(chatMsg);
+                    message.setType("chat");
+                    String key = UUID.randomUUID().toString().substring(10);
+                    redisUtil.save(key, message);
+                    chatUtil.sendMsg(key);
+                }
+            });
             return Result.ok("删除成功");
         }
         return Result.ok("删除失败");
