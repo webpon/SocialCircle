@@ -12,4 +12,8 @@ public interface TopicService {
     Result deleteTopic(Integer id, User user);
 
     Result addTopic(Topic topic, User user);
+
+    Result getTopic(Integer p, User user);
+
+    void updateConcernNum(Integer topicId, Integer num);
 }

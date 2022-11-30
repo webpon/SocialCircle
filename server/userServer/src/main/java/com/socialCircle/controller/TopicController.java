@@ -7,7 +7,6 @@ import com.socialCircle.service.TopicService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @RestController
 @RequestMapping("/topic")
@@ -20,6 +19,12 @@ public class TopicController {
     @GetMapping
     public Result getTopic(@RequestParam(defaultValue = "1") Integer p){
         return topicService.getTopic(p);
+    }
+
+    @GetMapping("/my")
+    public Result getTopic(@RequestParam(defaultValue = "1") Integer p,
+                           @RequestAttribute User user){
+        return topicService.getTopic(p, user);
     }
 
     @DeleteMapping

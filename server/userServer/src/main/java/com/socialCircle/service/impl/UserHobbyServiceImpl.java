@@ -75,15 +75,10 @@ public class UserHobbyServiceImpl implements UserHobbyService {
 
     @Override
     public List<UserHobby> getUserHobbiesByUserId(Integer id) {
-        RedisQuery<UserHobby> redisQuery =
+        RedisQuery<List<UserHobby>> redisQuery =
                 new RedisQuery<>(USER_HOBBY, id.toString(), null, DateField.MINUTE, 30);
-        RedisCommand command = (key) -> {
-            List<UserHobby> userHobbies =
-                    userHobbyDao.selectList(new QueryWrapper<UserHobby>().eq("user_id", id));
-            RedisQuery<List> redisQuery1 =
-                    new RedisQuery<>(USER_HOBBY, id.toString(), null, DateField.MINUTE, 30);
-            redisQuery1.setData(userHobbies);
-            redisUtil.save(key, redisQuery1, 30, TimeUnit.MINUTES);
+        RedisCommand<List<UserHobby>> command = (key) -> {
+            return userHobbyDao.selectList(new QueryWrapper<UserHobby>().eq("user_id", id));
         };
         List<UserHobby> userHobbies = redisUtil.getBeans(redisQuery, command, UserHobby.class);
         if (userHobbies == null || userHobbies.size() == 0) {

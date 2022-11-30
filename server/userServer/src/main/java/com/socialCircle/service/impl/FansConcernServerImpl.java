@@ -15,6 +15,7 @@ public class FansConcernServerImpl implements FansConcernServer {
 
     @Resource
     private FansConcernDao fansConcernDao;
+
     @Override
     public List<FansConcern> getConcernByUserId(Integer id) {
         return fansConcernDao.selectList(new QueryWrapper<FansConcern>().eq("me", id));
@@ -32,7 +33,7 @@ public class FansConcernServerImpl implements FansConcernServer {
         FansConcern fansConcern = fansConcernDao.selectOne(new QueryWrapper<FansConcern>()
                 .eq("me", userId)
                 .eq("concern", concernUserId));
-        return fansConcern ;
+        return fansConcern;
     }
 
     @Override
@@ -76,10 +77,8 @@ public class FansConcernServerImpl implements FansConcernServer {
      */
     @Override
     public List<FansConcern> getConcernByUserId(Integer id, Integer p) {
-        Page<FansConcern> fansConcernPage = new Page<>();
-        Page<FansConcern> me = fansConcernDao.selectPage(fansConcernPage, new QueryWrapper<FansConcern>()
-                .eq("me", id));
-        return me.getRecords();
+        return fansConcernDao.selectList(new QueryWrapper<FansConcern>()
+                .eq("me", id).last("limit " + (p - 1) * 10 + "," + 10));
     }
 
     @Override
@@ -89,9 +88,7 @@ public class FansConcernServerImpl implements FansConcernServer {
 
     @Override
     public List<FansConcern> getFensByUserId(Integer id, Integer p) {
-        Page<FansConcern> fansConcernPage = new Page<>();
-        Page<FansConcern> me = fansConcernDao.selectPage(fansConcernPage, new QueryWrapper<FansConcern>()
-                .eq("concern", id));
-        return me.getRecords();
+        return fansConcernDao.selectList(new QueryWrapper<FansConcern>()
+                .eq("concern", id).last("limit " + (p - 1) * 10 + "," + 10));
     }
 }

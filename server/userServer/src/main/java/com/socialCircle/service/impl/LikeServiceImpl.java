@@ -44,20 +44,13 @@ public class LikeServiceImpl implements LikeService {
     public Result getLikesByDynamicId(Integer dynamicId, Integer p) {
         String key = dynamicId + ":" + p;
         // redis查询对象
-        RedisQuery<List<DynamicVM>> query =
+        RedisQuery<List<Like>> query =
                 new RedisQuery<>(LIKE_DYNAMIC_QUERY_KEY, key, null, DateField.MINUTE, 10);
-        RedisCommand redisCommand = (k) -> {
-
-            Page dynamicPage = new Page<>((p - 1) * 10, 10);
+        RedisCommand<List<Like>> redisCommand = (k) -> {
             QueryWrapper<Like> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("dynamic_id", dynamicId);
+            queryWrapper.eq("dynamic_id", dynamicId).last("limit " + (p - 1) * 10 + "," + 10);
+            return likeDao.selectList(queryWrapper);
 
-            IPage page = likeDao.selectPage(dynamicPage, queryWrapper);
-            List<Like> data = page.getRecords();
-
-            RedisQuery<List<Like>> listRedisQuery =
-                    new RedisQuery<>(LIKE_DYNAMIC_QUERY_KEY, k, data, DateField.MINUTE, 10);
-            redisUtil.save(k, listRedisQuery);
         };
         List<Like> beans = redisUtil.getBeans(query, redisCommand, Like.class);
         if (beans == null) {
@@ -104,19 +97,13 @@ public class LikeServiceImpl implements LikeService {
     public Result getLikesByCommentId(Integer commentId, Integer p) {
         String key = commentId + ":" + p;
         // redis查询对象
-        RedisQuery<List<DynamicVM>> query =
+        RedisQuery<List<Like>> query =
                 new RedisQuery<>(LIKE_COMMENT_QUERY_KEY, key, null, DateField.MINUTE, 10);
-        RedisCommand redisCommand = (k) -> {
-
-            Page page = new Page<>((p - 1) * 10, 10);
+        RedisCommand<List<Like>> redisCommand = (k) -> {
             QueryWrapper<Like> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("comment_id", commentId);
-            IPage iPage = likeDao.selectPage(page, queryWrapper);
-            List<Like> data = iPage.getRecords();
+            queryWrapper.eq("comment_id", commentId).last("limit " + (p - 1) * 10 + "," + 10);
 
-            RedisQuery<List<Like>> listRedisQuery =
-                    new RedisQuery<>(LIKE_COMMENT_QUERY_KEY, k, data, DateField.MINUTE, 10);
-            redisUtil.save(k, listRedisQuery);
+            return likeDao.selectList(queryWrapper);
         };
         List<Like> beans = redisUtil.getBeans(query, redisCommand, Like.class);
         if (beans == null) {

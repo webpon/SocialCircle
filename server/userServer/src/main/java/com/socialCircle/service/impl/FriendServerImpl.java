@@ -223,11 +223,10 @@ public class FriendServerImpl implements FriendServer {
             return Result.ok(userInfoVMS);
         }
         // 分页查询
-        Page<Friend> page = new Page<>(((p - 1) * 10), 10);
-        Page<Friend> me = friendDao.selectPage(page, new QueryWrapper<Friend>()
-                .eq("me", user.getId()));
+        List<Friend> friendList = friendDao.selectList(new QueryWrapper<Friend>()
+                .eq("me", user.getId()).last("limit "+(p - 1) * 10+","+10));
         ArrayList<UserInfoVM> list = new ArrayList<>();
-        for (Friend friend : me.getRecords()) {
+        for (Friend friend : friendList) {
             Result result = userInfoService.userInfo(friend.getFriend(),
                     Collections.singletonList(""), user);
             UserInfoVM data = (UserInfoVM) result.getData();

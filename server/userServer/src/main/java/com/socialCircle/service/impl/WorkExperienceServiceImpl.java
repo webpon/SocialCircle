@@ -30,9 +30,7 @@ public class WorkExperienceServiceImpl implements WorkExperienceService {
         RedisQuery<List<WorkExperience>> query =
                 new RedisQuery<>(WORK_EXPERIENCE, id.toString(), null, DateField.DAY_OF_MONTH, 30);
         return redisUtil.getBeans(query, key -> {
-            List<WorkExperience> list = dao.getWorkExperienceByUserId(id);
-            query.setData(list);
-            redisUtil.save(key, query, 40, TimeUnit.MINUTES);
+            return dao.getWorkExperienceByUserId(id);
         }, WorkExperience.class);
     }
 

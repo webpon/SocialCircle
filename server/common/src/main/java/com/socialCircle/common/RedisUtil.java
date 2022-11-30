@@ -97,7 +97,9 @@ public class RedisUtil {
         String s = stringRedisTemplate.opsForValue().get(key);
         if (s == null) {
             if (lock(key, 10, TimeUnit.SECONDS)) {
-                redisCommand.run(key);
+                List<T> run = (List<T>) redisCommand.run(key);
+                redisQuery.setData(run);
+                save(key, redisQuery, redisQuery.getOffset(),TimeUnit.DAYS);
                 delete(key+":lock");
             }
             try {

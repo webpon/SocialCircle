@@ -52,17 +52,12 @@ public class DynamicServiceImpl implements DynamicService {
         // redis查询对象
         RedisQuery<List<DynamicVM>> query =
                 new RedisQuery<>(DYNAMIC_QUERY_KEY + "my:", key, null, DateField.MINUTE, 20);
-        RedisCommand redisCommand = (k) -> {
-            Page dynamicPage = new Page<>((p - 1) * 10, 10);
+        RedisCommand<List<DynamicVM>> redisCommand = (k) -> {
             QueryWrapper<Dynamic> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("user_id", userId);
             queryWrapper.orderByDesc("publish_time");
-            Page page = dynamicDao.selectPage(dynamicPage, queryWrapper);
-            List<Dynamic> data = page.getRecords();
-            ArrayList<DynamicVM> dynamicVMS = getDynamicVMS(data);
-            RedisQuery<List<DynamicVM>> listRedisQuery =
-                    new RedisQuery<>(DYNAMIC_QUERY_KEY + "my:", k, dynamicVMS, DateField.MINUTE, 20);
-            redisUtil.save(k, listRedisQuery);
+            List<Dynamic> data = dynamicDao.selectList(queryWrapper.last("limit "+(p - 1) * 10+","+10));
+            return getDynamicVMS(data);
         };
         List<Dynamic> beans = redisUtil.getBeans(query, redisCommand, Dynamic.class);
         if (beans == null) {
@@ -80,18 +75,13 @@ public class DynamicServiceImpl implements DynamicService {
         // redis查询对象
         RedisQuery<List<DynamicVM>> query =
                 new RedisQuery<>(DYNAMIC_QUERY_KEY, key, null, DateField.MINUTE, 20);
-        RedisCommand redisCommand = (k) -> {
-            Page dynamicPage = new Page<>((p - 1) * 10, 10);
+        RedisCommand<List<DynamicVM>> redisCommand = (k) -> {
             QueryWrapper<Dynamic> queryWrapper = new QueryWrapper<>();
             if (classify != null) {
                 queryWrapper.eq("classify_id", classify);
             }
-            Page page = dynamicDao.selectPage(dynamicPage, queryWrapper);
-            List<Dynamic> data = page.getRecords();
-            ArrayList<DynamicVM> dynamicVMS = getDynamicVMS(data);
-            RedisQuery<List<DynamicVM>> listRedisQuery =
-                    new RedisQuery<>(DYNAMIC_QUERY_KEY, p.toString(), dynamicVMS, DateField.MINUTE, 20);
-            redisUtil.save(k, listRedisQuery);
+            List<Dynamic> data = dynamicDao.selectList(queryWrapper.last("limit "+(p - 1) * 10+","+10));
+            return getDynamicVMS(data);
         };
         List<Dynamic> beans = redisUtil.getBeans(query, redisCommand, Dynamic.class);
         if (beans == null) {
@@ -169,17 +159,12 @@ public class DynamicServiceImpl implements DynamicService {
         // redis查询对象
         RedisQuery<List<DynamicVM>> query =
                 new RedisQuery<>(DYNAMIC_QUERY_CONCERN_KEY, key, null, DateField.MINUTE, 20);
-        RedisCommand redisCommand = (k) -> {
-            Page dynamicPage = new Page<>((p - 1) * 10, 10);
+        RedisCommand<List<DynamicVM>> redisCommand = (k) -> {
             QueryWrapper<Dynamic> queryWrapper = new QueryWrapper<>();
             ArrayList<Integer> list = getConcernList(id);
             queryWrapper.in("user_id", list);
-            Page page = dynamicDao.selectPage(dynamicPage, queryWrapper);
-            List<Dynamic> data = page.getRecords();
-            ArrayList<DynamicVM> dynamicVMS = getDynamicVMS(data);
-            RedisQuery<List<DynamicVM>> listRedisQuery =
-                    new RedisQuery<>(DYNAMIC_QUERY_CONCERN_KEY, k, dynamicVMS, DateField.MINUTE, 20);
-            redisUtil.save(k, listRedisQuery);
+            List<Dynamic> data = dynamicDao.selectList(queryWrapper.last("limit "+(p - 1) * 10+","+10));
+            return getDynamicVMS(data);
         };
         List<Dynamic> beans = redisUtil.getBeans(query, redisCommand, Dynamic.class);
         if (beans == null) {
@@ -194,17 +179,11 @@ public class DynamicServiceImpl implements DynamicService {
         // redis查询对象
         RedisQuery<List<DynamicVM>> query =
                 new RedisQuery<>(DYNAMIC_QUERY_TOPIC_KEY, key, null, DateField.MINUTE, 20);
-        RedisCommand redisCommand = (k) -> {
-            Page dynamicPage = new Page<>((p - 1) * 10, 10);
+        RedisCommand<List<DynamicVM>> redisCommand = (k) -> {
             QueryWrapper<Dynamic> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("topic_id", topicId);
-            Page page = dynamicDao.selectPage(dynamicPage, queryWrapper);
-
-            List<Dynamic> data = page.getRecords();
-            ArrayList<DynamicVM> dynamicVMS = getDynamicVMS(data);
-            RedisQuery<List<DynamicVM>> listRedisQuery =
-                    new RedisQuery<>(DYNAMIC_QUERY_TOPIC_KEY, k, dynamicVMS, DateField.MINUTE, 20);
-            redisUtil.save(k, listRedisQuery);
+            List<Dynamic> data = dynamicDao.selectList(queryWrapper.last("limit "+(p - 1) * 10+","+10));
+            return getDynamicVMS(data);
         };
         List<Dynamic> beans = redisUtil.getBeans(query, redisCommand, Dynamic.class);
         if (beans == null) {
