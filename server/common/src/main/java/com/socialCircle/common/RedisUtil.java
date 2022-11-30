@@ -1,6 +1,7 @@
 package com.socialCircle.common;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.socialCircle.constant.RedisCommand;
@@ -174,12 +175,21 @@ public class RedisUtil {
 
 
     /**
-     * 分布式锁
+     * 设置分布式锁
      * @param key 保存的key
      * @return 获取所是否成功
      */
     public Boolean lock(String key, Integer timeout, TimeUnit time){
         return stringRedisTemplate.opsForValue().setIfAbsent(key+":lock","1", timeout, time);
+    }
+
+    /**
+     * 删除分布式锁
+     * @param key 保存的key
+     * @return 获取所是否成功
+     */
+    public Boolean unLock(String key){
+        return stringRedisTemplate.delete(key+":lock");
     }
 
     public <T> Map<String, List<T>> getMap(String key, Class<T> t) {
@@ -188,5 +198,13 @@ public class RedisUtil {
             return null;
         }
         return JSON.parseObject(s, new TypeReference<Map<String,List<T>>>(){});
+    }
+
+    /**
+     * 获取锁
+     */
+    public boolean getLock(String key) {
+        String s = stringRedisTemplate.opsForValue().get(key);
+        return StrUtil.isEmptyIfStr(s);
     }
 }

@@ -1,13 +1,16 @@
-package com.socialCircle.entity;
+package com.socialCircle.msg;
 
+import com.socialCircle.entity.Comment;
+import com.socialCircle.msg.Message;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 评论消息
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class CommentMsg extends Message {
     public CommentMsg() {

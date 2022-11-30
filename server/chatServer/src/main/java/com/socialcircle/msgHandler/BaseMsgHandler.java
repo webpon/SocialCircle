@@ -3,8 +3,9 @@ package com.socialcircle.msgHandler;
 import com.alibaba.fastjson.JSON;
 import com.socialCircle.common.RedisUtil;
 import com.socialCircle.entity.*;
+import com.socialCircle.msg.ChatMsg;
+import com.socialCircle.msg.Message;
 import com.socialcircle.config.WsSessionManager;
-import com.socialcircle.ws.HttpAuthHandler;
 import lombok.Getter;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -37,41 +38,43 @@ public class BaseMsgHandler<T extends Message> {
             clazz = (Class<T>) annotation.clazz();
             save = annotation.save();
         }
-        HttpAuthHandler.msgHandlers.add(this);
     }
 
-    public void receiveHandler(WebSocketSession session, User user) {
-        if (!save){
+    public void receiveHandler(WebSocketSession session, User user) throws IOException {
+        if (!save) {
             return;
         }
+        Query query = new Query();
+        Criteria criteria = new Criteria();
+        criteria.andOperator(Criteria.where("to").is(user.getId().toString()));
+        query.addCriteria(criteria);
+        List<T> msgList = null;
         try {
-            Query query = new Query();
-            Criteria criteria = new Criteria();
-            criteria.andOperator(Criteria.where("to").is(user.getId().toString()));
-            query.addCriteria(criteria);
-            List<T> msgList = mongoTemplate.find(query, clazz, type);
-            if (!msgList.isEmpty()) {
-                T msg = msgList.get(0);
-                List<T> list = msg.getList();
-                list.forEach(dynamicMsg -> {
-                    // 发送消息
-                    Message message = new Message(dynamicMsg);
-                    message.setTo(user.getId());
-                    String s = JSON.toJSONString(message);
-                    try {
-                        session.sendMessage(new TextMessage(s));
-                    } catch (IOException ignored) {}
-                });
-                // 删除动态记录
-                mongoTemplate.remove(
-                        new Query(Criteria.where("_id").is(msg.get_id())),
-                        ChatMsg.class,type);
-            }
-        } catch (Exception ignored) {}
+            msgList = mongoTemplate.find(query, clazz, type);
+        } catch (Exception e) {
+            return;
+        }
+        if (msgList.isEmpty()) {
+            return;
+        }
+        T msg = msgList.get(0);
+        List<T> list = msg.getList();
+        for (T mess : list) {
+            // 发送消息
+            Message message = new Message(mess);
+            message.setTo(user.getId());
+            message.setType(type);
+            String s = JSON.toJSONString(message);
+            session.sendMessage(new TextMessage(s));
 
+        }
+        // 删除记录
+        mongoTemplate.remove(
+                new Query(Criteria.where("_id").is(msg.get_id())),
+                ChatMsg.class, type);
     }
 
-    public void sendHandler(Message message) throws IOException{
+    public void sendHandler(Message message) throws IOException {
         Integer bean = redisUtil.getBean(LOGIN + message.getTo(), Integer.class);
 
         // 判断是否在线
@@ -86,7 +89,7 @@ public class BaseMsgHandler<T extends Message> {
         }
     }
 
-    public void saveHandler(Message message){
+    public void saveHandler(Message message) {
         T msg = JSON.parseObject(message.getMsg(), clazz);
         msg.setForm(message.getForm());
         msg.setTo(message.getTo());

@@ -77,4 +77,12 @@ public class UserInfoVM {
     private List<WorkExperience> workExperiences;
 
     private List<UserHobby> hobbies;
+
+    private Boolean concern;
+    private Boolean friend;
+    private Boolean fens;
+    /**
+     * 备注
+     */
+    private String remarks;
 }

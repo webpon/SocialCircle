@@ -8,6 +8,8 @@ import com.socialCircle.constant.RedisCommand;
 import com.socialCircle.constant.RedisQuery;
 import com.socialCircle.dao.DynamicDao;
 import com.socialCircle.entity.*;
+import com.socialCircle.msg.ChatMsg;
+import com.socialCircle.msg.Message;
 import com.socialCircle.service.DynamicService;
 import com.socialCircle.service.ImageService;
 import com.socialCircle.service.TopicService;

@@ -79,13 +79,15 @@ public class UserServiceImpl implements UserService {
         if (user != null){
             return Result.error("注册失败");
         }
-        // 生成账号
-        Long maxId = userDao.getMaxId()+1L;
-        StringBuilder stringBuffer = new StringBuilder(maxId.toString());
-        for (int i = stringBuffer.length(); i < 10; i++) {
-            stringBuffer.insert(0,"0");
+        synchronized (this) {
+            // 生成账号
+            long maxId = userDao.getMaxId() + 1L;
+            StringBuilder stringBuffer = new StringBuilder(Long.toString(maxId));
+            for (int i = stringBuffer.length(); i < 10; i++) {
+                stringBuffer.insert(0, "0");
+            }
+            signIn.setAccountId(stringBuffer.substring(0));
         }
-        signIn.setAccountId(stringBuffer.substring(0));
         signIn.setPassword(md5(signIn.getPassword()));
         // 添加成功
         if (userDao.save(signIn)) {

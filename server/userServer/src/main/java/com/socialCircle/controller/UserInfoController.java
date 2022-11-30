@@ -22,7 +22,7 @@ public class UserInfoController {
 
     @GetMapping
     public Result info(@RequestAttribute("user")User user){
-        return userInfoService.userInfo(user.getId(), null);
+        return userInfoService.userInfo(user.getId(), null, user);
     }
 
     @PutMapping
@@ -35,8 +35,9 @@ public class UserInfoController {
 
     @GetMapping("/infoByUserId")
     public Result getUserInfoByUserId(Integer userId,
+                                      @RequestAttribute User user,
                                       @RequestParam(required = false) List<String> fields){
-        return userInfoService.userInfo(userId,fields);
+        return userInfoService.userInfo(userId,fields, user);
     }
 
 }

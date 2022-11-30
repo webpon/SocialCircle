@@ -1,4 +1,6 @@
 package com.socialCircle.entity;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,6 +14,7 @@ public class WorkExperience implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
@@ -22,12 +25,12 @@ public class WorkExperience implements Serializable {
     /**
      * 入职时间
      */
-    private Date startName;
+    private String  startTime;
 
     /**
      * 离职时间
      */
-    private Date endTime;
+    private String endTime;
 
     /**
      * 所在的行业

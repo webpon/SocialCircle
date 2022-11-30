@@ -16,4 +16,6 @@ public interface RedisKey {
     String LIKE_COMMENT_QUERY_KEY = "query:like:comment:";
     String COMMENT_QUERY_KEY = "query:comment:";
     String USER_INFO = "query:user_info:";
+    String USER_HOBBY = "query:user:hobby:";
+    String WORK_EXPERIENCE = "query:workExperience:";
 }

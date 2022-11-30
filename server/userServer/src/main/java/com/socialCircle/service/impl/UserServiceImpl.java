@@ -69,8 +69,6 @@ public class UserServiceImpl implements UserService {
             if (login.getBanned() == 1){
                 return Result.error("已经被封");
             }
-            // 设置为登录
-            redisUtil.setIfAbsent(LOGIN+user.getId());
             userDao.loginTime(login);
             HashMap<String, String> map = new HashMap<>();
             map.put("id",login.getId().toString());
@@ -93,13 +91,15 @@ public class UserServiceImpl implements UserService {
             return Result.error("注册失败");
         }
         signIn.setPermission(0);
-        // 生成账号
-        long maxId = userDao.getMaxId()+1L;
-        StringBuilder stringBuffer = new StringBuilder(Long.toString(maxId));
-        for (int i = stringBuffer.length(); i < 10; i++) {
-            stringBuffer.insert(0,"0");
+        synchronized (this) {
+            // 生成账号
+            long maxId = userDao.getMaxId() + 1L;
+            StringBuilder stringBuffer = new StringBuilder(Long.toString(maxId));
+            for (int i = stringBuffer.length(); i < 10; i++) {
+                stringBuffer.insert(0, "0");
+            }
+            signIn.setAccountId(stringBuffer.substring(0));
         }
-        signIn.setAccountId(stringBuffer.substring(0));
         signIn.setPassword(md5(signIn.getPassword()));
         // 添加成功
         if (userDao.save(signIn)) {

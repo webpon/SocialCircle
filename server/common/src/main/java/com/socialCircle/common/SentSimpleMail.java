@@ -39,7 +39,6 @@ public class SentSimpleMail {
         props.setProperty("mail.smtp.host", MAIL_HOST); // 发送邮件的主机
         props.setProperty("mail.smtp.auth", "true");
         Session session = Session.getInstance(props, null);// 获得Session对象
-        session.setDebug(true); // 设置是否显示debug信息,true 会在控制台显示相关信息
         /*
          * 创建邮件消息，发送邮件
          */

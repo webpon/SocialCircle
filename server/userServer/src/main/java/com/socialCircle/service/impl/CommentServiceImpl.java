@@ -10,6 +10,8 @@ import com.socialCircle.constant.RedisCommand;
 import com.socialCircle.constant.RedisQuery;
 import com.socialCircle.dao.CommentDao;
 import com.socialCircle.entity.*;
+import com.socialCircle.msg.CommentMsg;
+import com.socialCircle.msg.Message;
 import com.socialCircle.service.CommentService;
 import com.socialCircle.service.DynamicService;
 import com.socialCircle.service.LikeService;

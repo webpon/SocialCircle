@@ -1,11 +1,11 @@
-package com.socialCircle.entity;
+package com.socialCircle.msg;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SealNumberMsg extends Message<SealNumberMsg>{
+public class SealNumberMsg extends Message<SealNumberMsg> {
     /**
      * 结束时间
      */

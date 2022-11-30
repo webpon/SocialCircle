@@ -12,4 +12,7 @@ public interface UserHobbyService {
     List<UserHobby> getUserHobbiesByUserId(Integer id);
 
     Result addUserHobby(AddHobby addHobby, User user);
+
+    Result deleteUserHobby(Integer hobbyId, User user);
+
 }

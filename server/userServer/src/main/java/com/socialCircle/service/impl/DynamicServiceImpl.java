@@ -11,6 +11,8 @@ import com.socialCircle.constant.RedisCommand;
 import com.socialCircle.constant.RedisQuery;
 import com.socialCircle.dao.DynamicDao;
 import com.socialCircle.entity.*;
+import com.socialCircle.msg.DynamicMsg;
+import com.socialCircle.msg.Message;
 import com.socialCircle.service.*;
 import com.socialCircle.vm.DynamicVM;
 import org.springframework.stereotype.Service;
@@ -138,8 +140,7 @@ public class DynamicServiceImpl implements DynamicService {
                     redisUtil.save(key, message);
                     chatUtil.sendMsg(key);
                 }
-                // 删除缓存
-                redisUtil.batchDelete(DYNAMIC_QUERY_CONCERN_KEY + user.getId());
+                redisUtil.batchDelete(DYNAMIC_QUERY_CONCERN_KEY + i);
             });
 
             return Result.ok(dynamicVM);
@@ -245,6 +246,14 @@ public class DynamicServiceImpl implements DynamicService {
         Dynamic dynamic = dynamicDao.selectById(dynamicId);
         dynamic.setLikeNum(dynamic.getLikeNum() - 1);
         dynamicDao.update(dynamic, wrapper);
+    }
+
+    @Override
+    public void updateByTopicIds(Integer id) {
+        UpdateWrapper<Dynamic> set = new UpdateWrapper<Dynamic>()
+                .eq("topic_id", id)
+                .set("topic_id", null);
+        dynamicDao.update(null, set);
     }
 
     @Override

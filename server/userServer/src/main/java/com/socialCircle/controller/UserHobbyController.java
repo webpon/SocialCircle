@@ -21,4 +21,15 @@ public class UserHobbyController {
                                @RequestAttribute User user){
         return userHobbyService.addUserHobby(addHobby, user);
     }
+
+    @DeleteMapping
+    public Result deleteUserHobby(Integer hobbyId,
+                                  @RequestAttribute User user){
+        return userHobbyService.deleteUserHobby(hobbyId, user);
+    }
+//
+//    @GetMapping
+//    public Result getUserHobbies(@RequestAttribute User user){
+//        return userHobbyService.getUserHobbies(user.getId());
+//    }
 }
