@@ -18,4 +18,5 @@ public interface RedisKey {
     String USER_INFO = "query:user_info:";
     String USER_HOBBY = "query:user:hobby:";
     String WORK_EXPERIENCE = "query:workExperience:";
+    String BLACK_KEY = "black:";
 }

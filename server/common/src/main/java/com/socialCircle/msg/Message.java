@@ -28,4 +28,5 @@ public class Message<T extends Message> {
     @Id
     private String _id;
     private List<T> list;
+    private Long mId;
 }

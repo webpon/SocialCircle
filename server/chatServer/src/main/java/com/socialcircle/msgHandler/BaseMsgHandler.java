@@ -74,9 +74,8 @@ public class BaseMsgHandler<T extends Message> {
                 ChatMsg.class, type);
     }
 
-    public void sendHandler(Message message) throws IOException {
+    public void sendHandler(Message message, User user) throws IOException {
         Integer bean = redisUtil.getBean(LOGIN + message.getTo(), Integer.class);
-
         // 判断是否在线
         if (bean != null) {
             String s = JSON.toJSONString(message);

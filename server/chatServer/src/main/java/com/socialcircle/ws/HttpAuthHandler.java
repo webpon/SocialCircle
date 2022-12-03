@@ -60,7 +60,7 @@ public class HttpAuthHandler extends TextWebSocketHandler {
         message1.setForm(user.getId());
         for (BaseMsgHandler handler : msgHandlers) {
             if (handler.getType().equals(message1.getType())) {
-                handler.sendHandler(message1);
+                handler.sendHandler(message1, user);
             }
         }
     }

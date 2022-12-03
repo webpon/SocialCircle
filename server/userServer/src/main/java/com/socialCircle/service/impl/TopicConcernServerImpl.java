@@ -63,7 +63,6 @@ public class TopicConcernServerImpl implements TopicConcernServer {
             return Result.error("取消关注失败");
         }
         // 关注
-        // todo bug
         if (dao.insert(topicConcern) != 1) {
             return Result.error("关注失败");
         }

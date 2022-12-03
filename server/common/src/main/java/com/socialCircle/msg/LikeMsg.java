@@ -27,10 +27,6 @@ public class LikeMsg extends Message<LikeMsg> {
     private Integer commentId;
 
     /**
-     * 点赞时间
-     */
-    private Date createTime;
-    /**
      * 用户id
      */
     private Integer userId;

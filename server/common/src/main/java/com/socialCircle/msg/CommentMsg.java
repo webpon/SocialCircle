@@ -21,9 +21,6 @@ public class CommentMsg extends Message {
         parentId = c.getParentId();
         userId = c.getUserId();
         dynamicId = c.getDynamicId();
-        likeNum = c.getLikeNum();
-        content = c.getContent();
-        createTime = c.getCreateTime();
     }
 
     private Long id;
@@ -39,21 +36,5 @@ public class CommentMsg extends Message {
     private Integer userId;
 
     private Integer dynamicId;
-
-    /**
-     * 点赞数
-     */
-    private Integer likeNum;
-
-    /**
-     * 分享数
-     */
-    private String content;
-
-    /**
-     * 点赞时间
-     */
-    private Date createTime;
-
 
 }
