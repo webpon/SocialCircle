@@ -108,19 +108,23 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         },
       },
     },
-
-    server: {
-      host: true,
-      port: VITE_PORT,
-      proxy: createProxy(VITE_PROXY),
-      // proxy: {
-      //     '/api': {
-      //         target: '',
-      //         changeOrigin: true,
-      //         rewrite: (path) => path.replace(/^\/api/, '/api/v1')
-      //     }
-      // }
-    },
+    // 暂时不需要代理
+    // server: {
+    //   // host: true,
+    //   // port: VITE_PORT,
+    //   // proxy: createProxy(VITE_PROXY),
+    //   proxy: {
+    //       '/api': {
+    //           rewrite: (path) => {
+    //             console.log(path);
+    //             console.log(path.replace(/^\/api/, ""));
+                
+    //             return path.replace(/^\/api/, "")
+                
+    //           }
+    //       }
+    //   }
+    // },
 
     optimizeDeps: {
       include: [],

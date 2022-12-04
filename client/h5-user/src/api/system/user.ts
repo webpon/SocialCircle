@@ -7,6 +7,31 @@ export interface BasicResponseModel<T = any> {
 }
 
 /**
+ * @description: 获取验证码
+ */
+export function getCaptcha() {
+  return http.request<BasicResponseModel>(
+    {
+      url: '/kaptcha',
+      method: 'GET',
+    }
+  );
+}
+
+/**
+ * @description: 获取验证码
+ */
+export function sendEmailCode(params: any) {
+  return http.request<BasicResponseModel>(
+    {
+      url: '/code/logIn',
+      method: 'GET',
+      params
+    }
+  );
+}
+
+/**
  * @description: 用户登录
  */
 export function login(params: any) {
