@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 
 @MsgHandlerType(value = "chat", clazz = ChatMsg.class)
-public class ChatMsgHandler extends BaseMsgHandler {
+public class ChatMsgHandler extends BaseMsgHandler<ChatMsg> {
     @Resource
     private BlacklistServer blacklistServer;
     @Override

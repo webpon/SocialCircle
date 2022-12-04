@@ -1,4 +1,4 @@
-package com.socialcircle.server;
+package com.socialcircle.server.impl;
 
 import cn.hutool.core.date.DateField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -8,6 +8,7 @@ import com.socialCircle.constant.RedisKey;
 import com.socialCircle.constant.RedisQuery;
 import com.socialCircle.entity.Blacklist;
 import com.socialcircle.dao.BlacklistDao;
+import com.socialcircle.server.BlacklistServer;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,9 +23,11 @@ public class BlacklistServerImpl implements BlacklistServer {
     @Override
     public Boolean ifHeBlack(Integer me, Integer to) {
         RedisQuery<Blacklist> blacklistRedisQuery = new RedisQuery<>(RedisKey.BLACK_KEY, to + ":" + me, null, DateField.MINUTE, 30);
-        RedisCommand<Blacklist> command = (key) -> blacklistDao.selectOne(new QueryWrapper<Blacklist>()
-                .eq("me", to).eq("black", me)
-        );
+        RedisCommand<Blacklist> command = (key) -> {
+            return blacklistDao.selectOne(new QueryWrapper<Blacklist>()
+                    .eq("me", to).eq("black", me)
+            );
+        };
         Blacklist blacklist = redisUtil.getBean(blacklistRedisQuery, command, Blacklist.class);
         return blacklist != null;
     }

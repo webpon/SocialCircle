@@ -42,13 +42,13 @@ public class UserServiceImpl implements UserService {
 
     public Result ifEmailCode(String email, String emailCode){
         String code = redisUtil.getBean(EMAIL_CODE + email, String.class);
+        redisUtil.delete(EMAIL_CODE + email);
         if (code == null) {
             return Result.error(ResultCode.CODE_ERROR,"验证码时效");
         }
         if (!code.equals(emailCode)){
             return Result.error(ResultCode.CODE_ERROR,"验证码失败");
         }
-        redisUtil.delete(EMAIL_CODE + email);
         return null;
     }
 

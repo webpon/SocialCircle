@@ -80,6 +80,10 @@ public class BaseMsgHandler<T extends Message> {
         if (bean != null) {
             String s = JSON.toJSONString(message);
             WebSocketSession wss = WsSessionManager.get(message.getTo().toString());
+            if (wss == null) {
+                redisUtil.delete(LOGIN + message.getTo());
+                saveHandler(message);
+            }
             wss.sendMessage(new TextMessage(s));
             return;
         }
