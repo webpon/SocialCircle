@@ -1,4 +1,4 @@
-package com.socialCircle.entity;
+package com.socialCircle.msg;
 
 import com.alibaba.fastjson.JSON;
 import lombok.Data;

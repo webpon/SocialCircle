@@ -1,6 +1,6 @@
 package com.socialcircle.msgHandler;
 
-import com.socialCircle.entity.Message;
+import com.socialCircle.msg.Message;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Retention;

@@ -83,7 +83,7 @@ const User: React.FC = () => {
               theme='warning'
               variant='text'
               onClick={() => {
-                setShowBan(true);
+                // setShowBan(true);
               }}
             >
               封号

@@ -1,10 +1,5 @@
 package com.socialCircle.controller;
 
-//import com.baomidou.mybatisplus.extension.api.R;
-//import com.google.code.kaptcha.Constants;
-import com.socialCircle.common.RedisUtil;
-import com.socialCircle.common.ResponseChatUtil;
-import com.socialCircle.common.SentSimpleMail;
 import com.socialCircle.entity.Result;
 import com.socialCircle.entity.SignIn;
 import com.socialCircle.entity.User;
@@ -18,15 +13,7 @@ public class UserController {
 
     @Resource
     private UserService userService;
-    @Resource
-    private ResponseChatUtil responseChatUtil;
 
-    @Resource
-    private RedisUtil redisUtil;
-
-    @GetMapping("/test")
-    public void test(){
-    }
     @PostMapping("/signIn")
     public Result signIn(@RequestBody SignIn signIn){
         return userService.signIn(signIn);

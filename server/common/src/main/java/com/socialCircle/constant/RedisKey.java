@@ -15,4 +15,9 @@ public interface RedisKey {
     String LIKE_DYNAMIC_QUERY_KEY = "query:like:dynamic:";
     String LIKE_COMMENT_QUERY_KEY = "query:like:comment:";
     String COMMENT_QUERY_KEY = "query:comment:";
+    String USER_INFO = "query:user_info:";
+    String USER_HOBBY = "query:user:hobby:";
+    String WORK_EXPERIENCE = "query:workExperience:";
+    String BLACK_KEY = "black:";
+    String IMAGE_CODE = "image:code:";
 }

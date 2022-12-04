@@ -8,6 +8,8 @@ import com.socialCircle.constant.RedisCommand;
 import com.socialCircle.constant.RedisQuery;
 import com.socialCircle.dao.DynamicDao;
 import com.socialCircle.entity.*;
+import com.socialCircle.msg.ChatMsg;
+import com.socialCircle.msg.Message;
 import com.socialCircle.service.DynamicService;
 import com.socialCircle.service.ImageService;
 import com.socialCircle.service.TopicService;
@@ -47,7 +49,7 @@ public class DynamicServiceImpl implements DynamicService {
                 new RedisQuery<>(DYNAMIC_QUERY_KEY, key, null, DateField.MINUTE, 20);
         // 数据库查询方式
         Integer finalP = p;
-        RedisCommand redisCommand = (k) -> {
+        RedisCommand<List<DynamicVM>> redisCommand = (k) -> {
             Integer p1 = finalP - 1;
             p1 *= 10;
             List<Dynamic> dynamics = dynamicDao.query(p1, classify);
@@ -61,8 +63,7 @@ public class DynamicServiceImpl implements DynamicService {
                 dynamicVM.setImages(images);
                 dynamicVMS.add(dynamicVM);
             });
-            RedisQuery<List<DynamicVM>> listRedisQuery = new RedisQuery<>(DYNAMIC_QUERY_KEY, finalP.toString(), dynamicVMS, DateField.MINUTE, 20);
-            redisUtil.save(k, listRedisQuery, dynamicVMRedisQuery.getOffset() + 10, TimeUnit.MINUTES);
+            return dynamicVMS;
         };
 
         List<DynamicVM> beans = redisUtil.getBeans(dynamicVMRedisQuery, redisCommand, DynamicVM.class);

@@ -25,4 +25,6 @@ public interface DynamicService {
 
     void addLikeNum(Integer dynamicId);
     void subtractLikeNum(Integer dynamicId);
+
+    void updateByTopicIds(Integer id);
 }

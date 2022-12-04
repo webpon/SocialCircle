@@ -1,36 +1,30 @@
 package com.socialcircle.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.socialCircle.common.RedisUtil;
-import com.socialCircle.entity.Message;
-import com.socialCircle.entity.User;
-import com.socialcircle.config.WsSessionManager;
+import com.socialCircle.msg.Message;
+import com.socialcircle.msgHandler.BaseMsgHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
 
 import javax.annotation.Resource;
-
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import static com.socialCircle.constant.RedisKey.LOGIN;
-import static com.socialcircle.ws.HttpAuthHandler.msgHandlers;
 
 @RestController
 @RequestMapping("/inform")
 public class InformController {
+    @Autowired
+    public List<BaseMsgHandler> msgHandlers = new ArrayList<>();
 
     @Resource
     private RedisUtil redisUtil;
+
     @GetMapping
-    public void informUser(String key, @RequestAttribute User user)  {
-        WebSocketSession session = WsSessionManager.get(user.getId().toString());
-        if (session == null) {
-            return;
-        }
+    public void informUser(String key)  {
         Message message = redisUtil.getBean(key, Message.class);
         if (message == null) {
             return;
@@ -38,7 +32,7 @@ public class InformController {
         msgHandlers.forEach(handler -> {
             if (handler.getType().equals(message.getType())) {
                 try {
-                    handler.sendHandler(message);
+                    handler.sendHandler(message, null);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

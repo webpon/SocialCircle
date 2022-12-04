@@ -10,6 +10,8 @@ import com.socialCircle.constant.RedisCommand;
 import com.socialCircle.constant.RedisQuery;
 import com.socialCircle.dao.CommentDao;
 import com.socialCircle.entity.*;
+import com.socialCircle.msg.CommentMsg;
+import com.socialCircle.msg.Message;
 import com.socialCircle.service.CommentService;
 import com.socialCircle.service.DynamicService;
 import com.socialCircle.service.LikeService;
@@ -106,18 +108,15 @@ public class CommentServiceImpl implements CommentService {
         // redis查询对象
         RedisQuery<List<CommentMO>> query =
                 new RedisQuery<>(COMMENT_QUERY_KEY, key, null, DateField.MINUTE, 20);
-        RedisCommand redisCommand = (k) -> {
+        RedisCommand<List<CommentMO>> redisCommand = (k) -> {
             QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("dynamic_id", dynamicId);
             queryWrapper.eq("parent_id", parentId);
             queryWrapper.orderByDesc("like_num");
-
             List<Comment> data;
             if (p != null) {
                 // 不是空就分页查询
-                Page dynamicPage = new Page<>((p - 1) * 10, 10);
-                Page page = commentDao.selectPage(dynamicPage, queryWrapper);
-                data = page.getRecords();
+                data = commentDao.selectList(queryWrapper.last("limit "+(p - 1) * 10+","+10));
             } else {
                 data = commentDao.selectList(queryWrapper);
             }
@@ -132,9 +131,7 @@ public class CommentServiceImpl implements CommentService {
                     commentMOS.add(commentMO);
                 });
             }
-            RedisQuery<List<CommentMO>> listRedisQuery =
-                    new RedisQuery<>(COMMENT_QUERY_KEY, k, commentMOS, DateField.MINUTE, 20);
-            redisUtil.save(k, listRedisQuery);
+            return commentMOS;
         };
         return redisUtil.getBeans(query, redisCommand, CommentMO.class);
     }

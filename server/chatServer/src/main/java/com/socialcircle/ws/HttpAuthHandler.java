@@ -5,7 +5,8 @@ import com.socialCircle.constant.RedisKey;
 import com.socialCircle.entity.User;
 import com.socialcircle.config.WsSessionManager;
 import com.socialcircle.msgHandler.BaseMsgHandler;
-import com.socialCircle.entity.Message;
+import com.socialCircle.msg.Message;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -13,14 +14,14 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class HttpAuthHandler extends TextWebSocketHandler {
 
-    public static List<BaseMsgHandler> msgHandlers = new ArrayList<>();
+    @Autowired
+    public  List<BaseMsgHandler> msgHandlers = new ArrayList<>();
 
     @Resource
     private RedisUtil redisUtil;
@@ -57,15 +58,11 @@ public class HttpAuthHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
         Message message1 = JSON.parseObject(payload, Message.class);
         message1.setForm(user.getId());
-        msgHandlers.forEach(handler -> {
+        for (BaseMsgHandler handler : msgHandlers) {
             if (handler.getType().equals(message1.getType())) {
-                try {
-                    handler.saveHandler(message1);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                handler.sendHandler(message1, user);
             }
-        });
+        }
     }
 
     /**

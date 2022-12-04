@@ -15,6 +15,6 @@ public class MVCConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new JWTInterceptor(jwtUtil))
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login","/kaptcha","/signIn","/emailCode");
+                .excludePathPatterns("/login","/kaptcha","/signIn","/code/**","/emailCode");
     }
 }

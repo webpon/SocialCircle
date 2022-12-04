@@ -1,20 +1,16 @@
-package com.socialCircle.entity;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+package com.socialCircle.msg;
+import com.socialCircle.entity.Like;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 点赞
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class LikeMsg extends Message<LikeMsg>{
+public class LikeMsg extends Message<LikeMsg> {
     public LikeMsg() {
     }
     public LikeMsg(Like like) {
@@ -30,10 +26,6 @@ public class LikeMsg extends Message<LikeMsg>{
     private Integer dynamicId;
     private Integer commentId;
 
-    /**
-     * 点赞时间
-     */
-    private Date createTime;
     /**
      * 用户id
      */

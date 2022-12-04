@@ -15,9 +15,9 @@ public class RedisQuery <T>{
     private T data;
     private Integer offset;
 
-    public RedisQuery(String prefixKey, String suffixKey, T data, DateField dateField, Integer offset) {
-        this.prefixKey = prefixKey;
-        this.suffixKey = suffixKey;
+    public RedisQuery(Object prefixKey, Object suffixKey, T data, DateField dateField, Integer offset) {
+        this.prefixKey = prefixKey.toString();
+        this.suffixKey = suffixKey.toString();
         this.data = data;
         this.offset = offset;
 

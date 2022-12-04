@@ -26,16 +26,25 @@ public class EmailSendServiceImpl implements EmailSendService {
     private RedisUtil redisUtil;
     @Resource
     private SentSimpleMail sentSimpleMail;
+
+    private String getCode(String key){
+        String code = redisUtil.getBean(RedisKey.IMAGE_CODE+key, String.class);
+        redisUtil.delete(RedisKey.IMAGE_CODE+key);
+        return code;
+    }
     /**
      * 发送验证码
      *
-     * @param sessionCode 正确验证码
+     * @param codeKey 正确验证码
      * @param email       用户邮箱
      * @param code        用户输入的验证码
      */
     @Override
-    public Result singInByEmailCode(String sessionCode, String email, String code) {
-        if (!sessionCode.equals(code)){
+    public Result singInByEmailCode(String codeKey, String email, String code) {
+        if (codeKey == null) {
+            return Result.error(ResultCode.CODE_ERROR,"请验证码");
+        }
+        if (!getCode(codeKey).equals(code)){
             return Result.error(ResultCode.CODE_ERROR,"验证码错误");
         }
         User user = userDao.queryByEmail(email);
@@ -47,13 +56,16 @@ public class EmailSendServiceImpl implements EmailSendService {
     /**
      * 注册发送验证码 登录
      *
-     * @param sessionCode 正确验证码
+     * @param codeKey 正确验证码
      * @param email       用户邮箱
      * @param code        用户输入的验证码
      */
     @Override
-    public Result logInByEmailCode(String sessionCode, String email, String code) {
-        if (!sessionCode.equals(code)){
+    public Result logInByEmailCode(String codeKey, String email, String code) {
+        if (codeKey == null) {
+            return Result.error(ResultCode.CODE_ERROR,"请验证码");
+        }
+        if (!getCode(codeKey).equals(code)){
             return Result.error(ResultCode.CODE_ERROR,"验证码错误");
         }
         User user = userDao.queryByEmail(email);

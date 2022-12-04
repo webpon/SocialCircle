@@ -15,7 +15,7 @@ public class WsSessionManager {
     /**
      * 保存连接 session 的地方
      */
-    private static ConcurrentHashMap<String, WebSocketSession> SESSION_POOL = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, WebSocketSession> SESSION_POOL = new ConcurrentHashMap<>();
 
     /**
      * 添加 session
@@ -50,7 +50,6 @@ public class WsSessionManager {
                 // 关闭连接
                 session.close();
             } catch (IOException e) {
-                // todo: 关闭出现异常处理
                 e.printStackTrace();
             }
         }

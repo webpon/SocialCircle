@@ -11,6 +11,8 @@ import com.socialCircle.constant.RedisCommand;
 import com.socialCircle.constant.RedisQuery;
 import com.socialCircle.dao.DynamicDao;
 import com.socialCircle.entity.*;
+import com.socialCircle.msg.DynamicMsg;
+import com.socialCircle.msg.Message;
 import com.socialCircle.service.*;
 import com.socialCircle.vm.DynamicVM;
 import org.springframework.stereotype.Service;
@@ -50,17 +52,12 @@ public class DynamicServiceImpl implements DynamicService {
         // redis查询对象
         RedisQuery<List<DynamicVM>> query =
                 new RedisQuery<>(DYNAMIC_QUERY_KEY + "my:", key, null, DateField.MINUTE, 20);
-        RedisCommand redisCommand = (k) -> {
-            Page dynamicPage = new Page<>((p - 1) * 10, 10);
+        RedisCommand<List<DynamicVM>> redisCommand = (k) -> {
             QueryWrapper<Dynamic> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("user_id", userId);
             queryWrapper.orderByDesc("publish_time");
-            Page page = dynamicDao.selectPage(dynamicPage, queryWrapper);
-            List<Dynamic> data = page.getRecords();
-            ArrayList<DynamicVM> dynamicVMS = getDynamicVMS(data);
-            RedisQuery<List<DynamicVM>> listRedisQuery =
-                    new RedisQuery<>(DYNAMIC_QUERY_KEY + "my:", k, dynamicVMS, DateField.MINUTE, 20);
-            redisUtil.save(k, listRedisQuery);
+            List<Dynamic> data = dynamicDao.selectList(queryWrapper.last("limit "+(p - 1) * 10+","+10));
+            return getDynamicVMS(data);
         };
         List<Dynamic> beans = redisUtil.getBeans(query, redisCommand, Dynamic.class);
         if (beans == null) {
@@ -78,18 +75,13 @@ public class DynamicServiceImpl implements DynamicService {
         // redis查询对象
         RedisQuery<List<DynamicVM>> query =
                 new RedisQuery<>(DYNAMIC_QUERY_KEY, key, null, DateField.MINUTE, 20);
-        RedisCommand redisCommand = (k) -> {
-            Page dynamicPage = new Page<>((p - 1) * 10, 10);
+        RedisCommand<List<DynamicVM>> redisCommand = (k) -> {
             QueryWrapper<Dynamic> queryWrapper = new QueryWrapper<>();
             if (classify != null) {
                 queryWrapper.eq("classify_id", classify);
             }
-            Page page = dynamicDao.selectPage(dynamicPage, queryWrapper);
-            List<Dynamic> data = page.getRecords();
-            ArrayList<DynamicVM> dynamicVMS = getDynamicVMS(data);
-            RedisQuery<List<DynamicVM>> listRedisQuery =
-                    new RedisQuery<>(DYNAMIC_QUERY_KEY, p.toString(), dynamicVMS, DateField.MINUTE, 20);
-            redisUtil.save(k, listRedisQuery);
+            List<Dynamic> data = dynamicDao.selectList(queryWrapper.last("limit "+(p - 1) * 10+","+10));
+            return getDynamicVMS(data);
         };
         List<Dynamic> beans = redisUtil.getBeans(query, redisCommand, Dynamic.class);
         if (beans == null) {
@@ -138,8 +130,7 @@ public class DynamicServiceImpl implements DynamicService {
                     redisUtil.save(key, message);
                     chatUtil.sendMsg(key);
                 }
-                // 删除缓存
-                redisUtil.batchDelete(DYNAMIC_QUERY_CONCERN_KEY + user.getId());
+                redisUtil.batchDelete(DYNAMIC_QUERY_CONCERN_KEY + i);
             });
 
             return Result.ok(dynamicVM);
@@ -168,17 +159,12 @@ public class DynamicServiceImpl implements DynamicService {
         // redis查询对象
         RedisQuery<List<DynamicVM>> query =
                 new RedisQuery<>(DYNAMIC_QUERY_CONCERN_KEY, key, null, DateField.MINUTE, 20);
-        RedisCommand redisCommand = (k) -> {
-            Page dynamicPage = new Page<>((p - 1) * 10, 10);
+        RedisCommand<List<DynamicVM>> redisCommand = (k) -> {
             QueryWrapper<Dynamic> queryWrapper = new QueryWrapper<>();
             ArrayList<Integer> list = getConcernList(id);
             queryWrapper.in("user_id", list);
-            Page page = dynamicDao.selectPage(dynamicPage, queryWrapper);
-            List<Dynamic> data = page.getRecords();
-            ArrayList<DynamicVM> dynamicVMS = getDynamicVMS(data);
-            RedisQuery<List<DynamicVM>> listRedisQuery =
-                    new RedisQuery<>(DYNAMIC_QUERY_CONCERN_KEY, k, dynamicVMS, DateField.MINUTE, 20);
-            redisUtil.save(k, listRedisQuery);
+            List<Dynamic> data = dynamicDao.selectList(queryWrapper.last("limit "+(p - 1) * 10+","+10));
+            return getDynamicVMS(data);
         };
         List<Dynamic> beans = redisUtil.getBeans(query, redisCommand, Dynamic.class);
         if (beans == null) {
@@ -193,17 +179,11 @@ public class DynamicServiceImpl implements DynamicService {
         // redis查询对象
         RedisQuery<List<DynamicVM>> query =
                 new RedisQuery<>(DYNAMIC_QUERY_TOPIC_KEY, key, null, DateField.MINUTE, 20);
-        RedisCommand redisCommand = (k) -> {
-            Page dynamicPage = new Page<>((p - 1) * 10, 10);
+        RedisCommand<List<DynamicVM>> redisCommand = (k) -> {
             QueryWrapper<Dynamic> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("topic_id", topicId);
-            Page page = dynamicDao.selectPage(dynamicPage, queryWrapper);
-
-            List<Dynamic> data = page.getRecords();
-            ArrayList<DynamicVM> dynamicVMS = getDynamicVMS(data);
-            RedisQuery<List<DynamicVM>> listRedisQuery =
-                    new RedisQuery<>(DYNAMIC_QUERY_TOPIC_KEY, k, dynamicVMS, DateField.MINUTE, 20);
-            redisUtil.save(k, listRedisQuery);
+            List<Dynamic> data = dynamicDao.selectList(queryWrapper.last("limit "+(p - 1) * 10+","+10));
+            return getDynamicVMS(data);
         };
         List<Dynamic> beans = redisUtil.getBeans(query, redisCommand, Dynamic.class);
         if (beans == null) {
@@ -245,6 +225,14 @@ public class DynamicServiceImpl implements DynamicService {
         Dynamic dynamic = dynamicDao.selectById(dynamicId);
         dynamic.setLikeNum(dynamic.getLikeNum() - 1);
         dynamicDao.update(dynamic, wrapper);
+    }
+
+    @Override
+    public void updateByTopicIds(Integer id) {
+        UpdateWrapper<Dynamic> set = new UpdateWrapper<Dynamic>()
+                .eq("topic_id", id)
+                .set("topic_id", null);
+        dynamicDao.update(null, set);
     }
 
     @Override
