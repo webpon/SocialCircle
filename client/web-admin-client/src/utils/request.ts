@@ -29,7 +29,6 @@ instance.interceptors.response.use(
   (response) => {
     if (response.status === 200) {
       const { data } = response;
-<<<<<<< HEAD
       if (data.code === SUCCESS_CODE) {
         return data;
       } else if (data.code === 401) {
@@ -37,9 +36,6 @@ instance.interceptors.response.use(
         localStorage.removeItem('token')
       }
       return Promise.reject(data);
-=======
-      return data;
->>>>>>> 260bd217affecc509694d801a13b3f4b442b0928
     }
     return Promise.reject(response?.data);
   },
