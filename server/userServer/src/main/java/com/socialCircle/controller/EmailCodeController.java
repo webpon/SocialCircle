@@ -19,28 +19,25 @@ public class EmailCodeController {
     private EmailSendService emailSend;
 
     @GetMapping("/singIn")
-    public Result singInEmailCode(HttpSession httpSession,
+    public Result singInEmailCode(String codeKey,
                                   String code,
                                   String email){
-        String s = (String) httpSession.getAttribute(Constants.KAPTCHA_SESSION_KEY);
-        return emailSend.singInByEmailCode(s, email,code);
+        return emailSend.singInByEmailCode(codeKey, email,code);
     }
 
     @GetMapping("/logIn")
-    public Result logInEmailCode(HttpSession httpSession,
+    public Result logInEmailCode(String codeKey,
                                  String code,
                                  String email){
-        String s = (String) httpSession.getAttribute(Constants.KAPTCHA_SESSION_KEY);
-        return emailSend.logInByEmailCode(s, email,code);
+        return emailSend.logInByEmailCode(codeKey, email,code);
     }
 
 
     @GetMapping("/password")
-    public Result passwordEmailCode(HttpSession httpSession,
+    public Result passwordEmailCode(String codeKey,
                                  String code,
                                  String email){
-        String s = (String) httpSession.getAttribute(Constants.KAPTCHA_SESSION_KEY);
-        return emailSend.logInByEmailCode(s, email,code);
+        return emailSend.logInByEmailCode(codeKey, email,code);
     }
 
 

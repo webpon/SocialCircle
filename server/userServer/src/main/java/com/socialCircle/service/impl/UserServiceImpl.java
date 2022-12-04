@@ -42,13 +42,13 @@ public class UserServiceImpl implements UserService {
 
     public Result ifEmailCode(String email, String emailCode){
         String code = redisUtil.getBean(EMAIL_CODE + email, String.class);
-        redisUtil.delete(EMAIL_CODE + email);
         if (code == null) {
             return Result.error(ResultCode.CODE_ERROR,"验证码时效");
         }
         if (!code.equals(emailCode)){
             return Result.error(ResultCode.CODE_ERROR,"验证码失败");
         }
+        redisUtil.delete(EMAIL_CODE + email);
         return null;
     }
 
@@ -104,12 +104,15 @@ public class UserServiceImpl implements UserService {
         // 添加成功
         if (userDao.save(signIn)) {
             signIn.setId(userDao.queryByEmail(signIn.getEmail()).getId());
-            signIn.setPetName(UUID.fastUUID().toString().substring(0,10));
             signIn.setGender(1);
             userInfoService.save(signIn);
             signIn.setPassword(null);
-            redisUtil.delete(EMAIL_CODE + signIn.getEmail());
-            return Result.ok("注册成功",signIn);
+            HashMap<String, String> map = new HashMap<>();
+            map.put("id",signIn.getId().toString());
+            map.put("permission", "0");
+            // 获取token
+            Object token = jwtUtil.getToken(map);
+            return Result.ok("注册成功",token);
         }
         return Result.error("注册失败");
     }
@@ -136,7 +139,6 @@ public class UserServiceImpl implements UserService {
             return Result.error("已经被封");
         }
         // 设置为登录
-        redisUtil.setIfAbsent(LOGIN+login.getId());
         userDao.loginTime(login);
         HashMap<String, String> map = new HashMap<>();
         map.put("id",login.getId().toString());

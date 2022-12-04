@@ -8,4 +8,5 @@ import lombok.EqualsAndHashCode;
 @Data
 public class ChatMsg extends Message {
     private String content;
+    private Long mId;
 }
