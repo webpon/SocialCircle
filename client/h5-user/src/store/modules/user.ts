@@ -28,7 +28,7 @@ interface IUserState {
 }
 
 interface LoginParams {
-  username: string;
+  email: string;
   password: string;
 }
 

@@ -1,4 +1,11 @@
 import { http } from '@/utils/http/axios';
+
+export interface BasicResponseModel<T = any> {
+  code: number;
+  msg: string;
+  data: T;
+}
+
 /**
  * @description: 获取图片验证码key
  */

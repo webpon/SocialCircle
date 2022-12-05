@@ -131,7 +131,7 @@ const formData = reactive({
   confirmPassword: '',
   policy: false,
 });
-
+const src = ref("");
 const { getFormRules } = useFormRules(formData);
 
 const switchPassType = ref(true);
@@ -152,6 +152,9 @@ async function sendEmailCode() {
     codeKey: key.value
   })
 }
+getCaptcha().then((data)=>{
+  console.log(data)
+})
 
 function handleRegister() {
   formRef.value
