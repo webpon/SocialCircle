@@ -44,14 +44,15 @@ public class CaptchaController {
         redisUtil.save(RedisKey.IMAGE_CODE + key, capText, 10, TimeUnit.MINUTES);
         return Result.ok("ok", key);
     }
+
     @GetMapping("/image")
-    public ModelAndView getKaptchaImage(@RequestParam String key, HttpServletResponse response) throws Exception {
+    public ModelAndView getKaptchaImage(String key, HttpServletResponse response) throws Exception {
         response.setDateHeader("Expires", 0);
         response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
         response.addHeader("Cache-Control", "post-check=0, pre-check=0");
         response.setHeader("Pragma", "no-cache");
         response.setContentType("image/jpeg");
-        String bean = redisUtil.getBean(key, String.class);
+        String bean = redisUtil.getBean(RedisKey.IMAGE_CODE +key, String.class);
         // create the image with the text
         BufferedImage bi = captchaProducer.createImage(bean);
         ServletOutputStream out = response.getOutputStream();
