@@ -53,6 +53,9 @@ public class CaptchaController {
         response.setHeader("Pragma", "no-cache");
         response.setContentType("image/jpeg");
         String bean = redisUtil.getBean(RedisKey.IMAGE_CODE +key, String.class);
+        if (bean == null) {
+            return null;
+        }
         // create the image with the text
         BufferedImage bi = captchaProducer.createImage(bean);
         ServletOutputStream out = response.getOutputStream();

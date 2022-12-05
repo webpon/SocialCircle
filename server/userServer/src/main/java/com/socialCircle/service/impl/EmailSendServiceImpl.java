@@ -44,7 +44,11 @@ public class EmailSendServiceImpl implements EmailSendService {
         if (codeKey == null) {
             return Result.error(ResultCode.CODE_ERROR,"请验证码");
         }
-        if (!getCode(codeKey).equals(code)){
+        String code1 = getCode(codeKey);
+        if (code1 == null) {
+            return Result.error(ResultCode.CODE_ERROR,"验证码已过期");
+        }
+        if (!code1.equals(code)){
             return Result.error(ResultCode.CODE_ERROR,"验证码错误");
         }
         User user = userDao.queryByEmail(email);
@@ -65,7 +69,11 @@ public class EmailSendServiceImpl implements EmailSendService {
         if (codeKey == null) {
             return Result.error(ResultCode.CODE_ERROR,"请验证码");
         }
-        if (!getCode(codeKey).equals(code)){
+        String code1 = getCode(codeKey);
+        if (code1 == null) {
+            return Result.error(ResultCode.CODE_ERROR,"验证码已过期");
+        }
+        if (!code1.equals(code)){
             return Result.error(ResultCode.CODE_ERROR,"验证码错误");
         }
         User user = userDao.queryByEmail(email);
