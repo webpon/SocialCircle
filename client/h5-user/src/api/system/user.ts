@@ -1,20 +1,27 @@
 import { http } from '@/utils/http/axios';
-
-export interface BasicResponseModel<T = any> {
-  code: number;
-  message: string;
-  result: T;
-}
-
 /**
- * @description: 获取验证码
+ * @description: 获取图片验证码key
  */
-export function getCaptcha() {
-  return http.request<BasicResponseModel>(
+export function getCaptchaKey() {
+  return http.request<API.BasicResponseModel>(
     {
       url: '/kaptcha',
       method: 'GET',
-    }
+    },
+  );
+}
+/**
+ * @description: 获取图片验证码
+ */
+ export function getCaptcha(key: string) {
+  return http.request<API.BasicResponseModel>(
+    {
+      url: '/kaptcha/image',
+      method: 'GET',
+      params: {
+        key
+      }
+    },
   );
 }
 
@@ -22,7 +29,7 @@ export function getCaptcha() {
  * @description: 获取验证码
  */
 export function sendEmailCode(params: any) {
-  return http.request<BasicResponseModel>(
+  return http.request<API.BasicResponseModel>(
     {
       url: '/code/logIn',
       method: 'GET',
@@ -35,7 +42,7 @@ export function sendEmailCode(params: any) {
  * @description: 用户登录
  */
 export function login(params: any) {
-  return http.request<BasicResponseModel>(
+  return http.request<API.BasicResponseModel>(
     {
       url: '/login',
       method: 'POST',

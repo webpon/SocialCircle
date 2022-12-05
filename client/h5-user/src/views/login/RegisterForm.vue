@@ -27,11 +27,11 @@
           </Icon>
         </template>
         <template #button>
-          <img class="w-200px" src="http://39.103.233.82:10001/kaptcha" />
+          <img class="w-200px" :src="`http://39.103.233.82:10001/kaptcha/image?key=${key}`" />
         </template>
       </van-field>
-      <van-field class="enter-y items-center !rounded-md" v-model="formData.sms" center clearable placeholder="请输入短信验证码"
-        :rules="getFormRules.sms">
+      <van-field class="enter-y items-center !rounded-md" v-model="formData.emailCode" center clearable
+        placeholder="请输入短信验证码" :rules="getFormRules.sms">
         <template #left-icon>
           <Icon>
             <EditOutlined />
@@ -99,7 +99,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, unref } from 'vue';
+import { computed, reactive, ref, unref, onMounted } from 'vue';
 import type { FormInstance } from 'vant';
 import { showSuccessToast } from 'vant';
 import { Icon } from '@vicons/utils';
@@ -113,19 +113,20 @@ import {
 } from '@vicons/antd';
 import { ShieldCheckmarkOutline } from '@vicons/ionicons5'
 import { LoginStateEnum, useLoginState, useFormRules } from './useLogin';
-import { getCaptcha, sendEmailCode as sendEmailCodeApi } from '@/api/system/user';
+import { getCaptchaKey, getCaptcha, sendEmailCode as sendEmailCodeApi } from '@/api/system/user';
 
 const { handleBackLogin, getLoginState } = useLoginState();
 const getShow = computed(() => unref(getLoginState) === LoginStateEnum.REGISTER);
 
 const loading = ref(false);
 const formRef = ref<FormInstance>();
+const captchaImg = ref('')
 
 const formData = reactive({
   petName: '',
   email: '',
   check: '',
-  sms: '',
+  emailCode: '',
   password: '',
   confirmPassword: '',
   policy: false,
@@ -135,12 +136,20 @@ const { getFormRules } = useFormRules(formData);
 
 const switchPassType = ref(true);
 const switchConfirmPassType = ref(true);
+const key = ref('')
+onMounted(async () => {
+  key.value = await getCaptchaKey() || ''
+  // console.log(key);
+  // captchaImg.value = await getCaptcha(key)
+})
+
 
 // 发送邮箱验证码
 async function sendEmailCode() {
   const data = await sendEmailCodeApi({
     email: '2249096563@qq.com',
-    code: formData.check
+    code: formData.check,
+    key: key.value
   })
 }
 
@@ -150,7 +159,7 @@ function handleRegister() {
     .then(async () => {
       try {
         loading.value = true;
-        getCaptcha()
+        // getCaptcha()
         // do something
         showSuccessToast({
           message: '注册成功！',

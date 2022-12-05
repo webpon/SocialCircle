@@ -51,7 +51,7 @@ const transform: AxiosTransform = {
     if (!isTransformResponse) {
       return res.data;
     }
-
+    
     const { data } = res;
 
     if (!data) {
@@ -59,25 +59,26 @@ const transform: AxiosTransform = {
       throw new Error('请求出错，请稍候重试');
     }
     //  这里 code，result，message为 后台统一的字段，需要修改为项目自己的接口返回格式
-    const { code, result, message } = data;
+    const { code, data: result, msg } = data;
+    
     // 请求成功
     const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
     // 是否显示提示信息
     if (isShowMessage) {
       if (hasSuccess && (successMessageText || isShowSuccessMessage)) {
         showDialog({
-          message: successMessageText || message || '操作成功！',
+          message: successMessageText || msg || '操作成功！',
         }).then(() => {
           // on close
         });
       } else if (!hasSuccess && (errorMessageText || isShowErrorMessage)) {
         // 是否显示自定义信息提示
-        showFailToast(message || errorMessageText || '操作失败！');
+        showFailToast(msg || errorMessageText || '操作失败！');
       } else if (!hasSuccess && options.errorMessageMode === 'modal') {
         // errorMessageMode=‘custom-modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
         showDialog({
           title: '提示',
-          message: message,
+          message: msg,
         }).then(() => {
           // on close
         });
@@ -89,7 +90,7 @@ const transform: AxiosTransform = {
       return result;
     }
     // 接口请求错误，统一提示错误信息 这里逻辑可以根据项目进行修改
-    let errorMsg = message;
+    let errorMsg = msg;
 
     switch (code) {
       // 请求失败
