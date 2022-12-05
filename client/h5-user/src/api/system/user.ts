@@ -2,15 +2,15 @@ import { http } from '@/utils/http/axios';
 
 export interface BasicResponseModel<T = any> {
   code: number;
-  message: string;
-  result: T;
+  msg: string;
+  data: T;
 }
 
 /**
  * @description: 获取验证码
  */
 export function getCaptcha() {
-  return http.request<BasicResponseModel>(
+  return http.request<BasicResponseModel<string>>(
     {
       url: '/kaptcha',
       method: 'GET',

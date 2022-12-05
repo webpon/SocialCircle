@@ -27,7 +27,7 @@
           </Icon>
         </template>
         <template #button>
-          <img class="w-200px" src="http://39.103.233.82:10001/kaptcha" />
+          <img class="w-200px" :src="src" />
         </template>
       </van-field>
       <van-field class="enter-y items-center !rounded-md" v-model="formData.sms" center clearable placeholder="请输入短信验证码"
@@ -130,7 +130,7 @@ const formData = reactive({
   confirmPassword: '',
   policy: false,
 });
-
+const src = ref("");
 const { getFormRules } = useFormRules(formData);
 
 const switchPassType = ref(true);
@@ -143,6 +143,9 @@ async function sendEmailCode() {
     code: formData.check
   })
 }
+getCaptcha().then((data)=>{
+  console.log(data)
+})
 
 function handleRegister() {
   formRef.value
@@ -150,7 +153,6 @@ function handleRegister() {
     .then(async () => {
       try {
         loading.value = true;
-        getCaptcha()
         // do something
         showSuccessToast({
           message: '注册成功！',

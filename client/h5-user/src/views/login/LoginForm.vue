@@ -2,10 +2,10 @@
   <van-form ref="formRef" v-if="getShow" class="flex flex-col items-center" @submit="handleSubmit">
     <van-field
       class="enter-y items-center mb-25px !rounded-md"
-      v-model="formData.username"
+      v-model="formData.email"
       name="username"
       placeholder="用户名"
-      :rules="getFormRules.username"
+      :rules="getFormRules.email"
     >
       <template #left-icon>
         <Icon>
@@ -38,10 +38,11 @@
     </van-field>
 
     <div class="enter-y w-full px-5px flex justify-between mb-100px">
-      <div class="flex items-center">
-        <van-switch class="mr-8px !text-30px" v-model="rememberMe" />
-        <span class="!text-25px">记住我</span>
-      </div>
+      <a >验证码登录</a>
+<!--      <div class="flex items-center">-->
+<!--        <van-switch class="mr-8px !text-30px" v-model="rememberMe" />-->
+<!--        <span class="!text-25px">记住我</span>-->
+<!--      </div>-->
       <a class="!text-25px" @click="setLoginState(LoginStateEnum.RESET_PASSWORD)">忘记密码?</a>
     </div>
 
@@ -89,8 +90,8 @@
   const rememberMe = ref(false);
   const switchPassType = ref(true);
   const formData = reactive({
-    username: 'admin',
-    password: '123456',
+    email: '',
+    password: '',
   });
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
@@ -103,7 +104,7 @@
           loading.value = true;
           showLoadingToast('登录中...');
           const { code, message: msg } = await userStore.Login({
-            username: formData.username,
+            email: formData.email,
             password: formData.password,
           });
           if (code == ResultEnum.SUCCESS) {
