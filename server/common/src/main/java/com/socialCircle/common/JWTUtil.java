@@ -23,12 +23,10 @@ public class JWTUtil {
      */
     public String getToken(Map<String, String> map) {
         JWTCreator.Builder builder = com.auth0.jwt.JWT.create();
-        map.forEach((k, v) -> {
-            builder.withClaim(k, v);
-        });
+        map.forEach(builder::withClaim);
         Calendar instance = Calendar.getInstance();
         instance.add(Calendar.SECOND, 7);
-        builder.withExpiresAt(new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 24)));
+        builder.withExpiresAt(new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 24 * 5)));
         return builder.sign(Algorithm.HMAC256(SIGNATURE)).toString();
     }
 
