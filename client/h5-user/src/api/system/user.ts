@@ -31,7 +31,7 @@ export function getCaptchaKey() {
 export function sendEmailCode(params: any) {
   return http.request<API.BasicResponseModel>(
     {
-      url: '/code/logIn',
+      url: '/code/singIn',
       method: 'GET',
       params
     }

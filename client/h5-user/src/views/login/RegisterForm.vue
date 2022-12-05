@@ -149,7 +149,7 @@ async function sendEmailCode() {
   const data = await sendEmailCodeApi({
     email: '2249096563@qq.com',
     code: formData.check,
-    key: key.value
+    codeKey: key.value
   })
 }
 
