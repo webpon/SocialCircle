@@ -1,10 +1,5 @@
 import { http } from '@/utils/http/axios';
 
-export interface BasicResponseModel<T = any> {
-  code: number;
-  msg: string;
-  data: T;
-}
 
 /**
  * @description: 获取图片验证码key
@@ -14,20 +9,6 @@ export function getCaptchaKey() {
     {
       url: '/kaptcha',
       method: 'GET',
-    },
-  );
-}
-/**
- * @description: 获取图片验证码
- */
- export function getCaptcha(key: string) {
-  return http.request<API.BasicResponseModel>(
-    {
-      url: '/kaptcha/image',
-      method: 'GET',
-      params: {
-        key
-      }
     },
   );
 }
@@ -57,6 +38,19 @@ export function login(params: any) {
     },
     {
       isTransformResponse: false,
+    }
+  );
+}
+
+/**
+ * @description: 用户注册
+ */
+export function sigIn(params: any) {
+  return http.request<API.BasicResponseModel>(
+    {
+      url: '/signIn',
+      method: 'POST',
+      params,
     }
   );
 }

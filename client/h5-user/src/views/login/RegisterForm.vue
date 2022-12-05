@@ -27,7 +27,7 @@
           </Icon>
         </template>
         <template #button>
-          <img class="w-200px" :src="`http://39.103.233.82:10001/kaptcha/image?key=${key}`" />
+          <img class="w-200px" :src="`http://39.103.233.82:10001/kaptcha/image?key=${key}`"  @click="updateCaptchaKey"/>
         </template>
       </van-field>
       <van-field class="enter-y items-center !rounded-md" v-model="formData.emailCode" center clearable
@@ -113,14 +113,17 @@ import {
 } from '@vicons/antd';
 import { ShieldCheckmarkOutline } from '@vicons/ionicons5'
 import { LoginStateEnum, useLoginState, useFormRules } from './useLogin';
-import { getCaptchaKey, getCaptcha, sendEmailCode as sendEmailCodeApi } from '@/api/system/user';
+import {
+  getCaptchaKey,
+  sendEmailCode as sendEmailCodeApi,
+  sigIn
+} from '@/api/system/user';
 
 const { handleBackLogin, getLoginState } = useLoginState();
 const getShow = computed(() => unref(getLoginState) === LoginStateEnum.REGISTER);
 
 const loading = ref(false);
 const formRef = ref<FormInstance>();
-const captchaImg = ref('')
 
 const formData = reactive({
   petName: '',
@@ -139,40 +142,38 @@ const switchConfirmPassType = ref(true);
 const key = ref('')
 onMounted(async () => {
   key.value = await getCaptchaKey() || ''
-  // console.log(key);
-  // captchaImg.value = await getCaptcha(key)
 })
-
+function updateCaptchaKey(){
+  getCaptchaKey().then((data)=>{
+    key.value = data || ''
+  })
+}
 
 // 发送邮箱验证码
 async function sendEmailCode() {
   const data = await sendEmailCodeApi({
-    email: '2249096563@qq.com',
+    email: formData.email,
     code: formData.check,
     codeKey: key.value
   })
 }
-getCaptcha().then((data)=>{
-  console.log(data)
-})
-
 function handleRegister() {
-  formRef.value
-    ?.validate()
-    .then(async () => {
-      try {
-        loading.value = true;
-        // getCaptcha()
-        // do something
-        showSuccessToast({
-          message: '注册成功！',
-          position: 'top',
-        })
-      } finally {
-        loading.value = false;
-      }
-    })
-    .catch(() => {
+  sigIn(formData).then(({code, msg}) => {
+    if (code === 200) {
+      loading.value = true;
+      showSuccessToast({
+        message: '注册成功！',
+        position: 'top',
+      })
+    }else {
+      loading.value = false;
+      showSuccessToast({
+        message: msg,
+        position: 'top',
+      })
+      updateCaptchaKey()
+    }
+  }).catch(() => {
       console.error('验证失败');
     });
 }
