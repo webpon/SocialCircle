@@ -154,12 +154,15 @@ public class UserServiceImpl implements UserService {
      * @param signIn |
      */
     @Override
-    public Result forgetPassword(SignIn signIn,User user) {
+    public Result forgetPassword(SignIn signIn) {
         Result result = ifEmailCode(signIn.getEmail(), signIn.getEmailCode());
         if (result != null){
             return result;
         }
-        signIn.setId(user.getId());
+        signIn.setId(userDao.selectOne(
+                new QueryWrapper<User>()
+                        .eq("email", signIn.getEmail())
+        ).getId());
         signIn.setPassword(md5(signIn.getPassword()));
         if (userDao.updatePassword(signIn)){
             return Result.ok("修改成功");

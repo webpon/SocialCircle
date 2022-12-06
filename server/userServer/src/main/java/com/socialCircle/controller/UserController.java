@@ -29,9 +29,8 @@ public class UserController {
         return userService.login(email,emailCode);
     }
     @PutMapping("/forget")
-    public Result forgetPassword(@RequestBody SignIn signIn,
-                                 @RequestAttribute User user){
-        return userService.forgetPassword(signIn, user);
+    public Result forgetPassword(@RequestBody SignIn signIn){
+        return userService.forgetPassword(signIn);
     }
 
 }

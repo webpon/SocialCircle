@@ -27,7 +27,7 @@ public interface UserService {
      * 忘记密码，修改密码
      * @param signIn
      */
-    Result forgetPassword(SignIn signIn,User user);
+    Result forgetPassword(SignIn signIn);
 
 
     /**
