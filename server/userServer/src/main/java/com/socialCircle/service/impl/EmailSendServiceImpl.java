@@ -92,7 +92,7 @@ public class EmailSendServiceImpl implements EmailSendService {
         synchronized (email) {
             String NUM_KEY = "email:num:" + email;
             Integer num = redisUtil.getBean(NUM_KEY, Integer.class);
-            if (num.equals(5)) {
+            if (num != null && num.equals(5)) {
                 return Result.error("验证码一个小时不能发送超过5次");
             }
             if (num != null) {

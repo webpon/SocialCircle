@@ -81,7 +81,8 @@ export class VAxios {
               const ret = transformRequestData(res, opt);
               resolve(ret);
             } catch (err) {
-              reject(err || new Error('request error!'));
+              // 把返回值交给调用者处理
+              reject(res.data || new Error('request error!'));
             }
             return;
           }

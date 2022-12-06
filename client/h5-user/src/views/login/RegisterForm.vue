@@ -101,7 +101,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref, unref, onMounted } from 'vue';
 import type { FormInstance } from 'vant';
-import { showSuccessToast } from 'vant';
+import {showFailToast, showSuccessToast} from 'vant';
 import { Icon } from '@vicons/utils';
 import {
   UserOutlined,
@@ -146,16 +146,18 @@ onMounted(async () => {
 function updateCaptchaKey(){
   getCaptchaKey().then((data)=>{
     key.value = data || ''
+    formData.check = '';
   })
 }
 
 // 发送邮箱验证码
 async function sendEmailCode() {
-  const data = await sendEmailCodeApi({
+  const {msg} = await sendEmailCodeApi({
     email: formData.email,
     code: formData.check,
     codeKey: key.value
   })
+  showFailToast(msg);
 }
 function handleRegister() {
   sigIn(formData).then(({code, msg}) => {

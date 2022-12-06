@@ -27,6 +27,19 @@ export function sigInEmailCode(params: any) {
 }
 
 /**
+ * @description: 注册获取验证码
+ */
+export function forgetPasswordEmailCode(params: any) {
+  return http.request<API.BasicResponseModel>(
+    {
+      url: '/code/password',
+      method: 'GET',
+      params
+    }
+  );
+}
+
+/**
  * @description: 登录获取验证码
  */
 export function logInEmailCode(params: any) {
@@ -79,6 +92,20 @@ export function sigIn(params: any) {
     {
       url: '/signIn',
       method: 'POST',
+      params,
+    }
+  );
+}
+
+
+/**
+ * @description: 忘记密码
+ */
+export function forgetPassword(params: any) {
+  return http.request<API.BasicResponseModel>(
+    {
+      url: '/forget',
+      method: 'PUT',
       params,
     }
   );
