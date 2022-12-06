@@ -3,10 +3,10 @@ import { createStorage } from '@/utils/Storage';
 import { store } from '@/store';
 import { ACCESS_TOKEN, CURRENT_USER } from '@/store/mutation-types';
 import { ResultEnum } from '@/enums/httpEnum';
-const Storage = createStorage({ storage: localStorage });
-import { getUserInfo, login, doLogout } from '@/api/system/user';
+import {getUserInfo, login, doLogout, loginByEmail} from '@/api/system/user';
 import { PageEnum } from '@/enums/pageEnum';
 import router from '@/router';
+const Storage = createStorage({ storage: localStorage });
 
 interface UserInfo {
   userId: string | number;
@@ -30,6 +30,11 @@ interface IUserState {
 interface LoginParams {
   email: string;
   password: string;
+}
+
+interface LoginByEmailParams {
+  email: string;
+  emailCode: string;
 }
 
 export const useUserStore = defineStore({
@@ -64,10 +69,24 @@ export const useUserStore = defineStore({
     async Login(params: LoginParams) {
       try {
         const response = await login(params);
-        const { result, code } = response;
+        const { data, code } = response;
         if (code === ResultEnum.SUCCESS) {
           // save token
-          this.setToken(result.token);
+          this.setToken(data);
+        }
+        return Promise.resolve(response);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+
+    async LoginByEmailCode(params: LoginByEmailParams) {
+      try {
+        const response = await loginByEmail(params);
+        const { data, code } = response;
+        if (code === ResultEnum.SUCCESS) {
+          // save token
+          this.setToken(data);
         }
         return Promise.resolve(response);
       } catch (error) {

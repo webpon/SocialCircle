@@ -14,9 +14,9 @@ export function getCaptchaKey() {
 }
 
 /**
- * @description: 获取验证码
+ * @description: 注册获取验证码
  */
-export function sendEmailCode(params: any) {
+export function sigInEmailCode(params: any) {
   return http.request<API.BasicResponseModel>(
     {
       url: '/code/singIn',
@@ -27,12 +27,41 @@ export function sendEmailCode(params: any) {
 }
 
 /**
- * @description: 用户登录
+ * @description: 登录获取验证码
+ */
+export function logInEmailCode(params: any) {
+  return http.request<API.BasicResponseModel>(
+    {
+      url: '/code/logIn',
+      method: 'GET',
+      params
+    }
+  );
+}
+
+/**
+ * @description: 用户密码登录
  */
 export function login(params: any) {
   return http.request<API.BasicResponseModel>(
     {
       url: '/login',
+      method: 'GET',
+      params,
+    },
+    {
+      isTransformResponse: false,
+    }
+  );
+}
+
+/**
+ * @description: 用户登录
+ */
+export function loginByEmail(params: any) {
+  return http.request<API.BasicResponseModel>(
+    {
+      url: '/loginByEmail',
       method: 'GET',
       params,
     },

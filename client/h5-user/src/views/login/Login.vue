@@ -4,6 +4,7 @@
       <div class="flex flex-col w-full">
         <LoginTitle />
         <LoginForm />
+        <EmailLoginForm />
         <ForgetPasswordForm />
         <RegisterForm />
       </div>
@@ -18,6 +19,7 @@
   import ForgetPasswordForm from './ForgetPasswordForm.vue';
   import RegisterForm from './RegisterForm.vue';
   import LoginWave from './LoginWave.vue';
+  import EmailLoginForm from './EmailLoginForm.vue';
 </script>
 
 <style scoped lang="less">

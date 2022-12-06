@@ -31,7 +31,7 @@
         </template>
       </van-field>
       <van-field class="enter-y items-center !rounded-md" v-model="formData.emailCode" center clearable
-        placeholder="请输入短信验证码" :rules="getFormRules.sms">
+        placeholder="请输入邮箱验证码" :rules="getFormRules.sms">
         <template #left-icon>
           <Icon>
             <EditOutlined />
@@ -115,7 +115,7 @@ import { ShieldCheckmarkOutline } from '@vicons/ionicons5'
 import { LoginStateEnum, useLoginState, useFormRules } from './useLogin';
 import {
   getCaptchaKey,
-  sendEmailCode as sendEmailCodeApi,
+  sigInEmailCode as sendEmailCodeApi,
   sigIn
 } from '@/api/system/user';
 

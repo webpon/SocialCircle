@@ -5,6 +5,7 @@ export enum LoginStateEnum {
   LOGIN,
   REGISTER,
   RESET_PASSWORD,
+  EMAIL_LOGIN,
 }
 
 const currentState = ref(LoginStateEnum.LOGIN);
