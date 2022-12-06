@@ -89,6 +89,19 @@ public class EmailSendServiceImpl implements EmailSendService {
     }
 
     private Result sendEmail(String email, String s) {
+        synchronized (email) {
+            String NUM_KEY = "email:num:" + email;
+            Integer num = redisUtil.getBean(NUM_KEY, Integer.class);
+            if (num.equals(5)) {
+                return Result.error("验证码一个小时不能发送超过5次");
+            }
+            if (num != null) {
+                redisUtil.save(NUM_KEY, num + 1, 1, TimeUnit.HOURS);
+            }
+            if (num == null) {
+                redisUtil.save(NUM_KEY, 1, 1, TimeUnit.HOURS);
+            }
+        }
         String yan = String.valueOf((int) ((Math.random() * 9 + 1) * Math.pow(10, 5)));
         log.debug("当前验证码是:" + yan);
         redisUtil.save(RedisKey.EMAIL_CODE + email, yan, 10, TimeUnit.MINUTES);
