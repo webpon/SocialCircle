@@ -3,8 +3,8 @@
     <van-field
       class="enter-y items-center mb-25px !rounded-md"
       v-model="formData.email"
-      name="username"
-      placeholder="用户名"
+      name="email"
+      placeholder="邮箱"
       :rules="getFormRules.email"
     >
       <template #left-icon>
@@ -38,7 +38,7 @@
     </van-field>
 
     <div class="enter-y w-full px-5px flex justify-between mb-100px">
-      <a >验证码登录</a>
+        <a class="!text-25px" @click="setLoginState(LoginStateEnum.EMAIL_LOGIN)">验证码登录</a>
 <!--      <div class="flex items-center">-->
 <!--        <van-switch class="mr-8px !text-30px" v-model="rememberMe" />-->
 <!--        <span class="!text-25px">记住我</span>-->
@@ -103,7 +103,7 @@
         try {
           loading.value = true;
           showLoadingToast('登录中...');
-          const { code, message: msg } = await userStore.Login({
+          const { code, msg } = await userStore.Login({
             email: formData.email,
             password: formData.password,
           });

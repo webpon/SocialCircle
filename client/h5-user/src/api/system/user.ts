@@ -33,7 +33,7 @@ export function login(params: any) {
   return http.request<API.BasicResponseModel>(
     {
       url: '/login',
-      method: 'POST',
+      method: 'GET',
       params,
     },
     {
