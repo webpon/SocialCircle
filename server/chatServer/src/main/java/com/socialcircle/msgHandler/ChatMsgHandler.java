@@ -19,24 +19,22 @@ public class ChatMsgHandler extends BaseMsgHandler<ChatMsg> {
         Integer to = message.getTo();
         Boolean heBlack = blacklistServer.ifHeBlack(me, to);
         Boolean meBlack = blacklistServer.ifMeBlack(me, to);
-        // 是否拉黑
-        if (!heBlack && !meBlack) {
-           super.sendHandler(message, user);
-           return;
+        if (heBlack && meBlack) {
+            // 是拉黑
+            // 设置信息
+            BlackMsg blackMsg = new BlackMsg();
+            if (heBlack){
+                blackMsg.setType("1");
+            }
+            if (meBlack){
+                blackMsg.setType("2");
+            }
+            blackMsg.setUserId(to);
+            message = new Message(blackMsg);
+            message.setForm(to);
+            message.setTo(me);
         }
-        // 设置信息
-        BlackMsg blackMsg = new BlackMsg();
-        if (heBlack){
-            blackMsg.setType("1");
-        }
-        if (meBlack){
-            blackMsg.setType("2");
-        }
-        blackMsg.setUserId(to);
-        Message msg = new Message(blackMsg);
-        msg.setForm(to);
-        msg.setTo(me);
         // 发送消息
-        super.sendHandler(msg, user);
+        super.sendHandler(message, user);
     }
 }

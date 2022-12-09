@@ -32,14 +32,6 @@
             and permission = 0
         </where>
     </select>
-<!--    <select id="getInfo" resultType="com.socialCircle.vm.UserInfoVM">-->
-<!--        select *,user.id as id-->
-<!--        from user-->
-<!--                 left join user_info ui on user.id = ui.user_id-->
-<!--        <where>-->
-<!--            user.id = #{id}-->
-<!--        </where>-->
-<!--    </select>-->
     <select id="getMaxId" resultType="java.lang.Long">
         select MAX(id) from user
     </select>

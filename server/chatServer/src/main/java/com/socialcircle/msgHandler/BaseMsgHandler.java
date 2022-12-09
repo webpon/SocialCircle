@@ -23,10 +23,11 @@ import static com.socialCircle.constant.RedisKey.LOGIN;
 @Getter
 public class BaseMsgHandler<T extends Message> {
     private String type;
-    private Class<T> clazz;
-    private Boolean save;
+    protected Class<T> clazz;
+    protected Boolean save;
+    private int sort;
     @Resource
-    private RedisUtil redisUtil;
+    protected RedisUtil redisUtil;
     @Resource
     protected MongoTemplate mongoTemplate;
 
@@ -37,6 +38,7 @@ public class BaseMsgHandler<T extends Message> {
             type = annotation.value();
             clazz = (Class<T>) annotation.clazz();
             save = annotation.save();
+            sort = annotation.sort();
         }
     }
 

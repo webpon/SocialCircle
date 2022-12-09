@@ -15,16 +15,23 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Component
 public class HttpAuthHandler extends TextWebSocketHandler {
 
-    @Autowired
-    public  List<BaseMsgHandler> msgHandlers = new ArrayList<>();
+    public  List<BaseMsgHandler> msgHandlers;
 
     @Resource
     private RedisUtil redisUtil;
+
+    @Autowired
+    public HttpAuthHandler(List<BaseMsgHandler> msgHandlers) {
+        msgHandlers.sort(Comparator.comparingInt(BaseMsgHandler::getSort));
+        this.msgHandlers = msgHandlers;
+    }
 
     /**
      * socket 建立成功事件
