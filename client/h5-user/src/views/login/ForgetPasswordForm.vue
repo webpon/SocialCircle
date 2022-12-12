@@ -150,19 +150,18 @@
       email: formData.email,
       code: formData.check,
       codeKey: key.value
-    }).then(({msg})=>{
+    }).then(()=>{
       showSuccessToast({
         message: "发送成功",
         position: 'top',
       })
-      console.log(11)
-    }).catch(({msg})=>{
+    })
+      .catch(({msg})=>{
       showSuccessToast({
         message: msg,
         position: 'top',
         type: "fail"
       })
-      console.log(2)
       updateCaptchaKey()
     })
   }
@@ -175,6 +174,7 @@
       })
       if (code === 200) {
         loading.value = true;
+        handleBackLogin()
       }
     }).catch(({msg}) => {
       loading.value = false;
