@@ -9,14 +9,14 @@ import router from '@/router';
 const Storage = createStorage({ storage: localStorage });
 
 interface UserInfo {
-  userId: string | number;
-  username: string;
-  realname: string;
-  nickname: string;
-  avatar: string;
-  cover: string;
-  gender: number;
-  phone: string;
+  userId?: string | number;
+  username?: string;
+  realname?: string;
+  petName?: string;
+  avatar?: string;
+  headIcon?: string;
+  gender?: number;
+  phone?: string;
   sign?: string;
   industry?: number;
 }
@@ -61,7 +61,11 @@ export const useUserStore = defineStore({
       Storage.set(ACCESS_TOKEN, token);
     },
     setUserInfo(info: UserInfo | null) {
-      this.userInfo = info;
+      if (this.userInfo == null) {
+        this.userInfo = info;
+      }else {
+        this.userInfo = {...info, ...this.userInfo};
+      }
       this.lastUpdateTime = new Date().getTime();
       Storage.set(CURRENT_USER, info);
     },

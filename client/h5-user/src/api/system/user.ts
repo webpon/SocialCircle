@@ -116,8 +116,28 @@ export function forgetPassword(params: any) {
  */
 export function getUserInfo() {
   return http.request({
-    url: '/getUserInfo',
+    url: '/user',
     method: 'get',
+  });
+}
+
+/**
+ * @description: 获取用户信息
+ */
+
+interface UserInfo {
+  userId?: string | number | null
+  petName?: string | null
+  headIcon?: string | null
+  gender?: number | null
+  phone?: string | null
+}
+
+export function updateUserInfo(params: UserInfo) {
+  return http.request<API.BasicResponseModel>({
+    url: '/user',
+    method: 'PUT',
+    params
   });
 }
 

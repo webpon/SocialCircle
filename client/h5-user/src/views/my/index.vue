@@ -8,10 +8,10 @@
         class="border-4 !absolute -top-90px h-170px w-170px"
         round
         fit="cover"
-        :src="avatar"
+        :src="headIcon"
       />
       <div class="flex flex-col items-center mt-90px">
-        <p class="font-black text-40px mb-20px">{{ nickname }}</p>
+        <p class="font-black text-40px mb-20px">{{ petName }}</p>
         <p class="text-30px px-36px">{{ sign }}</p>
       </div>
       <van-divider class="w-full" />
@@ -79,8 +79,9 @@
   const userStore = useUserStore();
   const showLogoutAction = ref(false);
 
-  const { nickname, avatar, cover, sign } = userStore.getUserInfo;
+  const { petName, avatar, headIcon, sign } = userStore.getUserInfo;
 
+  console.log(petName)
   const logoutActions = [
     {
       name: '退出登录',
@@ -93,7 +94,7 @@
   ];
 
   const getUserCoverBg = computed(() => {
-    return { backgroundImage: `url(${cover ? cover : avatar})` };
+    return { backgroundImage: `url(${headIcon ? headIcon : avatar})` };
   });
 </script>
 <style lang="less" scoped>
