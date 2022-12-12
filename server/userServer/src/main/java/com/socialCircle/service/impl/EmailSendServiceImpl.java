@@ -113,6 +113,6 @@ public class EmailSendServiceImpl implements EmailSendService {
                 log.error(e.toString());
             }
         });
-        return Result.ok();
+        return Result.ok("发送成功");
     }
 }
