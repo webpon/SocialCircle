@@ -1,17 +1,17 @@
 <template>
   <div>
     <NavBar>
-      <template #right><span class="text-32px" @click="handleNickname">保存</span></template>
+      <template #right><span class="text-32px" @click="handlePetName">保存</span></template>
     </NavBar>
     <van-form ref="formRef">
       <van-field
         class="mt-20px"
-        name="nickname"
-        v-model="formValue.nickname"
+        name="petName"
+        v-model="formValue.petName"
         placeholder="请输入昵称（2-12字）"
         :rules="[
           {
-            validator: validateNickname(),
+            validator: validatePetMame(),
             trigger: 'onChange',
           },
         ]"
@@ -27,21 +27,22 @@
 
 <script setup lang="ts">
   import NavBar from './components/NavBar.vue';
-  import { useUserStore } from '@/store/modules/user';
+  import {useUserStore, useUserStoreWidthOut} from '@/store/modules/user';
   import { onMounted, reactive, ref } from 'vue';
   import type { FormInstance } from 'vant';
   import { showToast } from 'vant';
+  import {updateUserInfo} from "@/api/system/user";
 
   const userStore = useUserStore();
 
-  const { nickname } = userStore.getUserInfo;
+  const { petName } = userStore.getUserInfo;
   const formRef = ref<FormInstance>();
 
   const formValue = reactive({
-    nickname: '',
+    petName: '',
   });
 
-  const validateNickname = () => {
+  const validatePetMame = () => {
     return async (value: string) => {
       const pattern = /^[\u4E00-\u9FA5A-Za-z0-9-_.·]+$/;
       if (!pattern.test(value)) {
@@ -54,16 +55,18 @@
     };
   };
 
-  function handleNickname() {
+  function handlePetName() {
     formRef.value
       ?.validate()
       .then(async () => {
         try {
           const formValue = formRef.value?.getValues();
-          showToast({
-            message: `当前表单值：${JSON.stringify(formValue)}`,
-          });
-          // do something
+          let petName = formValue?.petName +""
+          updateUserInfo({petName}).then(({code}) => {
+            if (code === 200){
+              userStore.setUserInfo({petName:petName})
+            }
+          })
         } finally {
           // after successful
         }
@@ -74,7 +77,7 @@
   }
 
   onMounted(() => {
-    formValue.nickname = nickname;
+    formValue.petName = petName;
   });
 </script>
 

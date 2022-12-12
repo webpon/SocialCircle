@@ -25,7 +25,7 @@
       input-align="right"
       :center="true"
       :border="false"
-      v-model="state.nickname"
+      v-model="state.petName"
       is-link
       to="/editNickname"
     />
@@ -112,17 +112,16 @@
   import { showToast } from 'vant';
 
   const userStore = useUserStore();
-  const { avatar, gender, industry, cover } = userStore.getUserInfo;
+  const { avatar, gender, industry, petName } = userStore.getUserInfo;
 
   const showGenderPicker = ref(false);
   const showIndustryPicker = ref(false);
 
   const state = reactive({
-    nickname: '',
+    petName,
     sign: '',
     // the field v-model
-    genderText: '',
-    industryText: '',
+    genderText: gender,
     // the pick v-model
     industryValues: [0],
     genderValues: [0],
@@ -130,6 +129,7 @@
 
   const handleGender = ({ selectedOptions }) => {
     state.genderText = selectedOptions[0].text;
+    console.log(selectedOptions[0].value)
     showToast(JSON.stringify(selectedOptions));
     // do something
     showGenderPicker.value = false;
