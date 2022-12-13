@@ -53,7 +53,7 @@ public class DynamicController {
     }
 
     @GetMapping("/{id}")
-    public Result getById(@RequestPart("id") Integer id){
+    public Result getById(@PathVariable("id") Integer id){
         DynamicVM dynamicById = dynamicService.getDynamicById(id);
         if (dynamicById == null) {
             return Result.error();
