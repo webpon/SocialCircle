@@ -6,20 +6,9 @@ import { ResultEnum } from '@/enums/httpEnum';
 import {getUserInfo, login, doLogout, loginByEmail} from '@/api/system/user';
 import { PageEnum } from '@/enums/pageEnum';
 import router from '@/router';
-const Storage = createStorage({ storage: localStorage });
+import UserInfo from '@/type/UserInfo.type';
 
-interface UserInfo {
-  userId?: string | number;
-  username?: string;
-  realname?: string;
-  petName?: string;
-  avatar?: string;
-  headIcon?: string;
-  gender?: number;
-  phone?: string;
-  sign?: string;
-  industry?: number;
-}
+const Storage = createStorage({ storage: localStorage });
 
 interface IUserState {
   token?: string;

@@ -1,4 +1,4 @@
-import { http } from '@/utils/http/axios';
+import {http} from '@/utils/http/axios';
 
 
 /**
@@ -92,6 +92,27 @@ export function sigIn(params: any) {
     {
       url: '/signIn',
       method: 'POST',
+      params,
+    }
+  );
+}
+
+export enum UserInfoField {
+  WORK = "work",
+  hobby = "hobby",
+}
+interface IInfoParams {
+  userId: number;
+  fields?: Array<UserInfoField>
+}
+/**
+ * @description: 用户信息
+ */
+export function getUserInfoById(params: IInfoParams) {
+  return http.request<API.BasicResponseModel>(
+    {
+      url: '/user/infoByUserId',
+      method: 'get',
       params,
     }
   );
