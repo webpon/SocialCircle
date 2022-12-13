@@ -74,7 +74,7 @@ public class LikeServiceImpl implements LikeService {
                         .eq("dynamic_id", like.getDynamicId())
         );
         // 是否有点赞
-        if (one != null || one.getId() != null) {
+        if (one != null && one.getId() != null) {
             if (likeDao.deleteById(one.getId()) > 0) {
                 dynamicService.subtractLikeNum(like.getDynamicId());
                 return Result.ok("取消成功");
