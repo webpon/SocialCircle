@@ -9,7 +9,7 @@ const routeModuleList: Array<RouteRecordRaw> = [
     redirect: '/dashboard/index',
     component: Layout,
     meta: {
-      title: '主控台',
+      title: '动态',
       icon: 'wap-home',
     },
     children: [
@@ -20,6 +20,14 @@ const routeModuleList: Array<RouteRecordRaw> = [
           keepAlive: false,
         },
         component: () => import('@/views/dashboard/index.vue'),
+      },
+      {
+        path: 'detailed/:id',
+        name: 'detailed',
+        meta: {
+          keepAlive: false,
+        },
+        component: () => import('@/views/dashboard/pages/DynamicDetailed.vue'),
       },
     ],
   },

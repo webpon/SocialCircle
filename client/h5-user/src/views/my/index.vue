@@ -81,7 +81,6 @@
 
   const { petName, avatar, headIcon, sign } = userStore.getUserInfo;
 
-  console.log(petName)
   const logoutActions = [
     {
       name: '退出登录',

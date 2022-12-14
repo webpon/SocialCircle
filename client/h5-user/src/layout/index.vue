@@ -1,6 +1,20 @@
 <template>
   <div class="h-screen flex flex-col">
-    <van-nav-bar v-if="getShowHeader" fixed placeholder :title="getTitle" />
+    <van-nav-bar
+      v-if="getShowHeader"
+      fixed
+      placeholder
+      :title="getTitle"
+    >
+      <template #left v-if="dyLeft">
+        <div @click="onClickBackDyIndex">
+          <van-icon name="arrow-left" />
+          <span style="color:#5d9dfe;">
+            返回
+          </span>
+        </div>
+      </template>
+    </van-nav-bar>
     <routerView class="flex-1 overflow-x-hidden">
       <template #default="{ Component, route }">
         <!--
@@ -32,8 +46,8 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue';
-  import { useRoute } from 'vue-router';
+  import {computed, reactive, ref, watchEffect} from 'vue';
+  import {useRoute, useRouter} from 'vue-router';
   import { useRouteStore } from '@/store/modules/route';
 
   const routeStore = useRouteStore();
@@ -51,6 +65,19 @@
   );
 
   const getShowHeader = computed(() => !currentRoute.meta.hiddenHeader);
+
+  const router = useRouter();
+  const route = useRoute();
+
+
+  let p = /\/dashboard\/detailed\/\d*/
+  const dyLeft = ref(p.test(route.path));
+  watchEffect(()=>{
+    dyLeft.value = p.test(route.path)
+  })
+  const onClickBackDyIndex = ()=>{
+    router.push({name:"Dashboard"});
+  }
 </script>
 
 <style scoped lang="less"></style>
