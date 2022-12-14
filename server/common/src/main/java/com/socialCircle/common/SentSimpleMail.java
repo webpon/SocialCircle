@@ -39,7 +39,7 @@ public class SentSimpleMail {
         props.setProperty("mail.smtp.host", MAIL_HOST); // 发送邮件的主机
         props.setProperty("mail.smtp.auth", "true");
         props.setProperty("mail.transport.protocol","smtp");
-        props.put("mail.smtp.port", "465");
+        props.put("mail.smtp.port", "587");
         Session session = Session.getInstance(props, null);// 获得Session对象
         /*
          * 创建邮件消息，发送邮件
