@@ -38,6 +38,8 @@ public class SentSimpleMail {
         Properties props = System.getProperties(); // 获得系统属性配置，用于连接邮件服务器的参数配置
         props.setProperty("mail.smtp.host", MAIL_HOST); // 发送邮件的主机
         props.setProperty("mail.smtp.auth", "true");
+        props.setProperty("mail.transport.protocol","smtp");
+        props.setProperty("mail.smtp.port", "587");
         Session session = Session.getInstance(props, null);// 获得Session对象
         /*
          * 创建邮件消息，发送邮件
