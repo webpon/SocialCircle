@@ -17,6 +17,7 @@ public class CommentMO {
         dynamicId=c.getDynamicId();
         likeNum=c.getLikeNum();
         content=c.getContent();
+        createTime=c.getCreateTime();
     }
 
     private Long id;
