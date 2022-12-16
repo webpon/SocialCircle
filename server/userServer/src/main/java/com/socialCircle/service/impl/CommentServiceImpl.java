@@ -74,7 +74,7 @@ public class CommentServiceImpl implements CommentService {
             dynamicService.addCommentNum(dynamic.getId(), 1);
             // 删除缓存
             redisUtil.batchDelete(COMMENT_QUERY_KEY + comment.getDynamicId());
-            return Result.ok(comment);
+            return Result.ok(commentDao.selectById(comment.getId()));
         }
         return Result.error("发布失败");
     }
