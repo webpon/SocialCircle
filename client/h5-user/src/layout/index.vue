@@ -1,22 +1,9 @@
 <template>
   <div class="h-screen flex flex-col">
-    <van-nav-bar
-      v-if="getShowHeader"
-      fixed
-      placeholder
-      :title="getTitle"
-    >
-      <template #left v-if="dyLeft">
-        <div @click="onClickBackDyIndex">
-          <van-icon name="arrow-left" />
-          <span style="color:#5d9dfe;">
-            返回
-          </span>
-        </div>
-      </template>
-    </van-nav-bar>
+
     <routerView class="flex-1 overflow-x-hidden">
       <template #default="{ Component, route }">
+        <NavBar v-show="!route.meta.hiddenBack" />
         <!--
           keep-alive 标签的 include 属性是根据组件的 name 判断的，
           所以 index.vue 和 list.vue 等页面 vue 文件里一定要写上 name，
@@ -31,53 +18,50 @@
         <component v-else :is="Component" :key="route.fullPath" />
       </template>
     </routerView>
-    <van-tabbar placeholder route>
-      <van-tabbar-item
-        fixed
-        replace
-        v-for="menu in getMenus"
-        :key="menu.name"
-        :to="menu.path"
-        :icon="(menu.meta?.icon as string)"
-        >{{ menu.meta?.title }}
+    <van-tabbar v-show="route.meta.showTabbar" placeholder route>
+      <van-tabbar-item fixed replace v-for="menu in getMenus" :key="menu.name" :to="menu.path"
+        :icon="(menu.meta?.icon as string)">{{ menu.meta?.title }}
       </van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
 
 <script setup lang="ts">
-  import {computed, reactive, ref, watchEffect} from 'vue';
-  import {useRoute, useRouter} from 'vue-router';
-  import { useRouteStore } from '@/store/modules/route';
+import { computed, reactive, ref, watchEffect } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useRouteStore } from '@/store/modules/route';
+import NavBar from './components/NavBar.vue';
 
-  const routeStore = useRouteStore();
-  // 需要缓存的路由组件
-  const keepAliveComponents = computed(() => routeStore.keepAliveComponents);
-  const currentRoute = useRoute();
+const routeStore = useRouteStore();
+// 需要缓存的路由组件
+const keepAliveComponents = computed(() => routeStore.keepAliveComponents);
+const currentRoute = useRoute();
 
-  const getTitle = computed(() => currentRoute.meta.title as string);
+const getTitle = computed(() => currentRoute.meta.title as string);
 
-  // 菜单
-  const getMenus = computed(() =>
-    routeStore.menus.filter((item) => {
-      return !item.meta?.innerPage;
-    })
-  );
-
-  const getShowHeader = computed(() => !currentRoute.meta.hiddenHeader);
-
-  const router = useRouter();
-  const route = useRoute();
-
-
-  let p = /\/dashboard\/detailed\/\d*/
-  const dyLeft = ref(p.test(route.path));
-  watchEffect(()=>{
-    dyLeft.value = p.test(route.path)
+// 菜单
+const getMenus = computed(() =>
+  routeStore.menus.filter((item) => {
+    return !item.meta?.innerPage;
   })
-  const onClickBackDyIndex = ()=>{
-    router.push({name:"Dashboard"});
-  }
+);
+
+const getShowHeader = computed(() => !currentRoute.meta.hiddenHeader);
+
+const router = useRouter();
+const route = useRoute();
+
+
+let p = /\/home\/detailed\/\d*/
+const dyLeft = ref(p.test(route.path));
+watchEffect(() => {
+  dyLeft.value = p.test(route.path)
+})
+const onClickBackDyIndex = () => {
+  router.push({ name: "Dashboard" });
+}
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+
+</style>

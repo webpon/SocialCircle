@@ -28,7 +28,7 @@ export function createRouterGuards(router: Router) {
     }
 
     const token = storage.get(ACCESS_TOKEN);
-
+    
     if (!token) {
       // redirect login page
       next(LOGIN_PATH);
@@ -36,15 +36,14 @@ export function createRouterGuards(router: Router) {
     }
 
     // 当上次更新时间为空时获取用户信息
-    if (userStore.getLastUpdateTime === 0) {
-      try {
-        await userStore.GetUserInfo();
-      } catch (err) {
-        next();
-        return;
-      }
-    }
-
+    // if (userStore.getLastUpdateTime === 0) {
+    //   try {
+    //     await userStore.GetUserInfo();
+    //   } catch (err) {
+    //     next();
+    //     return;
+    //   }
+    // }
     next();
   });
 

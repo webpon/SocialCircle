@@ -10,7 +10,7 @@
 	"scripts": {
 		"bootstrap": "pnpm install",
 		"serve": "npm run dev",
-		"dev": "vite",
+		"dev": "vite --host",
 		"build": "cross-env NODE_ENV=production vite build  && esno ./build/script/postBuild.ts",
 		"build:no-cache": "pnpm clean:cache && npm run build",
 		"report": "cross-env REPORT=true npm run build",

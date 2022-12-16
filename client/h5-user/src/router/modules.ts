@@ -4,9 +4,9 @@ const Layout = () => import('@/layout/index.vue');
 
 const routeModuleList: Array<RouteRecordRaw> = [
   {
-    path: '/dashboard',
+    path: '/home',
     name: 'Dashboard',
-    redirect: '/dashboard/index',
+    redirect: '/home/index',
     component: Layout,
     meta: {
       title: '动态',
@@ -17,17 +17,30 @@ const routeModuleList: Array<RouteRecordRaw> = [
         path: 'index',
         name: 'DashboardPage',
         meta: {
+          title: '动态',
+          hiddenBack: true,
+          showTabbar: true,
           keepAlive: false,
         },
-        component: () => import('@/views/dashboard/index.vue'),
+        component: () => import('@/views/home/index.vue'),
       },
       {
         path: 'detailed/:id',
         name: 'detailed',
         meta: {
+          title: '动态详情',
           keepAlive: false,
         },
-        component: () => import('@/views/dashboard/pages/DynamicDetailed.vue'),
+        component: () => import('@/views/home/pages/DynamicDetailed.vue'),
+      },
+      {
+        path: 'postNews',
+        name: 'postNews',
+        meta: {
+          title: '发布动态',
+          keepAlive: false,
+        },
+        component: () => import('@/views/home/pages/postNews.vue'),
       },
     ],
   },
@@ -46,6 +59,8 @@ const routeModuleList: Array<RouteRecordRaw> = [
         name: 'MessagePage',
         meta: {
           keepAlive: false,
+          hiddenBack: true,
+          showTabbar: true,
         },
         component: () => import('@/views/message/index.vue'),
       },
@@ -66,6 +81,8 @@ const routeModuleList: Array<RouteRecordRaw> = [
         name: 'MyPage',
         meta: {
           keepAlive: false,
+          hiddenBack: true,
+          showTabbar: true,
           hiddenHeader: true,
         },
         component: () => import('@/views/my/index.vue'),
