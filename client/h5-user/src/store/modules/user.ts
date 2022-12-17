@@ -50,13 +50,13 @@ export const useUserStore = defineStore({
       Storage.set(ACCESS_TOKEN, token);
     },
     setUserInfo(info: UserInfo | null) {
-      if (this.userInfo == null) {
+      if (this.$state.userInfo == null) {
         this.userInfo = info;
       }else {
-        this.userInfo = {...info, ...this.userInfo};
+        this.userInfo = {...info, ...this.$state.userInfo};
       }
       this.lastUpdateTime = new Date().getTime();
-      Storage.set(CURRENT_USER, info);
+      Storage.set(CURRENT_USER, this.$state.userInfo);
     },
 
     async Login(params: LoginParams) {

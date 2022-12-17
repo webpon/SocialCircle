@@ -14,9 +14,21 @@
 
 <script setup lang="ts">
   import { showFailToast } from 'vant';
+  import {uploaderFile} from "@/api/oss";
+  import {updateUserInfo} from "@/api/system/user";
+  import {useUserStore} from "@/store/modules/user";
+  const userStore = useUserStore();
 
   function beforeRead(file) {
     if (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg') {
+      uploaderFile(file).then((headIcon)=>{
+        updateUserInfo({headIcon}).then((code) =>{
+          if (code ){
+            userStore.setUserInfo({headIcon})
+          }
+        })
+
+      })
       return true;
     }
     showFailToast('请上传正确格式的图片');
@@ -24,7 +36,6 @@
   }
 
   function afterRead(file) {
-    console.log('%c [ file ]-43', 'font-size:13px; background:pink; color:#bf2c9f;', file);
     // 这里写上传逻辑
   }
 </script>
