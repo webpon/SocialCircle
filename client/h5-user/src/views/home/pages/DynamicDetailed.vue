@@ -47,13 +47,17 @@
       </div>
     </div>
     <van-divider :style="{ color: '#898989', borderColor: '#898989' }"/>
-    <div class="comment">
-
+    <div  @scroll="handleScroll" class="comment">
+      <template v-for="item in comments">
+        <Comment :comment="item" @updatePlaceholder="updatePlaceholder"/>
+      </template>
+      <div class="t" v-if="gotoGet">加载中...</div>
+      <div class="t" v-else>到底啦</div>
     </div>
     <div class="commentInput">
       <van-form ref="formRef" @submit="handleSubmit">
         <van-field v-model="commentData.content" center clearable class="input"
-                   placeholder="请输入邮箱验证码"/>
+                   :placeholder="placeholder"/>
         <van-button
           type="primary"
           native-type="submit"
@@ -68,12 +72,23 @@
 
 <script setup lang="ts">
   import UserHead from "@/components/UserHead.vue"
-  import {onBeforeMount, reactive, ref} from "vue";
+  import {
+    getCurrentInstance,
+    onBeforeMount,
+    onMounted,
+    onUnmounted,
+    reactive,
+    ref,
+    watchEffect
+  } from "vue";
   import {likeByDynamic, whetherLikeByDynamic} from "@/api/like";
   import {useRoute} from "vue-router";
   import {getDynamicById} from "@/api/dynamic";
   import DynamicVM from "@/type/DynamicVM";
   import {FormInstance} from "vant";
+  import CommentType from "@/type/Comment.type";
+  import {comment, getComment} from "@/api/comment";
+  import Comment from "@/components/Comment.vue";
 
   const route = useRoute()
 
@@ -83,6 +98,7 @@
   })
   const like = ref(false);
   const {id} = route.params
+  const gotoGet = ref(true);
 
   const images1 = [];
   const width = ref(110)
@@ -142,17 +158,68 @@
 
   const formRef = ref<FormInstance>();
   const commentData = reactive({
-    content: ""
+    content: "",
+    parentId: 0
   })
+
+  let commentFun = null;
 
   function handleSubmit() {
     formRef.value
       ?.validate()
       .then(async () => {
-        console.log(commentData)
-      })
+        return await comment({
+          dynamicId: data.dynamic.id,
+          content: commentData.content,
+          parentId: commentData.parentId
+        })
+      }).then((data2) => {
+      commentData.parentId = 0;
+      commentData.content = '';
+      console.log(commentFun)
+      if (commentFun != null) {
+        commentFun(data2);
+        commentFun = null
+        return;
+      }
+      console.log(data2)
+      comments.value.unshift(data2);
+    })
   }
 
+  const p = ref(1);
+  const comments = ref<Array<CommentType>>([]);
+  watchEffect(()=>{
+    getComment(id, p.value).then((data) => {
+      comments.value.push(...data);
+      if (!data){
+        gotoGet.value = false;
+      }
+    })
+  });
+  const handleScroll= (e) => {
+    const {scrollTop, clientHeight, scrollHeight} = e.target
+    if (scrollTop + clientHeight >= scrollHeight - 100 && gotoGet.value){
+      gotoGet.value = false
+      p.value ++
+    }
+  }
+
+  const placeholder = ref("说说你的看法吧！")
+  const updatePlaceholder = ({name, func, id}) => {
+    placeholder.value = name;
+    commentFun = func;
+    commentData.parentId = id;
+  }
+
+  const {proxy} = getCurrentInstance()
+
+  onMounted(() => {
+    proxy.mittBus.on('comment', updatePlaceholder)
+  })
+  onUnmounted(() => {
+    proxy.mittBus.off('comment')
+  })
 </script>
 
 <style scoped lang="less">
@@ -160,7 +227,6 @@
     margin: 20px 0;
     border-radius: 10px;
     background-color: #fff;
-
     p, nav {
       margin: 0 20px !important;
     }
@@ -177,6 +243,16 @@
 
       img {
         margin: 3px 0;
+      }
+    }
+
+    .comment {
+      overflow-y: scroll;
+      height: 65%;
+      margin-bottom: 170px;
+
+      .t {
+        text-align: center;
       }
     }
 
@@ -200,9 +276,8 @@
 
     .commentInput {
       padding-top: 5px;
-      border-top: 2px #989898 solid;
       position: fixed;
-      bottom: 100px;
+      bottom: 0;
       width: 100%;
       background-color: #fff;
 
