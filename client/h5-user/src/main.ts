@@ -8,7 +8,7 @@ import App from './App.vue';
 import { setupStore } from '@/store';
 import router, { setupRouter } from './router';
 import { updateDarkSign } from './theme';
-
+import mitt from "mitt";
 async function bootstrap() {
   const app = createApp(App);
   // 挂载状态管理
@@ -16,8 +16,10 @@ async function bootstrap() {
   // 挂载路由
   setupRouter(app);
   await router.isReady();
+  app.config.globalProperties.mittBus = new mitt()
   // 路由准备就绪后挂载APP实例
   app.mount('#app', true);
+
 
   // 根节点挂载 dark 标识
   const appDesignSetting = window.localStorage.getItem('DESIGN-SETTING');
