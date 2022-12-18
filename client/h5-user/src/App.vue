@@ -71,7 +71,7 @@
 
   const Storage = createStorage({ storage: localStorage });
   const userStore = useUserStore();
-  Storage.get(CURRENT_USER, '') ||userStore.GetUserInfo()
+  Storage.get(CURRENT_USER, '').petName ||userStore.GetUserInfo()
 
   const getTransitionName = computed(() => {
     return unref(getIsPageAnimate) ? unref(getPageAnimateType) : undefined;
