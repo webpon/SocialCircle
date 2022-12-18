@@ -1,5 +1,5 @@
 <template>
-  <div @scroll="handleScroll" class="scroll">
+  <div @scroll="handleScroll" class="overflow-y-auto">
     <Dynamic v-for="item in dynamics" :dynamic="item.dynamic" :images="item.images"/>
   </div>
 </template>
@@ -35,8 +35,5 @@
 </script>
 
 <style scoped lang="less">
-.scroll{
-  overflow-y: scroll;
-  height: 1150px;
-}
+
 </style>

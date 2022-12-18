@@ -1,7 +1,7 @@
 <template>
   <div class="bg">
     <div>
-      <van-tabs v-model:active="active" swipeable :line-width="20" shrink>
+      <van-tabs v-model:active="active" swipeable :line-width="20" shrink sticky class="relative">
         <van-tab :title-style="{ fontSize: '17px', margin: '0 5px' }">
           <template #title>
             <van-badge :dot="showMsg">
@@ -20,7 +20,7 @@
             <Classify :id="item.id"/>
         </van-tab> -->
       </van-tabs>
-      <van-button icon="plus" type="primary" class="!fixed top-10px right-15px w-65px !h-65px !rounded-full" />
+      <van-button icon="plus" type="primary" class="!fixed z-100 top-10px right-25px w-65px !h-65px !rounded-full" @click="router.push('/home/postNews');"/>
     </div>
   </div>
 </template>
@@ -36,12 +36,14 @@ import ClassifyType from "@/type/Classify.type";
 import { getClassify } from "@/api/classify";
 import Classify from "./pages/Classify.vue";
 import { useMessageStore } from "@/store/modules/message";
+import { useRouter } from 'vue-router';
 
 
 const active = ref(1);
 const designStore = useDesignSettingStore();
 const messageStore = useMessageStore();
 const globSetting = useGlobSetting();
+const router = useRouter();
 const { title } = globSetting;
 
 const index = ref(2);

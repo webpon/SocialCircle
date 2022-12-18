@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-  import UserHead from "@/components/UserHead.vue"
+  import UserHead from "@/views/home/components/UserHead.vue"
   import {
     getCurrentInstance,
     onBeforeMount,
@@ -89,7 +89,7 @@
   import {FormInstance} from "vant";
   import CommentType from "@/type/Comment.type";
   import {comment, getComment} from "@/api/comment";
-  import Comment from "@/components/Comment.vue";
+  import Comment from "@/views/home/components/Comment.vue";
   import cellGroup
     from "../../../../../mini-program-user-client/uni_modules/uview-ui/libs/config/props/cellGroup";
 

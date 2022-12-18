@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
   import CommentType from "@/type/Comment.type";
-  import UserHead from "@/components/UserHead.vue"
+  import UserHead from "@/views/home/components/UserHead.vue"
   import {getCurrentInstance, ref, Ref} from "vue";
   import {likeByComment, whetherLikeByComment} from "@/api/like";
   import {deleteComment as deleteCommentApi} from "@/api/comment";
@@ -107,9 +107,9 @@
   const actions = [
     { name: '复制', id: 1}
   ];
-  if (id === comment.userId){
+  // if (id === comment.userId){
     actions.push({ name: '删除', id: 2})
-  }
+  // }
   actions.push({ name: '取消', id: 3})
   const onSelect = (item) => {
     switch (item.id) {

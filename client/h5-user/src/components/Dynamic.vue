@@ -57,7 +57,7 @@
 
   import ImageType from "@/type/Image.type";
   import DynamicType from "@/type/Dynamic.type";
-  import UserHead from "@/components/UserHead.vue"
+  import UserHead from "@/views/home/components/UserHead.vue"
   import {ref} from "vue";
   import {likeByDynamic, whetherLikeByDynamic} from "@/api/like";
   import {useRouter} from "vue-router";
