@@ -6,7 +6,7 @@
       :height="headSize"
       :src="info.headIcon"
     />
-    <span :style="{fontSize, fontWeight}">
+    <span :style="{fontSize:`${fontSize}!important`, fontWeight}">
       {{info.petName}}
     </span>
     <div v-if="twoUserId !== 0">
@@ -67,13 +67,14 @@
 </script>
 
 <style scoped lang="less">
-div {
+  div {
   display: flex;
   align-items: center;
   margin: 5px !important;
 
   > span {
     margin: 0 10px;
+    font-size: 30px;
   }
 }
 </style>
