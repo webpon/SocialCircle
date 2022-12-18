@@ -15,6 +15,9 @@
   import { darken, lighten } from '@/utils/index';
   import { useRouteStore } from '@/store/modules/route';
   import { useDesignSetting } from '@/hooks/setting/useDesignSetting';
+  import {useUserStore} from "@/store/modules/user";
+  import {CURRENT_USER} from "@/store/mutation-types";
+  import {createStorage} from "@/utils/Storage";
 
   const routeStore = useRouteStore();
   const { getDarkMode, getAppTheme, getIsPageAnimate, getPageAnimateType } = useDesignSetting();
@@ -65,6 +68,10 @@
       treeSelectItemActiveColor: appTheme,
     };
   };
+
+  const Storage = createStorage({ storage: localStorage });
+  const userStore = useUserStore();
+  Storage.get(CURRENT_USER, '').petName ||userStore.GetUserInfo()
 
   const getTransitionName = computed(() => {
     return unref(getIsPageAnimate) ? unref(getPageAnimateType) : undefined;

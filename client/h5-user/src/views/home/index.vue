@@ -46,12 +46,11 @@ const { title } = globSetting;
 
 const index = ref(2);
 const showMsg = ref(messageStore.getConcernMsgShow);
-const classifies = ref<Array<ClassifyType>>([]);
-
-getClassify().then((data) => {
-  // console.log(data)
-  classifies.value.push(...data);
-})
+// const classifies = ref<Array<ClassifyType>>([]);
+//
+// getClassify().then((data) => {
+//   classifies.value.push(...data);
+// })
 </script>
 
 <style scoped lang="less">

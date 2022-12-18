@@ -32,6 +32,7 @@
   import type { FormInstance } from 'vant';
   import { showToast } from 'vant';
   import {updateUserInfo} from "@/api/system/user";
+  import {useRouter} from "vue-router";
 
   const userStore = useUserStore();
 
@@ -54,6 +55,7 @@
       return Promise.resolve(true);
     };
   };
+  const router = useRouter()
 
   function handlePetName() {
     formRef.value
@@ -62,10 +64,9 @@
         try {
           const formValue = formRef.value?.getValues();
           let petName = formValue?.petName +""
-          updateUserInfo({petName}).then(({code}) => {
-            if (code === 200){
-              userStore.setUserInfo({petName:petName})
-            }
+          updateUserInfo({petName}).then(() => {
+              userStore.setUserInfo({petName})
+              router.go(-1)
           })
         } finally {
           // after successful

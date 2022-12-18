@@ -1,5 +1,5 @@
 export default interface UserInfo {
-  userId?: string | number;
+  id?: string | number;
   username?: string;
   realname?: string;
   petName?: string;

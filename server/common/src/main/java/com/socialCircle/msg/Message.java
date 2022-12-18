@@ -1,5 +1,6 @@
 package com.socialCircle.msg;
 
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -17,12 +18,17 @@ public class Message<T extends Message> {
         this.setTo(message.getTo());
         message.setTo(null);
         this.setMsg(JSON.toJSONString(message));
-
+        if (message.getMId() == null){
+            message.setMId(DateUtil.date().getTime());
+        }
+        this.setMId(message.getMId());
+        message.setMId(null);
     }
 
     private String type;
     private String msg;
     private Integer form;
+    private Long mId;
     private Integer to;
     private String sendTime;
     @Id

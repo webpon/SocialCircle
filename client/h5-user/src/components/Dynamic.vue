@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UserHead :userId="dynamic.userId"/>
+    <UserHead :userId="dynamic.userId" :fontSiez="30"/>
     <p @click="pushWithQuery">
       {{dynamic.content}}
     </p>
@@ -128,6 +128,10 @@
 </script>
 
 <style scoped lang="less">
+  *{
+    font-size: 27px;
+  }
+
   div {
     margin: 20px 20px;
     padding: 10px;
@@ -155,7 +159,6 @@
 
     .click {
       justify-content: space-between;
-      font-size: 17px;
 
       > div {
         width: 40%;
@@ -165,6 +168,7 @@
 
         span {
           margin: 0 5px;
+          font-size: 20px !important;
         }
       }
 

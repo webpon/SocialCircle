@@ -13,7 +13,7 @@
     >
       <template #input>
         <UploaderImage>
-          <van-image class="avatar" round fit="cover" :src="avatar" />
+          <van-image class="avatar" round fit="cover" :src="headIcon" />
         </UploaderImage>
       </template>
     </van-field>
@@ -112,7 +112,7 @@
   import { showToast } from 'vant';
 
   const userStore = useUserStore();
-  const { avatar, gender, industry, petName } = userStore.getUserInfo;
+  const { headIcon, gender, industry, petName } = userStore.getUserInfo;
 
   const showGenderPicker = ref(false);
   const showIndustryPicker = ref(false);

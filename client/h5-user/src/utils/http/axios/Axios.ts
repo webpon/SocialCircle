@@ -82,7 +82,7 @@ export class VAxios {
               resolve(ret);
             } catch (err) {
               // 把返回值交给调用者处理
-              reject(res.data || new Error('request error!'));
+              reject(res.data );
             }
             return;
           }

@@ -30,9 +30,6 @@ public class OssController {
     private String endpoint;
 
     @Value("${alicloud.access-id}")
-    private String accessKey;
-
-    @Value("${alicloud.secret-key}")
     private String accessId;
 
     @RequestMapping("/oss")

@@ -61,23 +61,23 @@ public class UserServiceImpl implements UserService {
         String s = md5(user.getPassword());
         user.setPassword(s);
         User login = userDao.login(user);
-        if (login != null){
-            // 判断是已经登录和是否被封号
-            if (!redisUtil.setIfAbsent(LOGIN+login.getId())) {
-                return  Result.error("账号已被登录");
-            }
-            if (login.getBanned() == 1){
-                return Result.error("已经被封");
-            }
-            userDao.loginTime(login);
-            HashMap<String, String> map = new HashMap<>();
-            map.put("id",login.getId().toString());
-            map.put("permission", login.getPermission().toString());
-            // 获取token
-            Object token = jwtUtil.getToken(map);
-            return Result.ok(token);
+        if (login == null){
+            return Result.error("登录失败");
         }
-        return Result.error("登录失败");
+        // 判断是已经登录和是否被封号
+        if (redisUtil.getBean(LOGIN+login.getId(), String.class) != null) {
+            return  Result.error("账号已被登录");
+        }
+        if (login.getBanned() == 1){
+            return Result.error("已经被封");
+        }
+        userDao.loginTime(login);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("id",login.getId().toString());
+        map.put("permission", login.getPermission().toString());
+        // 获取token
+        Object token = jwtUtil.getToken(map);
+        return Result.ok(token);
     }
 
     @Override
@@ -102,19 +102,19 @@ public class UserServiceImpl implements UserService {
         }
         signIn.setPassword(md5(signIn.getPassword()));
         // 添加成功
-        if (userDao.save(signIn)) {
-            signIn.setId(userDao.queryByEmail(signIn.getEmail()).getId());
-            signIn.setGender(1);
-            userInfoService.save(signIn);
-            signIn.setPassword(null);
-            HashMap<String, String> map = new HashMap<>();
-            map.put("id",signIn.getId().toString());
-            map.put("permission", "0");
-            // 获取token
-            Object token = jwtUtil.getToken(map);
-            return Result.ok("注册成功",token);
+        if (!userDao.save(signIn)) {
+            return Result.error("注册失败");
         }
-        return Result.error("注册失败");
+        signIn.setId(userDao.queryByEmail(signIn.getEmail()).getId());
+        signIn.setGender(1);
+        userInfoService.save(signIn);
+        signIn.setPassword(null);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("id",signIn.getId().toString());
+        map.put("permission", "0");
+        // 获取token
+        Object token = jwtUtil.getToken(map);
+        return Result.ok("注册成功",token);
     }
 
 
@@ -132,7 +132,7 @@ public class UserServiceImpl implements UserService {
         }
         User login = userDao.queryByEmail(email);
         // 判断是已经登录和是否被封号
-        if (!redisUtil.setIfAbsent(LOGIN+login.getId())) {
+        if (redisUtil.getBean(LOGIN+login.getId(), String.class) != null) {
             return  Result.error("账号已被登录");
         }
         if (login.getBanned() == 1){
@@ -195,5 +195,4 @@ public class UserServiceImpl implements UserService {
         }
         return s;
     }
-
 }
