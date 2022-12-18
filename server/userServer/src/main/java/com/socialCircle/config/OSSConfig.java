@@ -14,10 +14,10 @@ public class OSSConfig {
     private String endpoint;
 
     @Value("${alicloud.access-id}")
-    private String accessKey;
+    private String accessId;
 
     @Value("${alicloud.secret-key}")
-    private String accessId;
+    private String accessKey;
 
     @Bean
     public OSS getClient(){

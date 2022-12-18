@@ -29,9 +29,6 @@ public class OssController {
     @Value("${alicloud.oss.endpoint}")
     private String endpoint;
 
-    @Value("${alicloud.secret-key}")
-    private String accessKey;
-
     @Value("${alicloud.access-id}")
     private String accessId;
 
