@@ -68,12 +68,11 @@ public class BaseMsgHandler<T extends Message> {
             message.setType(type);
             String s = JSON.toJSONString(message);
             session.sendMessage(new TextMessage(s));
-
         }
         // 删除记录
         mongoTemplate.remove(
                 new Query(Criteria.where("_id").is(msg.get_id())),
-                ChatMsg.class, type);
+                clazz, type);
     }
 
     public void sendHandler(Message message, User user) throws IOException {
