@@ -37,8 +37,9 @@
 <script setup lang="ts">
   import CommentType from "@/type/Comment.type";
   import UserHead from "@/components/UserHead.vue"
-  import {getCurrentInstance, onMounted, ref, Ref} from "vue";
-  import {likeByComment, likeByDynamic, whetherLikeByComment} from "@/api/like";
+  import {getCurrentInstance, ref, Ref} from "vue";
+  import {likeByComment, whetherLikeByComment} from "@/api/like";
+  import {deleteComment as deleteCommentApi} from "@/api/comment";
   import {useUserStore} from "@/store/modules/user";
 
   interface por {
@@ -118,7 +119,8 @@
         }
         break;
       case 2:
-
+        deleteCommentApi(comment.id)
+        deleteComment()
 
     }
     actionShow.value = false;
@@ -131,6 +133,9 @@
   }
   const gotouchend = () =>  clearTimeout(timeOut);
 
+  const deleteComment = ()=>{
+    proxy.mittBus.emit('deleteComment', comment.id);
+  };
 
 </script>
 
@@ -167,7 +172,7 @@
 
       p {
         margin-bottom: 10px;
-        font-size: 18px;
+        font-size: 27px;
         width: 90%;
         margin-right: 10px;
       }

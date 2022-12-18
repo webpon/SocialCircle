@@ -30,3 +30,15 @@ export function comment(comment:CommentType) {
     },
   );
 }
+
+/**
+ * @description: 删除评论
+ */
+export function deleteComment(commentId:number) {
+  return http.request<API.BasicResponseModel<CommentType>>(
+    {
+      url: `${baseUri}?commentId=${commentId}`,
+      method: 'delete',
+    },
+  );
+}

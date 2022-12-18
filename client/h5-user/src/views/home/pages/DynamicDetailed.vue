@@ -57,7 +57,7 @@
     <div class="commentInput">
       <van-form ref="formRef" @submit="handleSubmit">
         <van-field v-model="commentData.content" center clearable class="input"
-                   :placeholder="placeholder"/>
+                   :placeholder="placeholder" ref="input"/>
         <van-button
           type="primary"
           native-type="submit"
@@ -78,6 +78,7 @@
     onMounted,
     onUnmounted,
     reactive,
+    Ref,
     ref,
     watchEffect
   } from "vue";
@@ -89,6 +90,8 @@
   import CommentType from "@/type/Comment.type";
   import {comment, getComment} from "@/api/comment";
   import Comment from "@/components/Comment.vue";
+  import cellGroup
+    from "../../../../../mini-program-user-client/uni_modules/uview-ui/libs/config/props/cellGroup";
 
   const route = useRoute()
 
@@ -99,6 +102,7 @@
   const like = ref(false);
   const {id} = route.params
   const gotoGet = ref(true);
+  const input = ref() as Ref;
 
   const images1 = [];
   const width = ref(110)
@@ -176,6 +180,7 @@
       }).then((data2) => {
       commentData.parentId = 0;
       commentData.content = '';
+      placeholder.value = '说说你的看法吧！'
       console.log(commentFun)
       if (commentFun != null) {
         commentFun(data2);
@@ -210,19 +215,43 @@
     placeholder.value = name;
     commentFun = func;
     commentData.parentId = id;
+    input.value.focus();
   }
 
   const {proxy} = getCurrentInstance()
 
   onMounted(() => {
-    proxy.mittBus.on('comment', updatePlaceholder)
+    proxy.mittBus.on('deleteComment', deleteComment);
+    proxy.mittBus.on('comment', updatePlaceholder);
   })
   onUnmounted(() => {
     proxy.mittBus.off('comment')
+    proxy.mittBus.off('deleteComment')
   })
+
+  const deleteComment = (id)=>{
+    const data = filter(id,  comments.value);
+    console.log(data)
+    comments.value = data;
+  };
+
+  const filter = (id, data)=>{
+    return data.filter((item)=>{
+      if (item.id === id){
+        return false;
+      }
+      item.childList = filter(id, item.childList);
+      return true;
+    })
+  }
+
 </script>
 
 <style scoped lang="less">
+  *{
+    font-size: 27px;
+  }
+
   div {
     margin: 20px 0;
     border-radius: 10px;
