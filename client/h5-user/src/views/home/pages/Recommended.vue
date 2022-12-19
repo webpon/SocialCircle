@@ -36,4 +36,8 @@
 
 <style scoped lang="less">
 
+  .overflow-y-auto{
+    overflow: auto;
+    margin-bottom: 30px;
+  }
 </style>
