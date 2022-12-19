@@ -2,17 +2,17 @@
   <div :class="childClass">
     <div>
       <UserHead :userId="comment.userId" :twoUserId="userId" :headSize="30" :fontWeight="500"
-                @updateName="updateName"/>
-      <div class="content" @click="repl">
-        <p @touchstart.prevent="gotouchstart" @touchend.prevent="gotouchend">{{comment.content}}</p>
+                @updateName="updateName" :time="comment.createTime"/>
+
+      <div class="content-like">
+        <div class="content" @click="repl">
+          <p @touchstart.prevent="gotouchstart" @touchend.prevent="gotouchend">{{comment.content}}</p>
+        </div>
         <div class="like" @click="onLike">
           <van-icon name="like-o" size="18" v-if="!like"/>
           <van-icon name="like" size="18" v-else color="#ee0a24"/>
           <div>{{comment.likeNum}}</div>
         </div>
-      </div>
-      <div class="time">
-        {{timeStr}}
       </div>
     </div>
     <nav v-show="commentShow">
@@ -31,6 +31,7 @@
       </span>
     </div>
     <van-action-sheet :show="actionShow" :actions="actions" @select="onSelect" />
+    <van-divider />
   </div>
 </template>
 
@@ -57,27 +58,6 @@
   })
   const childClass = ref(!child ? '' : 'child');
   const commentShow = ref(false);
-  const timeStr = ref("");
-
-  getServerTime().then((t)=>{
-    let date = new Date(comment.createTime as number);  // 参数需要毫秒数，所以这里将秒数乘于 1000
-    const Y = date.getFullYear() + '-';
-    const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-    const D = date.getDate() + ' ';
-    const now = new Date(t as unknown as number);
-    const Y1 = now.getFullYear() + '-';
-    const D1 = now.getDate() + ' ';
-    if (Y !== Y1) {
-      timeStr.value += Y;
-    }
-    if (D !== D1) {
-      timeStr.value += M;
-      timeStr.value += D;
-    }
-    timeStr.value += (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
-    const minutes = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
-    timeStr.value += minutes
-  })
 
   const like = ref(false);
   whetherLikeByComment({commentId: comment.id as number})
@@ -165,23 +145,26 @@
       color: #2B85E4;
     }
 
-    .content {
+    .content-like {
       display: flex;
       align-items: center;
       justify-content: space-between;
-
-      .like {
-        width: 100px;
-        text-align: center;
-        float: right;
-      }
-
-      p {
-        margin-bottom: 10px;
-        font-size: 27px;
+      .content {
         width: 90%;
-        margin-right: 10px;
+        height: 100%;
+
+        p {
+          margin-bottom: 10px;
+          font-size: 27px;
+          margin-right: 10px;
+        }
       }
+        .like {
+          width: 100px;
+          text-align: center;
+          float: right;
+        }
+
     }
   }
 </style>
