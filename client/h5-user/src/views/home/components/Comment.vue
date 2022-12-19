@@ -17,7 +17,7 @@
     </div>
     <nav v-show="commentShow">
       <template v-for="item in comment.childList">
-        <Comment :comment="item" :child="comment.parentId === 0" :userId="comment.userId"/>
+        <Comment :comment="item" :child="comment.parentId === 0" :userId="comment.userId" />
       </template>
     </nav>
     <div v-if="comment.parentId === 0 && comment.childList.length > 0">
@@ -41,6 +41,7 @@
   import {likeByComment, whetherLikeByComment} from "@/api/like";
   import {deleteComment as deleteCommentApi} from "@/api/comment";
   import {useUserStore} from "@/store/modules/user";
+  import { getServerTime } from "@/api/other";
 
   interface por {
     comment: CommentType;
@@ -58,23 +59,25 @@
   const commentShow = ref(false);
   const timeStr = ref("");
 
-  let date = new Date(comment.createTime as number);  // 参数需要毫秒数，所以这里将秒数乘于 1000
-  const Y = date.getFullYear() + '-';
-  const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-  const D = date.getDate() + ' ';
-  const now = new Date();
-  const Y1 = now.getFullYear() + '-';
-  const D1 = now.getDate() + ' ';
-  if (Y !== Y1) {
-    timeStr.value += Y;
-  }
-  if (D !== D1) {
-    timeStr.value += M;
-    timeStr.value += D;
-  }
-  timeStr.value += (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
-  const minutes = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
-  timeStr.value += minutes
+  getServerTime().then((t)=>{
+    let date = new Date(comment.createTime as number);  // 参数需要毫秒数，所以这里将秒数乘于 1000
+    const Y = date.getFullYear() + '-';
+    const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+    const D = date.getDate() + ' ';
+    const now = new Date(t as unknown as number);
+    const Y1 = now.getFullYear() + '-';
+    const D1 = now.getDate() + ' ';
+    if (Y !== Y1) {
+      timeStr.value += Y;
+    }
+    if (D !== D1) {
+      timeStr.value += M;
+      timeStr.value += D;
+    }
+    timeStr.value += (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+    const minutes = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
+    timeStr.value += minutes
+  })
 
   const like = ref(false);
   whetherLikeByComment({commentId: comment.id as number})
@@ -107,9 +110,9 @@
   const actions = [
     { name: '复制', id: 1}
   ];
-  // if (id === comment.userId){
+  if (id === comment.userId){
     actions.push({ name: '删除', id: 2})
-  // }
+  }
   actions.push({ name: '取消', id: 3})
   const onSelect = (item) => {
     switch (item.id) {
@@ -131,7 +134,10 @@
     clearTimeout()
     timeOut = setTimeout(() => actionShow.value = true, 500)
   }
-  const gotouchend = () =>  clearTimeout(timeOut);
+  const gotouchend = () => {
+    clearTimeout(timeOut)
+    repl();
+  };
 
   const deleteComment = ()=>{
     proxy.mittBus.emit('deleteComment', comment.id);

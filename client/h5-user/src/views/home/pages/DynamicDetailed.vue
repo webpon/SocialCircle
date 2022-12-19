@@ -231,7 +231,6 @@
 
   const deleteComment = (id)=>{
     const data = filter(id,  comments.value);
-    console.log(data)
     comments.value = data;
   };
 

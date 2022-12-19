@@ -29,7 +29,7 @@
 
   interface por {
     userId: number;
-    // twoUserId: number;
+    twoUserId: number;
     fontSize: number;
     headSize: number;
     fontWeight: number;
@@ -37,7 +37,7 @@
 
   const {userId, twoUserId, fontSize, headSize} = withDefaults(
     defineProps<por>(),{
-      // twoUserId: 0,
+      twoUserId: 0,
       fontSize:25,
       headSize:40,
       fontWeight: 700
