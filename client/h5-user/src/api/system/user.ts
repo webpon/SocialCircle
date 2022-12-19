@@ -152,8 +152,8 @@ interface UserInfo {
   headIcon?: string | null
   gender?: number | null
   phone?: string | null
-}
 
+}
 export function updateUserInfo(params: UserInfo) {
   return http.request<API.BasicResponseModel>({
     url: '/user',
@@ -182,6 +182,18 @@ export function changePassword(params: any, uid: any) {
       method: 'POST',
       params,
     },
+    {
+      isTransformResponse: false,
+    }
+  );
+}
+
+export function getSeal(id : number) {
+  return http.request<API.BasicResponseModel>({
+    url: '/sealNumber',
+    method: 'GET',
+    params: {id}
+  },
     {
       isTransformResponse: false,
     }

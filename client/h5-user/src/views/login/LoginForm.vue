@@ -70,7 +70,7 @@
 <script setup lang="ts">
   import { computed, onMounted, reactive, ref, unref } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
-  import { showFailToast, showLoadingToast, showSuccessToast } from 'vant';
+  import {showDialog, showFailToast, showLoadingToast, showSuccessToast } from 'vant';
   import type { FormInstance } from 'vant';
   import { Icon } from '@vicons/utils';
   import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from '@vicons/antd';
@@ -78,6 +78,7 @@
   import { ResultEnum } from '@/enums/httpEnum';
   import { PageEnum } from '@/enums/pageEnum';
   import { LoginStateEnum, useLoginState, useFormRules } from './useLogin';
+  import {getSeal} from "@/api/system/user";
 
   const { setLoginState, getLoginState } = useLoginState();
   const { getFormRules } = useFormRules();
@@ -103,17 +104,28 @@
         try {
           loading.value = true;
           showLoadingToast('登录中...');
-          const { code, msg } = await userStore.Login({
+          const { code, msg, data } = await userStore.Login({
             email: formData.email,
             password: formData.password,
           });
+          console.log(code)
           if (code == ResultEnum.SUCCESS) {
             const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
             showSuccessToast('登录成功，即将进入系统');
             if (route.name === PageEnum.BASE_LOGIN_NAME) {
               router.replace('/');
             } else router.replace(toPath);
-          } else {
+          }else if (code === ResultEnum.USER_SEAL){
+            const {code, data1} = await getSeal(data.id);
+            if (code === 200) {
+                showDialog({
+                  title:"封号",
+                  message: `${data1?.reason}.封号截至时间:${data1?.endTime}`
+                });
+            }else {
+              handleSubmit();
+            }
+          }else {
             showFailToast(msg || '登录失败');
           }
         } finally {
@@ -125,7 +137,6 @@
       });
   }
 
-  onMounted(() => {});
 </script>
 
 <style scoped lang="less"></style>
