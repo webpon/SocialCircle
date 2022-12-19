@@ -66,10 +66,10 @@ public class UserServiceImpl implements UserService {
         }
         // 判断是已经登录和是否被封号
         if (redisUtil.getBean(LOGIN+login.getId(), String.class) != null) {
-            return  Result.error("账号已被登录", login);
+            return  Result.error("账号已被登录");
         }
         if (login.getBanned() == 1){
-            return Result.error("已经被封");
+            return Result.error(ResultCode.REPORT_ERROR, login);
         }
         userDao.loginTime(login);
         HashMap<String, String> map = new HashMap<>();
@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
             return  Result.error("账号已被登录");
         }
         if (login.getBanned() == 1){
-            return Result.error("已经被封");
+            return Result.error(ResultCode.REPORT_ERROR, login);
         }
         // 设置为登录
         userDao.loginTime(login);

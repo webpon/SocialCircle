@@ -54,4 +54,7 @@ public class Result<T> {
         return new Result<C>(400,null,data);
     }
 
+    public static  <C> Result<C> error(Integer code, C data) {
+        return new Result(code,null,data);
+    }
 }
