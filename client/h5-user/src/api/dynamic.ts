@@ -41,3 +41,18 @@ export function getDynamicById(id: number) {
     },
   );
 }
+
+/**
+ * @description: 按照id删除动态
+ */
+export function deleteDynamicById(id: number) {
+  return http.request<API.BasicResponseModel>(
+    {
+      url: `${baseUri}?id=${id}`,
+      method: 'delete'
+    },
+    {
+      isTransformResponse:true
+    }
+  );
+}

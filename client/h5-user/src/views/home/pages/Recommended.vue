@@ -1,34 +1,39 @@
 <template>
   <div @scroll="handleScroll" class="overflow-y-auto">
-    <Dynamic v-for="item in dynamics" :dynamic="item.dynamic" :images="item.images"/>
+    <Dynamic v-for="item in dynamics" :dynamic="item.dynamic" :images="item.images"
+             @deleteDyn="deleteDyn"/>
   </div>
 </template>
 
 <script setup lang="ts">
   import {ref, watchEffect} from "vue";
   import DynamicVM from "@/type/DynamicVM";
-  import { getDynamicByRecommended} from "@/api/dynamic";
+  import {getDynamicByRecommended} from "@/api/dynamic";
   import Dynamic from "@/components/Dynamic.vue";
 
   const dynamics = ref<Array<DynamicVM>>([])
   const p = ref(1);
-  let  gotoGet = true;
+  let gotoGet = true;
 
-  function getDy(p : number) {
-    getDynamicByRecommended(p).then((data)=>{
+  function getDy(p: number) {
+    getDynamicByRecommended(p).then((data) => {
       dynamics.value.push(...data)
       gotoGet = data.length === 10
     })
   }
 
-  watchEffect(()=>{
-     getDy(p.value)
+  const deleteDyn = (id) => {
+    dynamics.value = dynamics.value.filter((item) => item.dynamic.id !== id);
+  }
+
+  watchEffect(() => {
+    getDy(p.value)
   });
-  const handleScroll= (e) => {
+  const handleScroll = (e) => {
     const {scrollTop, clientHeight, scrollHeight} = e.target
-    if (scrollTop + clientHeight >= scrollHeight - 100 && gotoGet){
+    if (scrollTop + clientHeight >= scrollHeight - 100 && gotoGet) {
       gotoGet = false
-      p.value ++
+      p.value++
     }
   }
 
@@ -36,7 +41,7 @@
 
 <style scoped lang="less">
 
-  .overflow-y-auto{
+  .overflow-y-auto {
     overflow: auto;
     margin-bottom: 30px;
   }

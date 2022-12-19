@@ -1,6 +1,9 @@
 <template>
   <div>
-    <UserHead :userId="dynamic.userId" :fontSiez="30"/>
+    <div class="top">
+      <UserHead :userId="dynamic.userId" :fontSiez="30" :time="dynamic.publishTime"/>
+      <van-icon name="cross" class="cross" v-if="delShow" @click="deleteDyn"/>
+    </div>
     <p @click="pushWithQuery">
       {{dynamic.content}}
     </p>
@@ -58,9 +61,13 @@
   import ImageType from "@/type/Image.type";
   import DynamicType from "@/type/Dynamic.type";
   import UserHead from "@/views/home/components/UserHead.vue"
-  import {ref} from "vue";
+  import {getCurrentInstance, ref} from "vue";
   import {likeByDynamic, whetherLikeByDynamic} from "@/api/like";
   import {useRouter} from "vue-router";
+  import {useUserStore} from "@/store/modules/user";
+  import {deleteDynamicById} from "@/api/dynamic";
+  import {showConfirmDialog} from "vant";
+
   const router = useRouter()
 
 
@@ -111,8 +118,8 @@
     likeByDynamic({dynamicId: dynamic.id}).then(() => {
       if (like.value) {
         dynamic.likeNum--
-      }else {
-        dynamic.likeNum ++
+      } else {
+        dynamic.likeNum++
       }
       like.value = !like.value
     })
@@ -122,13 +129,32 @@
   function pushWithQuery() {
     router.push({
       name: 'detailed',
-      params:{id:dynamic.id}
+      params: {id: dynamic.id}
     })
+  }
+
+  const userStore = useUserStore();
+  const {id} = userStore.getUserInfo;
+  const delShow = ref(id === dynamic.id);
+
+  const {proxy} = getCurrentInstance()
+
+  const deleteDyn = () => {
+    showConfirmDialog({
+      message:
+        '是否删除当前动态',
+    })
+      .then(async () => {
+        deleteDynamicById(dynamic.id)
+          .then(() => proxy.$emit('deleteDyn', dynamic.id))
+          .catch(() => {})
+      })
+      .catch(() => {});
   }
 </script>
 
 <style scoped lang="less">
-  *{
+  * {
     font-size: 27px;
   }
 
@@ -137,6 +163,19 @@
     padding: 10px;
     border-radius: 10px;
     background-color: #fff;
+
+    .top {
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: space-between;
+
+      .cross {
+        position: relative;
+        top: 10px;
+        right: 10px;
+      }
+    }
 
     p, nav {
       margin: 0 20px !important;
