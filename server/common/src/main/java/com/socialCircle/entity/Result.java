@@ -40,6 +40,10 @@ public class Result<T> {
     public static  <C> Result<C> error(String msg){
         return new Result<C>(400,msg,null);
     }
+
+    public static  <C> Result<C> error(String msg,C data){
+        return new Result<C>(400,msg,data);
+    }
     public static  <C> Result<C> error(){
         return new Result<C>(400,null,null);
     }

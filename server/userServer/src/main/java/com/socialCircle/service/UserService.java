@@ -34,4 +34,6 @@ public interface UserService {
      * 修改密码
      */
     Result updatePassword(SignIn signIn, User user);
+
+    void updateBanned(Integer id);
 }

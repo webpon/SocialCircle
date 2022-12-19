@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
         }
         // 判断是已经登录和是否被封号
         if (redisUtil.getBean(LOGIN+login.getId(), String.class) != null) {
-            return  Result.error("账号已被登录");
+            return  Result.error("账号已被登录", login);
         }
         if (login.getBanned() == 1){
             return Result.error("已经被封");
@@ -185,6 +185,14 @@ public class UserServiceImpl implements UserService {
             }
         }
         return Result.error("修改失败");
+    }
+
+    @Override
+    public void updateBanned(Integer id) {
+        User user = new User();
+        user.setId(id);
+        user.setBanned(2);
+        userDao.updateById(user);
     }
 
 

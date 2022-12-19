@@ -13,10 +13,10 @@ public class ReportVM implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer id;
 
+    private Integer userId;
     /**
      * 被封号人
      */
-    private Integer userId;
     private Integer reportUserId;
     private String content;
     private List<Image> images;

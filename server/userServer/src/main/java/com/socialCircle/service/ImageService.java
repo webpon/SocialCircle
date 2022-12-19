@@ -10,4 +10,6 @@ public interface ImageService {
     void saveListByDynamicId(List<Image> images, Integer id);
 
     void deleteByDynamicId(Integer id);
+
+    void saveList(List<Image> images);
 }

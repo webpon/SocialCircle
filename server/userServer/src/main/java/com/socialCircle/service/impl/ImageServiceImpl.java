@@ -31,4 +31,9 @@ public class ImageServiceImpl implements ImageService {
     public void deleteByDynamicId(Integer id) {
         imageDao.delete(new QueryWrapper<Image>().eq("dynamic_id", id));
     }
+
+    @Override
+    public void saveList(List<Image> images) {
+        images.forEach(i -> imageDao.insert(i));
+    }
 }
