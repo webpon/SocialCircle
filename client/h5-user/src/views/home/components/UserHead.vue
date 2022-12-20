@@ -7,20 +7,21 @@
       :src="info.headIcon"
     />
     <div>
-      <div :style="{fontSize:`${fontSize}!important`, fontWeight}">
-        {{info.petName}}
+      <div class="name">
+        <div :style="{fontSize:`${fontSize}!important`, fontWeight}">
+          {{info.petName}}
+        </div>
+        <div v-if="twoUserId !== 0">
+          <van-icon name="play"/>
+          <span
+            :style="{fontSize, fontWeight}">
+          {{twoInfo.petName}}
+          </span>
+        </div>
       </div>
       <div class="time">
         {{timeStr}}
       </div>
-    </div>
-
-    <div v-if="twoUserId !== 0">
-      <van-icon name="play"/>
-      <span
-        :style="{fontSize, fontWeight}">
-        {{twoInfo.petName}}
-      </span>
     </div>
     <van-tag class="tag" v-if="userId === 1" type="primary">官方</van-tag>
   </div>
@@ -106,13 +107,16 @@
     div {
       margin: 0 5px;
 
+      .name{
+        display: flex;
+      }
       .time {
         font-size: 20px;
       }
     }
 
     .tag {
-     position: relative;
+      position: relative;
       top: -15px;
 
       > span {
