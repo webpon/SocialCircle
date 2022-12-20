@@ -27,7 +27,7 @@ export function uploader(host: string, form: FormData) {
 }
 
 export function uploaderFile(file: any) {
-  return new Promise(async (res, rej) => {
+  return new Promise<string>(async (res, rej) => {
     const data = await signature();
     const key = data.dir + ('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
       .replace(/[xy]/g, c => {

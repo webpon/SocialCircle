@@ -1,5 +1,6 @@
 import { http } from '@/utils/http/axios';
 import DynamicVM from "@/type/DynamicVM";
+import DynamicType from "@/type/Dynamic.type";
 
 const baseUri = "/dynamic"
 
@@ -50,6 +51,22 @@ export function deleteDynamicById(id: number) {
     {
       url: `${baseUri}?id=${id}`,
       method: 'delete'
+    },
+    {
+      isTransformResponse:true
+    }
+  );
+}
+
+/**
+ * @description: 发布动态
+ */
+export function addDynamic(data: DynamicVM) {
+  return http.request<API.BasicResponseModel>(
+    {
+      url: `${baseUri}`,
+      method: 'post',
+      data
     },
     {
       isTransformResponse:true

@@ -135,7 +135,7 @@
 
   const userStore = useUserStore();
   const {id} = userStore.getUserInfo;
-  const delShow = ref(id === dynamic.id);
+  const delShow = ref(id === dynamic.userId);
 
   const {proxy} = getCurrentInstance()
 
