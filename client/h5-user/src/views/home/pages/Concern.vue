@@ -10,10 +10,11 @@
   import DynamicVM from "@/type/DynamicVM";
   import {getDynamicByConcern} from "@/api/dynamic";
   import Dynamic from "@/components/Dynamic.vue";
+  import useDyanmic from "@/views/home/pages/useDyanmic";
 
   const dynamics = ref<Array<DynamicVM>>([])
   const p = ref(1);
-  let gotoGet = true;
+  let gotoGet = ref(true);
 
 
   function getDy(p) {
@@ -22,20 +23,7 @@
     })
   }
 
-  const deleteDyn = (id) => {
-    dynamics.value = dynamics.value.filter((item) => item.dynamic.id !== id);
-  }
-
-  watchEffect(() => {
-    getDy(p.value)
-  });
-  const handleScroll = (e) => {
-    const {scrollTop, clientHeight, scrollHeight} = e.target
-    if (scrollTop + clientHeight >= scrollHeight - 100 && gotoGet) {
-      gotoGet = false
-      p.value++
-    }
-  }
+  const {handleScroll, deleteDyn} = useDyanmic(dynamics, p, getDy);
 
 </script>
 

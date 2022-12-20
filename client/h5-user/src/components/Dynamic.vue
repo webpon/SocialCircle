@@ -66,7 +66,7 @@
   import {useRouter} from "vue-router";
   import {useUserStore} from "@/store/modules/user";
   import {deleteDynamicById} from "@/api/dynamic";
-  import {showConfirmDialog} from "vant";
+  import {showConfirmDialog, showFailToast} from "vant";
 
   const router = useRouter()
 
@@ -146,7 +146,10 @@
     })
       .then(async () => {
         deleteDynamicById(dynamic.id)
-          .then(() => proxy.$emit('deleteDyn', dynamic.id))
+          .then(() => {
+            showFailToast("删除成功，可能需要一会才会消失");
+            proxy.$emit('deleteDyn', dynamic.id)
+          })
           .catch(() => {})
       })
       .catch(() => {});

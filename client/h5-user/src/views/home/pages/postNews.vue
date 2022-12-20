@@ -43,6 +43,7 @@
   });
 
   const files = ref([])
+  const router = useRouter();
 
   const onSubmit = () => {
     const images:Array<ImageType> = [];
@@ -68,8 +69,8 @@
           content: formData.content
         }
       }).then(({code, msg})=>{
+        console.log(code)
         if (code === 200) {
-          const router = useRouter();
           router.go(-1)
         }else {
           showFailToast(msg || '发布失败');

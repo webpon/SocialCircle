@@ -69,7 +69,7 @@ export function addDynamic(data: DynamicVM) {
       data
     },
     {
-      isTransformResponse:true
+      isTransformResponse:false
     }
   );
 }

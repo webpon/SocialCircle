@@ -10,32 +10,21 @@
   import DynamicVM from "@/type/DynamicVM";
   import {getDynamicByRecommended} from "@/api/dynamic";
   import Dynamic from "@/components/Dynamic.vue";
+  import useDyanmic from "@/views/home/pages/useDyanmic";
 
   const dynamics = ref<Array<DynamicVM>>([])
   const p = ref(1);
-  let gotoGet = true;
+  let gotoGet = ref(true);
 
   function getDy(p: number) {
     getDynamicByRecommended(p).then((data) => {
       dynamics.value.push(...data)
-      gotoGet = data.length === 10
+      gotoGet.value = data.length === 10
     })
   }
 
-  const deleteDyn = (id) => {
-    dynamics.value = dynamics.value.filter((item) => item.dynamic.id !== id);
-  }
+  const {handleScroll, deleteDyn} = useDyanmic(dynamics, p, getDy,gotoGet);
 
-  watchEffect(() => {
-    getDy(p.value)
-  });
-  const handleScroll = (e) => {
-    const {scrollTop, clientHeight, scrollHeight} = e.target
-    if (scrollTop + clientHeight >= scrollHeight - 100 && gotoGet) {
-      gotoGet = false
-      p.value++
-    }
-  }
 
 </script>
 
