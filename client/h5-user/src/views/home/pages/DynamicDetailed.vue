@@ -185,7 +185,7 @@
       commentData.parentId = 0;
       commentData.content = '';
       placeholder.value = '说说你的看法吧！'
-      console.log(commentFun)
+      input.value.blur();
       if (commentFun != null) {
         commentFun(data2);
         commentFun = null
