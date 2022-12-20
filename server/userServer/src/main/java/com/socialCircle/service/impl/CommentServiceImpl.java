@@ -112,7 +112,7 @@ public class CommentServiceImpl implements CommentService {
             QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("dynamic_id", dynamicId);
             queryWrapper.eq("parent_id", parentId);
-            queryWrapper.orderByDesc("like_num");
+            queryWrapper.orderByDesc("like_num", "id");
             List<Comment> data;
             if (p != null) {
                 // 不是空就分页查询

@@ -80,7 +80,7 @@ public class DynamicServiceImpl implements DynamicService {
             if (classify != null) {
                 queryWrapper.eq("classify_id", classify);
             }
-            List<Dynamic> data = dynamicDao.selectList(queryWrapper.last("limit "+(p - 1) * 10+","+10));
+            List<Dynamic> data = dynamicDao.selectList(queryWrapper.orderByDesc("id").last("limit "+(p - 1) * 10+","+10));
             return getDynamicVMS(data);
         };
         List<Dynamic> beans = redisUtil.getBeans(query, redisCommand, Dynamic.class);
@@ -163,7 +163,7 @@ public class DynamicServiceImpl implements DynamicService {
             QueryWrapper<Dynamic> queryWrapper = new QueryWrapper<>();
             ArrayList<Integer> list = getConcernList(id);
             queryWrapper.in("user_id", list);
-            List<Dynamic> data = dynamicDao.selectList(queryWrapper.last("limit "+(p - 1) * 10+","+10));
+            List<Dynamic> data = dynamicDao.selectList(queryWrapper.orderByDesc("id").last("limit "+(p - 1) * 10+","+10));
             return getDynamicVMS(data);
         };
         List<Dynamic> beans = redisUtil.getBeans(query, redisCommand, Dynamic.class);
@@ -182,7 +182,7 @@ public class DynamicServiceImpl implements DynamicService {
         RedisCommand<List<DynamicVM>> redisCommand = (k) -> {
             QueryWrapper<Dynamic> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("topic_id", topicId);
-            List<Dynamic> data = dynamicDao.selectList(queryWrapper.last("limit "+(p - 1) * 10+","+10));
+            List<Dynamic> data = dynamicDao.selectList(queryWrapper.orderByDesc("id").last("limit "+(p - 1) * 10+","+10));
             return getDynamicVMS(data);
         };
         List<Dynamic> beans = redisUtil.getBeans(query, redisCommand, Dynamic.class);

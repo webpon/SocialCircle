@@ -46,7 +46,8 @@ public class TopicServiceImpl implements TopicService {
                 new RedisQuery<>(RedisKey.TOPIC_QUERY_KEY, p.toString(), null, DateField.MINUTE, 30);
         RedisCommand<List<Topic>> redisCommand = (key) -> {
             QueryWrapper<Topic> topicQueryWrapper = new QueryWrapper<>();
-            return topicDao.selectList(topicQueryWrapper.last("limit " + (p - 1) * 10 + "," + 10));
+            return topicDao.selectList(topicQueryWrapper.orderByDesc("concern_num")
+                    .last("limit " + (p - 1) * 10 + "," + 10));
         };
         List<Topic> beans = redisUtil.getBeans(listRedisQuery, redisCommand, Topic.class);
         if (beans != null) {
