@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-if="top != null">
+      <h4 :class="'No'+top">No.{{top}}</h4>
+    </div>
     <div class="top">
       <UserHead :userId="dynamic.userId" :fontSiez="30" :time="dynamic.publishTime"/>
       <van-icon name="cross" class="cross" v-if="delShow" @click="deleteDyn"/>
@@ -29,22 +32,16 @@
     <div class="flex click">
       <div @click="showShare = true">
         <van-icon name="share-o" size="18"/>
-        <span>
-          分享 ({{dynamic.shareNum}})
-        </span>
+        <span>{{dynamic.shareNum}}</span>
       </div>
       <div @click="onLike">
         <van-icon name="like-o" size="18" v-if="!like"/>
         <van-icon name="like" size="18" v-else color="#ee0a24"/>
-        <span>
-          点赞 ({{dynamic.likeNum}})
-        </span>
+        <span>{{dynamic.likeNum}}</span>
       </div>
       <div @click="pushWithQuery">
         <van-icon name="comment-o" size="18"/>
-        <span>
-          评论 ({{dynamic.commentNum}})
-        </span>
+        <span>{{dynamic.commentNum}}</span>
       </div>
       <van-share-sheet
         v-model:show="showShare"
@@ -74,9 +71,12 @@
   interface por {
     images?: Array<ImageType>;
     dynamic: DynamicType;
+    top: number | null;
   }
 
-  const {dynamic, images} = defineProps<por>();
+  const {dynamic, images, top} = withDefaults(defineProps<por>(), {
+    top: null
+  });
 
   const images1 = [];
   images?.forEach((i) => images1.push(i.url))
@@ -150,9 +150,11 @@
             showFailToast("删除成功，可能需要一会才会消失");
             proxy.$emit('deleteDyn', dynamic.id)
           })
-          .catch(() => {})
+          .catch(() => {
+          })
       })
-      .catch(() => {});
+      .catch(() => {
+      });
   }
 </script>
 
@@ -161,11 +163,30 @@
     font-size: 27px;
   }
 
+  .No1 {
+    color: #ff1414;
+  }
+
+  .No2 {
+    color: #ff3714;
+  }
+
+  .No3 {
+    color: #ff6614;
+  }
+
+
   div {
     margin: 20px 20px;
     padding: 10px;
     border-radius: 10px;
     background-color: #fff;
+
+    h4 {
+      font-size: 30px;
+      margin: -20px 0;
+      color: #888888;
+    }
 
     .top {
       padding: 0;

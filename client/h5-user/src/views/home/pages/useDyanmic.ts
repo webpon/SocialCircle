@@ -6,9 +6,11 @@ export default function (dynamics, p, getDy, gotoGet) {
     dynamics.value = dynamics.value.filter((item) => item.dynamic.id !== id);
   }
 
-  watchEffect(() => {
-    getDy(p.value)
-  });
+  if (p != null) {
+    watchEffect(() => {
+      getDy(p.value)
+    });
+  }
   const handleScroll = (e) => {
     const {scrollTop, clientHeight, scrollHeight} = e.target
     if (scrollTop + clientHeight >= scrollHeight - 100 && gotoGet.value) {

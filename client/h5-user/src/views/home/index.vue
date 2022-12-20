@@ -14,7 +14,7 @@
           <Recommended />
         </van-tab>
         <van-tab title="热榜" :title-style="{ fontSize: '17px', margin: '0 5px' }">
-          热榜
+          <HotTop/>
         </van-tab>
         <!-- <van-tab v-for="item in classifies" :title="item.title">
             <Classify :id="item.id"/>
@@ -35,6 +35,7 @@ import Concern from "./pages/Concern.vue";
 import ClassifyType from "@/type/Classify.type";
 import { getClassify } from "@/api/classify";
 import Classify from "./pages/Classify.vue";
+import HotTop from "./pages/HotTop.vue";
 import { useMessageStore } from "@/store/modules/message";
 import { useRouter } from 'vue-router';
 

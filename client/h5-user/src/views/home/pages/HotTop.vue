@@ -1,14 +1,16 @@
 <template>
-  <div @scroll="handleScroll" class="overflow-y-auto">
-    <Dynamic v-for="item in dynamics" :dynamic="item.dynamic" :images="item.images"
-             @deleteDyn="deleteDyn"/>
+  <div class="overflow-y-auto">
+    <div v-for="(item, i) in dynamics">
+      <Dynamic :dynamic="item.dynamic" :images="item.images"
+               @deleteDyn="deleteDyn" :top="i+1"/>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
   import {ref, watchEffect} from "vue";
   import DynamicVM from "@/type/DynamicVM";
-  import {getDynamicByConcern} from "@/api/dynamic";
+  import {getDynamicByConcern, getDynamicByTop} from "@/api/dynamic";
   import Dynamic from "@/components/Dynamic.vue";
   import useDyanmic from "@/views/home/pages/useDyanmic";
 
@@ -17,13 +19,14 @@
   let gotoGet = ref(true);
 
 
-  function getDy(p) {
-    getDynamicByConcern(p).then((data)=>{
+  function getDy() {
+    getDynamicByTop().then((data)=>{
       dynamics.value.push(...data)
     })
   }
+  getDy();
 
-  const {handleScroll, deleteDyn} = useDyanmic(dynamics, p, getDy,gotoGet);
+  const {handleScroll, deleteDyn} = useDyanmic(dynamics, null, getDy,gotoGet);
 
 </script>
 
