@@ -46,4 +46,5 @@ public class UserInfo implements Serializable {
 
     private Integer userId;
 
+    private String birthday;
 }

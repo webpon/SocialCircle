@@ -85,4 +85,5 @@ public class UserInfoVM {
      * 备注
      */
     private String remarks;
+    private String birthday;
 }

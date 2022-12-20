@@ -38,12 +38,6 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (info == null) {
             return Result.error("没有当前用户");
         }
-        if (fields == null) {
-            info.setWorkExperiences(workExperienceService.getWorkExperienceByUserId(userId));
-            info.setHobbies(userHobbyService.getUserHobbiesByUserId(userId));
-            return Result.ok(info);
-        }
-
         fields.forEach(s -> {
             if ("work".equals(s)) {
                 info.setWorkExperiences(workExperienceService.getWorkExperienceByUserId(userId));

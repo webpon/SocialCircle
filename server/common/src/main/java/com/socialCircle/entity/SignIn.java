@@ -51,4 +51,5 @@ public class SignIn {
     private String phone;
 
     private String emailCode;
+    private String birthday;
 }
