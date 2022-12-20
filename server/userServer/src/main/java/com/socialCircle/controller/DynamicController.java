@@ -62,4 +62,8 @@ public class DynamicController {
     }
 
     // 热门top15
+    @GetMapping("top")
+    public Result getTop(){
+        return dynamicService.getTop();
+    }
 }

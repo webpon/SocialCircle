@@ -236,6 +236,22 @@ public class DynamicServiceImpl implements DynamicService {
     }
 
     @Override
+    public Result getTop() {
+        // redis查询对象
+        RedisQuery<List<DynamicVM>> query =
+                new RedisQuery<>(DYNAMIC_QUERY_TOP_KEY,"", null, DateField.MINUTE, 20);
+        RedisCommand<List<DynamicVM>> redisCommand = (k) -> {
+            List<Dynamic> data = dynamicDao.getTop();
+            return getDynamicVMS(data);
+        };
+        List<Dynamic> beans = redisUtil.getBeans(query, redisCommand, Dynamic.class);
+        if (beans == null) {
+            return Result.error("没有数据");
+        }
+        return Result.ok(beans);
+    }
+
+    @Override
     public void addLikeNum(Integer dynamicId) {
         UpdateWrapper<Dynamic> wrapper = new UpdateWrapper();
         wrapper.eq("id", dynamicId);

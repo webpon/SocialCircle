@@ -27,4 +27,6 @@ public interface DynamicService {
     void subtractLikeNum(Integer dynamicId);
 
     void updateByTopicIds(Integer id);
+
+    Result getTop();
 }

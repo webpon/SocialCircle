@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.socialCircle.dao.DynamicDao">
+
+    <select id="getTop" resultType="com.socialCircle.entity.Dynamic">
+        select * from dynamic, (
+            select avg(like_num+comment_num+share_num) as num,id
+            from dynamic
+            group by id
+            order by num  desc ,id desc limit 15
+        ) d
+        where d.id = dynamic.id
+    </select>
+</mapper>
