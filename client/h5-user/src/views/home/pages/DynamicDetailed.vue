@@ -47,7 +47,7 @@
       </div>
     </div>
     <van-divider :style="{ color: '#898989', borderColor: '#898989' }"/>
-    <div  @scroll="handleScroll" class="comment">
+    <div @scroll="handleScroll" class="comment">
       <template v-for="item in comments">
         <Comment :comment="item" @updatePlaceholder="updatePlaceholder"/>
       </template>
@@ -57,7 +57,9 @@
     <div class="commentInput">
       <van-form ref="formRef" @submit="handleSubmit">
         <van-field v-model="commentData.content" center clearable class="input"
+                   @focus="foc"
                    :placeholder="placeholder" ref="input"/>
+        <van-icon name="smile-o" size="30" @click="showEmo"/>
         <van-button
           type="primary"
           native-type="submit"
@@ -65,13 +67,13 @@
           评论
         </van-button>
       </van-form>
+      <Emoji @emojiClick="emojiClick" v-show="showEmoji"/>
     </div>
 
   </div>
 </template>
 
 <script setup lang="ts">
-  import UserHead from "@/views/home/components/UserHead.vue"
   import {
     getCurrentInstance,
     onBeforeMount,
@@ -92,6 +94,8 @@
   import Comment from "@/views/home/components/Comment.vue";
   import cellGroup
     from "../../../../../mini-program-user-client/uni_modules/uview-ui/libs/config/props/cellGroup";
+  import Emoji from "@/components/Emoji.vue";
+  import UserHead from "@/views/home/components/UserHead.vue"
 
   const route = useRoute()
 
@@ -187,26 +191,25 @@
         commentFun = null
         return;
       }
-      console.log(data2)
       comments.value.unshift(data2);
     })
   }
 
   const p = ref(1);
   const comments = ref<Array<CommentType>>([]);
-  watchEffect(()=>{
+  watchEffect(() => {
     getComment(id, p.value).then((data) => {
       comments.value.push(...data);
-      if (!data){
+      if (!data) {
         gotoGet.value = false;
       }
     })
   });
-  const handleScroll= (e) => {
+  const handleScroll = (e) => {
     const {scrollTop, clientHeight, scrollHeight} = e.target
-    if (scrollTop + clientHeight >= scrollHeight - 100 && gotoGet.value){
+    if (scrollTop + clientHeight >= scrollHeight - 100 && gotoGet.value) {
       gotoGet.value = false
-      p.value ++
+      p.value++
     }
   }
 
@@ -229,14 +232,14 @@
     proxy.mittBus.off('deleteComment')
   })
 
-  const deleteComment = (id)=>{
-    const data = filter(id,  comments.value);
+  const deleteComment = (id) => {
+    const data = filter(id, comments.value);
     comments.value = data;
   };
 
-  const filter = (id, data)=>{
-    return data.filter((item)=>{
-      if (item.id === id){
+  const filter = (id, data) => {
+    return data.filter((item) => {
+      if (item.id === id) {
         return false;
       }
       item.childList = filter(id, item.childList);
@@ -244,10 +247,19 @@
     })
   }
 
+  const showEmoji = ref(false);
+  const emojiClick = (text) => {
+    commentData.content += text;
+  }
+
+  const showEmo = () => showEmoji.value = !showEmoji.value;
+
+  const foc = () => showEmoji.value = false;
+
 </script>
 
 <style scoped lang="less">
-  *{
+  * {
     font-size: 27px;
   }
 
@@ -255,6 +267,7 @@
     margin: 20px 0;
     border-radius: 10px;
     background-color: #fff;
+
     p, nav {
       margin: 0 20px !important;
     }
