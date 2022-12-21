@@ -38,13 +38,15 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (info == null) {
             return Result.error("没有当前用户");
         }
-        fields.forEach(s -> {
-            if ("work".equals(s)) {
-                info.setWorkExperiences(workExperienceService.getWorkExperienceByUserId(userId));
-            } else if ("hobby".equals(s)) {
-                info.setHobbies(userHobbyService.getUserHobbiesByUserId(userId));
-            }
-        });
+        if (fields != null) {
+            fields.forEach(s -> {
+                if ("work".equals(s)) {
+                    info.setWorkExperiences(workExperienceService.getWorkExperienceByUserId(userId));
+                } else if ("hobby".equals(s)) {
+                    info.setHobbies(userHobbyService.getUserHobbiesByUserId(userId));
+                }
+            });
+        }
         if (!userId.equals(user.getId())) {
             FansConcern fansConcern = fansConcernServer.meConcernHeByUserId(user.getId(), userId);
             info.setConcern(fansConcern != null);
