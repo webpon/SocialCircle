@@ -2,7 +2,9 @@ package com.socialCircle.service.impl;
 
 import cn.hutool.core.date.DateField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.socialCircle.common.RedisUtil;
 import com.socialCircle.constant.RedisCommand;
+import com.socialCircle.constant.RedisKey;
 import com.socialCircle.constant.RedisQuery;
 import com.socialCircle.dao.UserInfoDao;
 import com.socialCircle.entity.*;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
@@ -26,6 +29,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     private FansConcernServer fansConcernServer;
     @Resource
     private FriendServer friendServer;
+    @Resource
+    private RedisUtil redisUtil;
 
     @Override
     public void save(SignIn user) {
@@ -34,18 +39,22 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public Result userInfo(Integer userId, List<String> fields, User user) {
-        UserInfoVM info = userInfoDao.getInfo(userId);
+        UserInfoVM info = redisUtil.getBean(RedisKey.USER_INFO + userId, UserInfoVM.class);
+        if (info == null) {
+            info = userInfoDao.getInfo(userId);
+            redisUtil.save(RedisKey.USER_INFO + userId, info, 20, TimeUnit.MINUTES);
+        }
         if (info == null) {
             return Result.error("没有当前用户");
         }
         if (fields != null) {
-            fields.forEach(s -> {
+            for (String s : fields) {
                 if ("work".equals(s)) {
                     info.setWorkExperiences(workExperienceService.getWorkExperienceByUserId(userId));
                 } else if ("hobby".equals(s)) {
                     info.setHobbies(userHobbyService.getUserHobbiesByUserId(userId));
                 }
-            });
+            }
         }
         if (!userId.equals(user.getId())) {
             FansConcern fansConcern = fansConcernServer.meConcernHeByUserId(user.getId(), userId);
@@ -73,6 +82,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     public Result updateUserInfo(SignIn signIn, User user) {
         signIn.setId(user.getId());
         if (userInfoDao.updateUserInfo(signIn)) {
+            redisUtil.delete(RedisKey.USER_INFO + user.getId());
             return Result.ok("修改成功", signIn);
         }
         return Result.error("修改失败");
