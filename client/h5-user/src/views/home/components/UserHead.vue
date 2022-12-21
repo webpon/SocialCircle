@@ -1,5 +1,5 @@
 <template>
-  <div class="head">
+  <div class="head" @click="goto">
     <van-image
       round
       :width="headSize"
@@ -34,6 +34,7 @@
   import {ref} from "vue";
   import UserInfo from "@/type/UserInfo.type";
   import {getServerTime} from "@/api/other";
+  import {useRouter} from "vue-router";
 
   interface por {
     userId: number;
@@ -95,6 +96,14 @@
     const minutes = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
     timeStr.value += minutes
   })
+  const router = useRouter()
+
+  const goto = ()=>{
+    router.push({
+      name: 'userInfo',
+      params: {id: userId}
+    })
+  }
 
 </script>
 

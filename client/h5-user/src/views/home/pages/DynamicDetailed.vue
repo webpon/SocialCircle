@@ -28,18 +28,18 @@
         <div @click="showShare = true">
           <van-icon name="share-o" size="18"/>
           <span>
-          分享 ({{data.dynamic.shareNum}})
-        </span>
+            {{data.dynamic.shareNum}}
+          </span>
         </div>
         <div @click="onLike">
           <van-icon name="like-o" size="18" v-if="!like"/>
           <van-icon name="like" size="18" v-else color="#ee0a24"/>
           <span>
-          点赞 ({{data.dynamic.likeNum}})
-        </span>
+            {{data.dynamic.likeNum}}
+          </span>
         </div>
         <van-share-sheet
-          :show="showShare"
+          v-model:show="showShare"
           title="立即分享给好友"
           :options="options"
           @select="onSelect"
@@ -47,13 +47,15 @@
       </div>
     </div>
     <van-divider :style="{ color: '#898989', borderColor: '#898989' }"/>
-    <div @scroll="handleScroll" class="comment">
-      <template v-for="item in comments">
-        <Comment :comment="item" @updatePlaceholder="updatePlaceholder"/>
-      </template>
-      <div class="t" v-if="gotoGet">加载中...</div>
-      <div class="t" v-else>到底啦</div>
-    </div>
+    <van-list
+      v-model:loading="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="onLoad"
+      class="comment"
+    >
+      <Comment v-for="item in comments" :comment="item" @updatePlaceholder="updatePlaceholder"/>
+    </van-list>
     <div class="commentInput">
       <van-form ref="formRef" @submit="handleSubmit">
         <van-field v-model="commentData.content" center clearable class="input"
@@ -107,6 +109,8 @@
   const {id} = route.params
   const gotoGet = ref(true);
   const input = ref() as Ref;
+  const loading = ref(false);
+  const finished = ref(false);
 
   const images1 = [];
   const width = ref(110)
@@ -195,15 +199,24 @@
     })
   }
 
-  const p = ref(1);
+  const p = ref(0);
   const comments = ref<Array<CommentType>>([]);
-  watchEffect(() => {
+
+  const onLoad = () => {
+    loading.value = true;
+    console.log(1)
+    p.value++;
     getComment(id, p.value).then((data) => {
-      comments.value.push(...data);
-      if (!data) {
-        gotoGet.value = false;
+      if (data) {
+        comments.value.push(...data)
+        finished.value = data.length !== 10;
+        loading.value = false;
+        return
       }
+
     })
+  }
+  watchEffect(() => {
   });
   const handleScroll = (e) => {
     const {scrollTop, clientHeight, scrollHeight} = e.target

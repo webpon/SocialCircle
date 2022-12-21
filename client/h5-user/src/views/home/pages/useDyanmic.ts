@@ -1,22 +1,27 @@
 import {watchEffect} from "vue";
+import {showToast} from "vant";
 
-export default function (dynamics, p, getDy, gotoGet) {
+export default function (dynamics, p, getDy, loadingUp) {
 
   const deleteDyn = (id) => {
     dynamics.value = dynamics.value.filter((item) => item.dynamic.id !== id);
   }
 
-  if (p != null) {
-    watchEffect(() => {
-      getDy(p.value)
-    });
-  }
-  const handleScroll = (e) => {
-    const {scrollTop, clientHeight, scrollHeight} = e.target
-    if (scrollTop + clientHeight >= scrollHeight - 100 && gotoGet.value) {
-      gotoGet.value = false
-      p.value++
+  const onLoad = () => {
+    if (p != null) {
+      p.value++;
+      getDy(p.value);
+    }else {
+      getDy(1)
     }
-  }
-  return {handleScroll, deleteDyn}
+  };
+  const onRefresh = () => {
+    showToast('刷新成功');
+    loadingUp.value = false;
+    p.value = 0;
+    dynamics.value = [];
+    onLoad();
+  };
+
+  return { deleteDyn, onLoad, onRefresh }
 }

@@ -1,10 +1,12 @@
 <template>
-  <div class="overflow-y-auto">
-    <div v-for="(item, i) in dynamics">
-      <Dynamic :dynamic="item.dynamic" :images="item.images"
-               @deleteDyn="deleteDyn" :top="i+1"/>
+  <van-pull-refresh v-model="loadingUp" @refresh="onRefresh">
+    <div>
+      <div v-for="(item, i) in dynamics">
+        <Dynamic :dynamic="item.dynamic" :images="item.images"
+                 @deleteDyn="deleteDyn" :top="i+1"/>
+      </div>
     </div>
-  </div>
+  </van-pull-refresh>
 </template>
 
 <script setup lang="ts">
@@ -16,7 +18,7 @@
 
   const dynamics = ref<Array<DynamicVM>>([])
   const p = ref(1);
-  let gotoGet = ref(true);
+  const loadingUp = ref(false);
 
 
   function getDy() {
@@ -25,8 +27,7 @@
     })
   }
   getDy();
-
-  const {handleScroll, deleteDyn} = useDyanmic(dynamics, null, getDy,gotoGet);
+  const {deleteDyn,onRefresh} = useDyanmic(dynamics, p, getDy,loadingUp);
 
 </script>
 
