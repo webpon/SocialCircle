@@ -18,6 +18,8 @@ import com.socialCircle.service.TopicService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -81,15 +83,18 @@ public class TopicConcernServerImpl implements TopicConcernServer {
 
     @Override
     public Result getConcernTopic(Integer p, User user) {
-        RedisQuery<List<TopicConcern>> listRedisQuery =
+        RedisQuery<List<Topic>> listRedisQuery =
                 new RedisQuery< >(TOPIC_CONCERN, user.getId()+":"+p, null, DateField.MINUTE, 90);
-        RedisCommand<List<TopicConcern>> command = (key) -> {
+        RedisCommand<List<Topic>> command = (key) -> {
             QueryWrapper<TopicConcern> wrapper = new QueryWrapper<TopicConcern>()
                     .eq("user_id", user.getId())
                     .last("limit " + (p - 1) * 10 + "," + 10);
-            return dao.selectList(wrapper);
+            List<TopicConcern> topicConcerns = dao.selectList(wrapper);
+            ArrayList<Topic> list = new ArrayList<>();
+            topicConcerns.forEach(i -> list.add(topicService.queryById(i.getTopicId())));
+            return list;
         };
-        List<TopicConcern> beans = redisUtil.getBeans(listRedisQuery, command, TopicConcern.class);
+        List<Topic> beans = redisUtil.getBeans(listRedisQuery, command, Topic.class);
         if (beans == null) {
             return Result.error("没有数据");
         }
