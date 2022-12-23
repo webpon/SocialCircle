@@ -43,6 +43,7 @@ public class TopicConcernServerImpl implements TopicConcernServer {
     @Override
     public Result concernTopic(TopicConcern topicConcern, User user) {
         topicConcern.setUserId(user.getId());
+        redisUtil.batchDelete(TOPIC_CONCERN+ user.getId());
         Topic topic = topicService.queryById(topicConcern.getTopicId());
         if (topic.getUserId().equals(user.getId())) {
             return Result.error("这是你的话题，已关注");
@@ -81,7 +82,7 @@ public class TopicConcernServerImpl implements TopicConcernServer {
     @Override
     public Result getConcernTopic(Integer p, User user) {
         RedisQuery<List<TopicConcern>> listRedisQuery =
-                new RedisQuery<>(TOPIC_CONCERN, p, null, DateField.MINUTE, 90);
+                new RedisQuery< >(TOPIC_CONCERN, user.getId()+":"+p, null, DateField.MINUTE, 90);
         RedisCommand<List<TopicConcern>> command = (key) -> {
             QueryWrapper<TopicConcern> wrapper = new QueryWrapper<TopicConcern>()
                     .eq("user_id", user.getId())
