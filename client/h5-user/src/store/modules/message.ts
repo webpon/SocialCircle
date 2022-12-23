@@ -7,24 +7,48 @@ import {getUserInfo, login, doLogout, loginByEmail} from '@/api/system/user';
 import { PageEnum } from '@/enums/pageEnum';
 import router from '@/router';
 const Storage = createStorage({ storage: localStorage });
-export interface IMessage {
-  concernMsgShow: boolean
+interface TopicNum {
+  topicId?: number;
+  msgNum?: number;
 }
+export interface IMessage {
+  concernMsgShow: boolean;
+  topicItemNum: Array<TopicNum>;
+}
+
 export const useMessageStore = defineStore({
   id: 'message',
   state: (): IMessage => ({
-    concernMsgShow: false
+    concernMsgShow: false,
+    topicItemNum: [{
+      topicId:4,
+      msgNum: 100
+    }]
    }),
   getters: {
+    getTopicNum():Array<TopicNum> {
+      return this.topicItemNum;
+    },
     getConcernMsgShow(): boolean{
       return this.concernMsgShow;
     }
   },
   actions: {
+    setTopicNum(topic, num: number){
+      console.log(topic)
+      const t = this.topicItemNum.map(item => {
+        const {id} = topic;
+        console.log(id)
+        if (item.topicId === id){
+          item.msgNum = num;
+        }
+      })
+      console.log(t)
+    }
    },
 });
 
 // Need to be used outside the setup
-export function useUserStoreWidthOut() {
+export function useMsgStoreWidthOut() {
   return useMessageStore(store);
 }

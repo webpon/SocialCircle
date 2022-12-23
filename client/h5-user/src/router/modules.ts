@@ -45,6 +45,29 @@ const routeModuleList: Array<RouteRecordRaw> = [
     ],
   },
   {
+    path: '/circle',
+    name: 'circle',
+    redirect: '/circle/index',
+    component: Layout,
+    meta: {
+      title: '圈子',
+      icon: 'manager',
+    },
+    children: [
+      {
+        path: 'index',
+        name: 'circleIndex',
+        meta: {
+          keepAlive: false,
+          hiddenBack: true,
+          showTabbar: true,
+          hiddenHeader: true,
+        },
+        component: () => import('@/views/circle/Index.vue'),
+      },
+    ],
+  },
+  {
     path: '/message',
     name: 'Message',
     redirect: '/message/index',

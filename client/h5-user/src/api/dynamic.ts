@@ -57,6 +57,19 @@ export function getDynamicByTop() {
 }
 
 /**
+ * @description: 按照topicId获取动态
+ */
+export function getDynamicByTopicId(topicId:number,p:number) {
+  return http.request<API.BasicResponseModel<Array<DynamicVM>>>(
+    {
+      url: `${baseUri}/byTopicId`,
+      method: 'GET',
+      params:{topicId,p}
+    },
+  );
+}
+
+/**
  * @description: 按照id获取动态
  */
 export function getDynamicById(id: number) {
