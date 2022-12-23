@@ -27,6 +27,7 @@ public class Topic implements Serializable {
      */
     @TableField(value = "`describe`")
     private String describe;
+    private String cover;
 
     /**
      * 关注数
