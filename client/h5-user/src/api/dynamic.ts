@@ -32,6 +32,19 @@ export function getDynamicByRecommended(p: number=1) {
 }
 
 /**
+ * @description: 获取指定用户动态
+ */
+export function getDynamicByUserId(userId, p: number=1) {
+  return http.request<API.BasicResponseModel<Array<DynamicVM>>>(
+    {
+      url: `${baseUri}/byUserId`,
+      method: 'GET',
+      params:{p,userId}
+    },
+  );
+}
+
+/**
  * @description: 获取top动态
  */
 export function getDynamicByTop() {

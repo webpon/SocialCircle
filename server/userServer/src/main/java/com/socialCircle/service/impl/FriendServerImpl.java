@@ -118,6 +118,7 @@ public class FriendServerImpl implements FriendServer {
             return Result.error("取消关注失败");
         }
         // 互加好友
+
         FansConcern oneFans = fansConcernServer.getOneFans(userId, concernUserId);
         if (oneFans != null) {
             if (log.isDebugEnabled()) {

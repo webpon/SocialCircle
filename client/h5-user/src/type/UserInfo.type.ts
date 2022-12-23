@@ -8,5 +8,11 @@ export default interface UserInfo {
   gender?: number;
   phone?: string;
   sign?: string;
-  industry?: number;
+  remarks?: string;
+  birthday?:string;
+  accountId?:number;
+  fens?:boolean;
+  concern?: boolean;
+  friend?: boolean;
+  region?:string
 }

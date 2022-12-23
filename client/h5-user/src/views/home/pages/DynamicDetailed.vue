@@ -204,7 +204,6 @@
 
   const onLoad = () => {
     loading.value = true;
-    console.log(1)
     p.value++;
     getComment(id, p.value).then((data) => {
       if (data) {
@@ -215,15 +214,6 @@
       }
 
     })
-  }
-  watchEffect(() => {
-  });
-  const handleScroll = (e) => {
-    const {scrollTop, clientHeight, scrollHeight} = e.target
-    if (scrollTop + clientHeight >= scrollHeight - 100 && gotoGet.value) {
-      gotoGet.value = false
-      p.value++
-    }
   }
 
   const placeholder = ref("说说你的看法吧！")

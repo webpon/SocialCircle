@@ -18,6 +18,7 @@ import { useUserStoreWidthOut } from '@/store/modules/user';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix || '';
+const apiUrl = globSetting.apiUrl;
 
 import router from '@/router';
 import { storage } from '@/utils/Storage';
@@ -230,10 +231,15 @@ const transform: AxiosTransform = {
 };
 
 function createAxios(opt?: Partial<CreateAxiosOptions>) {
+  let timeout:number|null = 10 * 1000
+  if (/127\.0\.0\.1/.test(apiUrl)){
+    console.log("本地")
+    timeout = null;
+  }
   return new VAxios(
     deepMerge(
       {
-        timeout: 10 * 1000,
+        timeout,
         authenticationScheme: '',
         // 接口前缀
         prefixUrl: urlPrefix,

@@ -16,9 +16,6 @@
         <van-tab title="热榜" :title-style="{ fontSize: '17px', margin: '0 5px' }">
           <HotTop/>
         </van-tab>
-        <!-- <van-tab v-for="item in classifies" :title="item.title">
-            <Classify :id="item.id"/>
-        </van-tab> -->
       </van-tabs>
       <van-button icon="plus" type="primary" class="!fixed z-100 top-10px right-25px w-65px !h-65px !rounded-full" @click="router.push('/home/postNews');"/>
     </div>

@@ -146,6 +146,16 @@ const routeModuleList: Array<RouteRecordRaw> = [
     },
     component: () => import('@/views/my/ThemeSetting.vue'),
   },
+  // user
+  {
+    path: '/user/:id',
+    name: 'userInfo',
+    meta: {
+      title: '他人信息',
+      innerPage: true,
+    },
+    component: () => import('@/views/user/Index.vue'),
+  },
 ];
 
 export default routeModuleList;
