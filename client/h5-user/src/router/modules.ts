@@ -34,7 +34,7 @@ const routeModuleList: Array<RouteRecordRaw> = [
         component: () => import('@/views/home/pages/DynamicDetailed.vue'),
       },
       {
-        path: 'postNews',
+        path: 'postNews/:topicId',
         name: 'postNews',
         meta: {
           title: '发布动态',
@@ -51,7 +51,7 @@ const routeModuleList: Array<RouteRecordRaw> = [
     component: Layout,
     meta: {
       title: '圈子',
-      icon: 'manager',
+      icon: 'circle',
     },
     children: [
       {

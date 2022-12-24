@@ -9,3 +9,10 @@ export function getConcern(p:number) {
     params: {p}
   })
 }
+export function getMyTopic(p:number) {
+  return http.request<API.BasicResponseModel<Topic>>({
+    url: `${baseUrl}/my`,
+    method:"get",
+    params: {p}
+  })
+}

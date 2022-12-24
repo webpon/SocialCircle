@@ -30,7 +30,13 @@
         <van-icon name="arrow-up"/>
       </span>
     </div>
-    <van-action-sheet :show="actionShow" :actions="actions" @select="onSelect" />
+    <van-action-sheet
+      v-model:show="actionShow"
+      :actions="actions"
+      @select="onSelect"
+      cancel-text="取消"
+      close-on-click-action
+    />
     <van-divider />
   </div>
 </template>
@@ -93,7 +99,6 @@
   if (id === comment.userId){
     actions.push({ name: '删除', id: 2})
   }
-  actions.push({ name: '取消', id: 3})
   const onSelect = (item) => {
     switch (item.id) {
       case 1:
@@ -106,7 +111,6 @@
         deleteComment()
 
     }
-    actionShow.value = false;
   };
 
   let  timeOut;

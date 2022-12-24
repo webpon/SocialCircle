@@ -34,12 +34,16 @@
   import {showFailToast} from "vant";
   import ImageType from "@/type/Image.type";
   import {addDynamic} from "@/api/dynamic";
-  import {useRouter} from "vue-router";
+  import {useRoute, useRouter} from "vue-router";
+
+  const route = useRoute()
 
   const formData = reactive<{
     content: string;
+    topicId?: number;
   }>({
-    content: ''
+    content: '',
+    topicId: route.params.topicId as unknown as number
   });
 
   const files = ref([])
@@ -63,13 +67,14 @@
       }
       resolve(images)
     }).then((images)=>{
+      const {content, topicId} = formData;
       addDynamic({
         images,
         dynamic:{
-          content: formData.content
+          content,
+          topicId
         }
       }).then(({code, msg})=>{
-        console.log(code)
         if (code === 200) {
           router.go(-1)
         }else {

@@ -1,12 +1,15 @@
 <template>
-  <div>
+  <div class="t">
     <header :style="{'background-image':`url(${data.cover})`}">
       <div class="cover">
         <van-icon name="weapp-nav" color="#fff" class="nav" size="1rem"/>
-        <div>
-          <h1>{{data.title}}</h1>
-          <span>{{data.describe}}</span>
-        </div>
+        <nav>
+          <div>
+            <h1>{{data.title}}</h1>
+            <p :class="showText?'showText':''" @click="show">{{data.describe}}</p>
+          </div>
+          <van-button class="but" type="primary"  @click="router.push(`/home/postNews/${data.id}`);">发布动态</van-button>
+        </nav>
       </div>
     </header>
     <van-tabs
@@ -32,6 +35,7 @@
         </van-pull-refresh>
       </van-tab>
       <van-tab title="交流" :title-style="{ fontSize: '17px', margin: '0 5px' }">
+        <TopicMessage/>
       </van-tab>
     </van-tabs>
 
@@ -44,14 +48,18 @@
   import DynamicVM from "@/type/DynamicVM";
   import {showToast} from "vant";
   import {getDynamicByTopicId} from "@/api/dynamic";
+  import {useRouter} from "vue-router";
+  import TopicMessage from "../pages/TopicMessage.vue";
 
   const loading = ref(false);
   const finished = ref(false);
   const dynamics = ref<Array<DynamicVM>>([])
   const p = ref(1);
   const showCon = ref(false)
+  const showText = ref(true)
   const active = ref(0);
   const loadingUp = ref(false);
+  const router = useRouter();
 
   interface TProps {
     data: Topic
@@ -79,9 +87,18 @@
     onLoad();
   };
 
+  const deleteDyn = (id) => {
+    dynamics.value = dynamics.value.filter((item) => item.dynamic.id !== id);
+  }
+
+  const show = ()=>showText.value = !showText.value
+
 </script>
 
 <style scoped lang="less">
+  .t{
+    height: 100%;
+  }
   header {
     width: 100%;
     background-size: 100% 11rem;
@@ -95,21 +112,47 @@
 
       .nav {
         float: right;
-        margin-right: 20px;
+        margin-right: 26vw;
         margin-top: 10px;
       }
 
-      div {
+      nav {
+        width: 73%;
         position: absolute;
-        top: 55%;
+        bottom: 10px;
         left: 20px;
         color: #ffffff;
+        display: flex;
+        justify-content: space-between;
 
-        h1 {
-          font-weight: 600;
-          font-size: 40px;
+        div {
+          width: 60%;
+
+          h1 {
+            font-weight: 600;
+            font-size: 40px;
+          }
+
+          p {
+            overflow: hidden;
+            text-overflow:ellipsis;
+            word-wrap: break-word;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+
+            text-indent: 2em;
+            word-wrap: break-word;
+            word-break: break-all;
+          }
+          .showText{
+            -webkit-line-clamp: 2;
+          }
         }
       }
+    }
+
+    .but {
+
     }
   }
 

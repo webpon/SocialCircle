@@ -20,10 +20,7 @@ export const useMessageStore = defineStore({
   id: 'message',
   state: (): IMessage => ({
     concernMsgShow: false,
-    topicItemNum: [{
-      topicId:4,
-      msgNum: 100
-    }]
+    topicItemNum: []
    }),
   getters: {
     getTopicNum():Array<TopicNum> {
@@ -34,16 +31,25 @@ export const useMessageStore = defineStore({
     }
   },
   actions: {
-    setTopicNum(topic, num: number){
-      console.log(topic)
+    setTopicNum(id, num: number){
+      let isNull = true;
       const t = this.topicItemNum.map(item => {
-        const {id} = topic;
-        console.log(id)
         if (item.topicId === id){
+          isNull = false;
           item.msgNum = num;
         }
+        return item
       })
-      console.log(t)
+      if (isNull){
+        t.push({
+          topicId:id,
+          msgNum: num
+        })
+      }
+      this.topicItemNum = t;
+    },
+    setConcernMsgShow(b: boolean){
+      this.concernMsgShow = b
     }
    },
 });

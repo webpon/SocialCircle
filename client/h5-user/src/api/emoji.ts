@@ -6,3 +6,10 @@ export function getEmoji() {
     method:"get"
   })
 }
+
+export function getGIF() {
+  return http.request<any>({
+    url:"https://social-circle-file.oss-cn-hangzhou.aliyuncs.com/gif.json",
+    method:"get"
+  })
+}

@@ -6,6 +6,7 @@ export default interface DynamicType {
   title?: string,
   shareNum?: number;
   userId?: number;
+  topicId?: number;
   content?: string,
   likeNum?: number
 }
