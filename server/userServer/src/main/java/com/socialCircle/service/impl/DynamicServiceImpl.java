@@ -197,6 +197,9 @@ public class DynamicServiceImpl implements DynamicService {
         Dynamic dynamic = dynamicDao.selectById(dynamicId);
         DynamicVM dynamicVM = new DynamicVM();
         dynamicVM.setDynamic(dynamic);
+        // 获取照片
+        List<Image> images = imageService.queryByDynamicId(dynamic.getId());
+        dynamicVM.setImages(images);
         return dynamicVM;
     }
 
