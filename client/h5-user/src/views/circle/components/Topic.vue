@@ -65,7 +65,9 @@
     data: Topic
   }
 
-  const {data} = defineProps<TProps>();
+  const {data} = withDefaults(defineProps<TProps>(), {
+    data: {}
+  });
 
   function getDyn(p: number) {
     getDynamicByTopicId(data.id, p).then((d)=>{
