@@ -2,9 +2,9 @@
   <vanConfigProvider :theme="getDarkMode" :theme-vars="getThemeVars()">
     <routerView v-slot="{ Component }">
       <transition :name="getTransitionName" mode="out-in" appear>
-        <keep-alive v-if="keepAliveComponents" :include="keepAliveComponents">
+        <KeepAlive>
           <component :is="Component" />
-        </keep-alive>
+        </KeepAlive>
       </transition>
     </routerView>
   </vanConfigProvider>

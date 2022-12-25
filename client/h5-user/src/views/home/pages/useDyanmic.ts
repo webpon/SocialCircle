@@ -1,4 +1,4 @@
-import {watchEffect} from "vue";
+import {onMounted} from "vue";
 import {showToast} from "vant";
 
 export default function (dynamics, p, getDy, loadingUp) {
@@ -8,6 +8,8 @@ export default function (dynamics, p, getDy, loadingUp) {
   }
 
   const onLoad = () => {
+    console.log('++++++++++++++++++');
+    
     if (p != null) {
       p.value++;
       getDy(p.value);
@@ -22,6 +24,10 @@ export default function (dynamics, p, getDy, loadingUp) {
     dynamics.value = [];
     onLoad();
   };
+  onMounted(() => {
+    console.log('0000000');
+    
+  })
 
   return { deleteDyn, onLoad, onRefresh }
 }

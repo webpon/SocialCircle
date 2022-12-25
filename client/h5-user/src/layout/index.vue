@@ -35,6 +35,7 @@ import NavBar from './components/NavBar.vue';
 const routeStore = useRouteStore();
 // 需要缓存的路由组件
 const keepAliveComponents = computed(() => routeStore.keepAliveComponents);
+
 const currentRoute = useRoute();
 
 const getTitle = computed(() => currentRoute.meta.title as string);

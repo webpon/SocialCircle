@@ -5,7 +5,7 @@ const Layout = () => import('@/layout/index.vue');
 const routeModuleList: Array<RouteRecordRaw> = [
   {
     path: '/home',
-    name: 'Dashboard',
+    name: 'home',
     redirect: '/home/index',
     component: Layout,
     meta: {
@@ -15,12 +15,12 @@ const routeModuleList: Array<RouteRecordRaw> = [
     children: [
       {
         path: 'index',
-        name: 'DashboardPage',
+        name: 'dynamic',
         meta: {
           title: '动态',
           hiddenBack: true,
           showTabbar: true,
-          keepAlive: false,
+          keepAlive: true,
         },
         component: () => import('@/views/home/index.vue'),
       },

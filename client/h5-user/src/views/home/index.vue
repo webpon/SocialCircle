@@ -21,7 +21,11 @@
     </div>
   </div>
 </template>
-
+<script lang="ts">
+  export default {
+    name: 'dynamic',
+  }
+</script>
 <script setup lang="ts" >
 import {computed, ref, watchEffect} from 'vue';
 import { useDesignSettingStore } from '@/store/modules/designSetting';
@@ -36,8 +40,6 @@ import HotTop from "./pages/HotTop.vue";
 import { useMessageStore } from "@/store/modules/message";
 import { useRouter } from 'vue-router';
 import {showToast} from "vant";
-
-
 const active = ref(1);
 const designStore = useDesignSettingStore();
 const messageStore = useMessageStore();

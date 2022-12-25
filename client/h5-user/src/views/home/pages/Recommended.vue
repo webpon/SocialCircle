@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-  import {ref, watchEffect} from "vue";
+  import {ref} from "vue";
   import DynamicVM from "@/type/DynamicVM";
   import {getDynamicByRecommended} from "@/api/dynamic";
   import Dynamic from "@/components/Dynamic.vue";
@@ -23,6 +23,7 @@
   const loading = ref(false);
   const finished = ref(false);
   const dynamics = ref<Array<DynamicVM>>([])
+
   const p = ref(1);
 
   const loadingUp = ref(false);
@@ -35,7 +36,9 @@
       loading.value = false;
     })
   }
+  console.log('_____________________');
   const {deleteDyn,onLoad,onRefresh} = useDyanmic(dynamics, p, getDy,loadingUp);
+  
 
 
 </script>
