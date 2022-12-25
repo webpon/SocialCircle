@@ -16,7 +16,7 @@
   import {ref, watchEffect} from "vue";
   import DynamicVM from "@/type/DynamicVM";
   import {getDynamicByConcern} from "@/api/dynamic";
-  import Dynamic from "@/components/Dynamic.vue";
+  import Dynamic from "@/views/home/components/Dynamic.vue";
   import useDyanmic from "@/views/home/pages/useDyanmic";
 
   const loading = ref(false);

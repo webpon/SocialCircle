@@ -38,7 +38,7 @@
 
   interface por {
     userId: number;
-    twoUserId: number;
+    twoUserId?: number;
     fontSize: number;
     headSize: number;
     fontWeight: number;

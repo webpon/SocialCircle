@@ -46,7 +46,6 @@ const routeModuleList: Array<RouteRecordRaw> = [
   },
   {
     path: '/circle',
-    name: 'circle',
     redirect: '/circle/index',
     component: Layout,
     meta: {
@@ -56,9 +55,9 @@ const routeModuleList: Array<RouteRecordRaw> = [
     children: [
       {
         path: 'index',
-        name: 'circleIndex',
+        name: 'circlePage',
         meta: {
-          keepAlive: false,
+          keepAlive: true,
           hiddenBack: true,
           showTabbar: true,
           hiddenHeader: true,

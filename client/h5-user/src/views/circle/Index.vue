@@ -38,7 +38,11 @@
     />
   </div>
 </template>
-
+<script lang="ts">
+export default {
+  name: 'circlePage'
+}
+</script>
 <script setup lang="ts">
   import {reactive, ref, watchEffect} from 'vue';
   import {getConcern as getConcernApi, getMyTopic} from "@/api/topic";
